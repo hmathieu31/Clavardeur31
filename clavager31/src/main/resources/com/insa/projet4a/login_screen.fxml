@@ -8,15 +8,14 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="407.0" prefWidth="630.0" style="-fx-background-color: #687387;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="407.0" prefWidth="630.0" style="-fx-background-color: #687387;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LoginController">
    <children>
       <Label alignment="CENTER" layoutX="121.0" layoutY="37.0" prefHeight="99.0" prefWidth="390.0" text="Clavager31" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="20.0">
          <font>
             <Font name="Rachana Bold" size="68.0" />
          </font>
       </Label>
-      <TextField layoutX="220.0" layoutY="319.0" prefHeight="32.0" prefWidth="190.0" promptText=".." style="-fx-background-color: #becbd6;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="220.0">
+      <TextField layoutX="220.0" layoutY="319.0" onKeyReleased="#connect" prefHeight="32.0" prefWidth="190.0" promptText=".." style="-fx-background-color: #becbd6;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="220.0">
          <effect>
             <InnerShadow />
          </effect>
@@ -28,7 +27,7 @@
       </Label>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="253.0" layoutY="126.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../ressources/img/logo.png" />
+            <Image url="@../../../../../../../ressources/img/logo.png" />
          </image>
          <effect>
             <DropShadow />
