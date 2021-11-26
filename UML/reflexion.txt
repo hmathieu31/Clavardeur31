@@ -1,0 +1,8 @@
+- init connexion + reception
+- init discussion + reception
+
+- discussion + reception discussion
+- init changer de pseudo + reception
+
+- fermeture discussion + reception
+- femeture connexion + reception
