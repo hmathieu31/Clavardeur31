@@ -16,6 +16,8 @@ public class GUI extends Application {
     private static Scene scene;
     private static Stage stage;
 
+    public static String pseudo;
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         stage = primaryStage;
