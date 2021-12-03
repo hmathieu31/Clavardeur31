@@ -11,10 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-
-import javafx.stage.Stage;
-import javafx.scene.Node;
-
 public class LoginController {
 
     Alert alert = new Alert(AlertType.ERROR, 
@@ -34,11 +30,8 @@ public class LoginController {
             if (!pseudoList.contains(pseudo)){
                 System.out.println(pseudo);
 
-                Stage stage = (Stage)((Node)key.getSource()).getScene().getWindow();
-
-                // Je veux changer de scene et passer en parametre le pseudo
-                // Voir vidéo yt
-                GUI.changeScene(stage,pseudo,1000,800);
+                GUI.setRoot("main");
+                GUI.changeSize(1000, 800);
             }   
             else{
                 pseudoField.clear();

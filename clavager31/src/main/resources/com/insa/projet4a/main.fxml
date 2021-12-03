@@ -4,14 +4,13 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insa.projet4a.MainController">
    <children>
       <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
             <Menu mnemonicParsing="false" text="Identity">
               <items>
-                <MenuItem mnemonicParsing="false" text="Change pseudo" />
+                <MenuItem fx:id="changeIdentityButton" mnemonicParsing="false" onAction="#changeIdentity" text="Change pseudo" />
               </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Help">

@@ -14,22 +14,25 @@ import java.io.IOException;
 public class GUI extends Application {
 
     private static Scene scene;
+    private static Stage stage;
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(Stage primaryStage) throws IOException {
+        stage = primaryStage;
         scene = new Scene(loadFXML("login_screen"), 650, 400);
         stage.setScene(scene);
-        stage.show();
-    }
-
-    public static void changeScene(Stage stage, String fxml, int width, int height) throws IOException{
-        scene = new Scene(loadFXML(fxml), 650, 400);
-        stage.setScene(scene);
+        stage.setTitle("Clavager31");
         stage.show();
     }
 
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
+    }
+
+    static void changeSize(int width, int height){
+        stage.setHeight(height);
+        stage.setWidth(width);
+        stage.centerOnScreen();
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
