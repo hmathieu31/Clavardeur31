@@ -114,7 +114,7 @@
                      <children>
                         <ScrollPane prefViewportHeight="605.0" prefViewportWidth="673.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <content>
-                              <VBox fx:id="messageList" prefHeight="111.0" prefWidth="671.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <VBox fx:id="messageList" prefHeight="220.0" prefWidth="650.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <AnchorPane style="-fx-padding: 10 0;" styleClass="messageAnchor">
                                        <children>
