@@ -22,16 +22,22 @@ public class GUI extends Application {
     public void start(Stage primaryStage) throws IOException {
         stage = primaryStage;
         scene = new Scene(loadFXML("login_screen"), 650, 400);
+        stage.setOnCloseRequest(e->closeProgram());
         stage.setScene(scene);
         stage.setTitle("Clavager31");
         stage.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
+    private void closeProgram(){
+        System.out.println("GUI CLOSING");
+        stage.close();
+    }
+
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
-    static void changeSize(int width, int height){
+    public static void changeSize(int width, int height){
         stage.setHeight(height);
         stage.setWidth(width);
         stage.centerOnScreen();
