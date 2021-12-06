@@ -21,7 +21,7 @@
             </AnchorPane>
             <AnchorPane>
                <children>
-                  <Label text="Dimanche 2 juin à 10h45" textFill="#a4a4a4" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="-7.0">
+                  <Label text="Dimanche 2 juin à 10h45" textFill="#a4a4a4" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="-7.0">
                      <font>
                         <Font name="OpenSymbol" size="11.0" />
                      </font>

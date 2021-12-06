@@ -17,7 +17,7 @@ public class GUI extends Application {
     private static Stage stage;
 
     public static String pseudo;
-    public static int currentDiscussionIndex;
+    public static int currentDiscussionIndex = -1;
 
     @Override
     public void start(Stage primaryStage) throws IOException {

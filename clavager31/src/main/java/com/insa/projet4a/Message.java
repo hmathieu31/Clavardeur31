@@ -1,6 +1,6 @@
 package com.insa.projet4a;
 
-public abstract class Message {
+public class Message {
 
     public Boolean from;
     public String date;

@@ -2,18 +2,18 @@ package com.insa.projet4a;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -31,6 +31,10 @@ public class MainController {
 
     @FXML private ListView<String> currentDiscussionList;
 
+    Alert alert = new Alert(AlertType.ERROR,
+                        "Vous n'avez pas de discussion active, veuillez choisir un utilisateur avec qui communiquer.", 
+                        ButtonType.OK);
+
     // S'execute toujours au lancement de la fenetre
     @FXML
     protected void initialize() throws IOException {
@@ -39,12 +43,12 @@ public class MainController {
         addConnected("Jean");
         addConnected("Kevin");
 
-        // ArrayList<Pair<Boolean,String>> list = new ArrayList<Pair<Boolean,String>>();
-        // Pair<Boolean,String> p1 = new Pair<Boolean,String>(true,"salut");list.add(p1);
-        // Pair<Boolean,String> p2 = new Pair<Boolean,String>(false,"bonjour");list.add(p2);
-        // Pair<Boolean,String> p3 = new Pair<Boolean,String>(true,"comment ça va");list.add(p3);
-        // Pair<Boolean,String> p4 = new Pair<Boolean,String>(false,"mal");list.add(p4);
-        // loadMessages(list);
+        ArrayList<Message> list = new ArrayList<Message>();
+        list.add(new Message(true,currentDate(),"Bonjour"));
+        list.add(new Message(false,currentDate(),"Salut"));
+        list.add(new Message(true,currentDate(),"Comment ça va ? \nQuoi de neuf"));
+        list.add(new Message(false,currentDate(),"Ca va bien.\nRien de spéciale\nEnfin si :  j'ai fini le GUI"));
+        loadMessages(list);
     }
 
     // Pour changer de pseudo
@@ -63,8 +67,16 @@ public class MainController {
     private void addMessage(String date, String content, String path) throws IOException{
         FXMLLoader loader = new FXMLLoader();   
         AnchorPane pane = loader.load(getClass().getResource(path).openStream());
-        Label messageLabel = (Label) pane.getChildren().get(0);
+        VBox vbox = (VBox) pane.getChildren().get(0);
+
+        AnchorPane pane1 = (AnchorPane) vbox.getChildren().get(0);
+        Label messageLabel = (Label) pane1.getChildren().get(0);
         messageLabel.setText(content);
+
+        AnchorPane pane2 = (AnchorPane) vbox.getChildren().get(1);
+        Label dateLabel = (Label) pane2.getChildren().get(0);
+        dateLabel.setText(date);
+        
         messageList.getChildren().add(pane);
     }
 
@@ -85,7 +97,7 @@ public class MainController {
     // On la formate sous une forme jolie
     public String currentDate(){
         Date date = new Date();
-        SimpleDateFormat formater = new SimpleDateFormat("Le' dd MMMM 'à' hh:mm:ss");;
+        SimpleDateFormat formater = new SimpleDateFormat("'Le' dd MMMM 'à' HH:mm");;
         return formater.format(date);
     }
 
@@ -96,18 +108,29 @@ public class MainController {
     private void sendMessage(KeyEvent key) throws IOException {
         if(key.getCode() == KeyCode.ENTER){
             String messageText = messageField.getText();
+
             if (!messageText.isEmpty()){
-                String date = currentDate();
-                addMessageTo(date,messageText);
-                messageField.clear();
+
+                // On vérifie qu'on discute bien avec quelqu'un
+                // Pour éviter d'avoir supprimé quelqu'un et continuer de discuter avec
+                if(GUI.currentDiscussionIndex >= 0){
+                    String date = currentDate();
+                    addMessageTo(date,messageText);
+                    messageField.clear();
+                }
+                else{
+                    alert.show();
+                }
             }  
         }
     }
 
-    private void loadMessages(ArrayList<Triple<Boolean,String>> list) throws IOException{
-        for(Pair<Boolean,String> p : list){
-            Boolean from = (Boolean) p.getKey();
-            String content = (String) p.getValue();
+    // Utilisé quand on change de fenetre ou quand on prend l'historique
+    private void loadMessages(ArrayList<Message> list) throws IOException{
+        for(Message m : list){
+            Boolean from = m.getFrom();
+            String content = m.getContent();
+            String date = m.getDate();
 
             if (from){
                 addMessageFrom(date,content);
@@ -180,6 +203,10 @@ public class MainController {
                 String pseudo = getPseudoFromIndex(index);
                 addConnected(pseudo);
                 currentDiscussionList.getItems().remove(index);
+
+                resetMessage();
+                GUI.currentDiscussionIndex = -1; // équivalent à null
+                updateCurrentDiscussion(); // si on supp et qu'il reste des user ça ne laisse pas à null
             }
         }
     }
