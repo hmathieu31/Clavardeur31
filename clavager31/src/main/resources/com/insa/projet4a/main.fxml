@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -52,7 +53,7 @@
                      <children>
                         <AnchorPane>
                            <children>
-                              <ListView prefHeight="250.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ListView fx:id="currentDiscussionList" onKeyReleased="#removeCurrentDiscussion" onMouseClicked="#updateCurrentDiscussion" prefHeight="250.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <VBox.margin>
                                     <Insets left="20.0" right="20.0" />
                                  </VBox.margin>
@@ -62,41 +63,17 @@
                         <Pane prefHeight="50.0" prefWidth="500.0" />
                         <ScrollPane prefHeight="380.0" prefViewportWidth="277.0" prefWidth="237.0">
                            <content>
-                              <VBox>
+                              <VBox fx:id="connectedList">
                                  <children>
-                                    <AnchorPane prefHeight="10.0" prefWidth="230.0">
+                                    <AnchorPane prefHeight="10.0" prefWidth="235.0">
                                        <children>
-                                          <Label text="Label" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                                          <Label style="-fx-background-color: white; -fx-border-color: gray;" text="Label" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                              <padding>
                                                 <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                                              </padding>
-                                          </Label>
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="10.0" prefWidth="230.0">
-                                       <children>
-                                          <Label text="Label" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                                             <padding>
-                                                <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-                                             </padding>
-                                          </Label>
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane layoutX="10.0" layoutY="35.0" prefHeight="10.0" prefWidth="230.0">
-                                       <children>
-                                          <Label text="Label" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                                             <padding>
-                                                <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-                                             </padding>
-                                          </Label>
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane layoutX="10.0" layoutY="60.0" prefHeight="10.0" prefWidth="230.0">
-                                       <children>
-                                          <Label text="Label" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                                             <padding>
-                                                <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-                                             </padding>
+                                             <effect>
+                                                <DropShadow />
+                                             </effect>
                                           </Label>
                                        </children>
                                     </AnchorPane>
