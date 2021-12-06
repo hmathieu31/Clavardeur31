@@ -63,22 +63,7 @@
                         <Pane prefHeight="50.0" prefWidth="500.0" />
                         <ScrollPane prefHeight="380.0" prefViewportWidth="277.0" prefWidth="237.0">
                            <content>
-                              <VBox fx:id="connectedList">
-                                 <children>
-                                    <AnchorPane prefHeight="10.0" prefWidth="235.0">
-                                       <children>
-                                          <Label style="-fx-background-color: white; -fx-border-color: gray;" text="Label" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                                             <padding>
-                                                <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-                                             </padding>
-                                             <effect>
-                                                <DropShadow />
-                                             </effect>
-                                          </Label>
-                                       </children>
-                                    </AnchorPane>
-                                 </children>
-                              </VBox>
+                              <VBox fx:id="connectedList" />
                            </content>
                         </ScrollPane>
                      </children>
@@ -92,50 +77,66 @@
                         <ScrollPane prefViewportHeight="605.0" prefViewportWidth="673.0" style="-fx-background-color: white;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <content>
                               <VBox fx:id="messageList" prefHeight="220.0" prefWidth="650.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <AnchorPane style="-fx-padding: 10 0;" styleClass="messageAnchor">
-                                       <children>
-                                          <Label style="-fx-background-color: gray; -fx-text-fill: white;" text="Salut comment ça va" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                          </Label>
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane layoutX="30.0" layoutY="10.0" style="-fx-padding: 10 0;" styleClass="messageAnchor">
-                                       <children>
-                                          <Label style="-fx-background-color: blue; -fx-text-fill: white;" text="Super et toi" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                          </Label>
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane layoutX="30.0" layoutY="10.0" style="-fx-padding: 10 0;" styleClass="messageAnchor">
-                                       <children>
-                                          <Label maxWidth="600.0" style="-fx-background-color: gray; -fx-text-fill: white;" text="La grande forme je fais un petit peu de java je trouve ça abominable" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                          </Label>
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane layoutX="30.0" layoutY="65.0" style="-fx-padding: 10 0;" styleClass="messageAnchor">
-                                       <children>
-                                          <Label style="-fx-background-color: blue; -fx-text-fill: white;" text="a ok" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                          </Label>
-                                       </children>
-                                    </AnchorPane>
-                                 </children>
                                  <VBox.margin>
                                     <Insets bottom="40.0" />
                                  </VBox.margin>
                                  <padding>
                                     <Insets left="20.0" right="20.0" />
                                  </padding>
+                                 <children>
+                                    <AnchorPane layoutX="30.0" layoutY="71.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox>
+                                             <children>
+                                                <AnchorPane fx:id="messageFrom21" layoutX="107.0" style="-fx-padding: 10 0;" styleClass="messageAnchor">
+                                                   <children>
+                                                      <Label maxWidth="600.0" style="-fx-background-color: gray; -fx-text-fill: white;" text="Salut comment çava&#10;quoi de neuf" AnchorPane.topAnchor="0.0">
+                                                         <padding>
+                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                         </padding>
+                                                      </Label>
+                                                   </children>
+                                                </AnchorPane>
+                                                <AnchorPane>
+                                                   <children>
+                                                      <Label text="Dimanche 2 juin à 10h45" textFill="#a4a4a4" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="-7.0">
+                                                         <font>
+                                                            <Font name="OpenSymbol" size="11.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </AnchorPane>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane layoutX="30.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0">
+                                       <children>
+                                          <VBox AnchorPane.rightAnchor="0.0">
+                                             <children>
+                                                <AnchorPane fx:id="messageFrom1" layoutX="107.0" style="-fx-padding: 10 0;" styleClass="messageAnchor">
+                                                   <children>
+                                                      <Label maxWidth="600.0" style="-fx-background-color: blue; -fx-text-fill: white;" text="Impec&#10;Pas grand chose de nouveau" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                         <padding>
+                                                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                         </padding>
+                                                      </Label>
+                                                   </children>
+                                                </AnchorPane>
+                                                <AnchorPane>
+                                                   <children>
+                                                      <Label text="Dimanche 2 juin à 10h45" textFill="#a4a4a4" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="-7.0">
+                                                         <font>
+                                                            <Font name="OpenSymbol" size="11.0" />
+                                                         </font>
+                                                      </Label>
+                                                   </children>
+                                                </AnchorPane>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
                               </VBox>
                            </content>
                         </ScrollPane>
