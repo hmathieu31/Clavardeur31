@@ -42,6 +42,12 @@ public class ThreadManager extends Thread {
 
     private HashMap<InetAddress, TCPClient> clientTable = new HashMap<InetAddress, TCPClient>();
 
+    
+    /** 
+     * @param clientPort
+     * @param clientInetAddress
+     * @throws IOException
+     */
     public void createClientThread(int clientPort, InetAddress clientInetAddress) throws IOException {
         TCPClient clientThread;
         clientThread = new TCPClient(clientPort, clientInetAddress);
@@ -49,16 +55,30 @@ public class ThreadManager extends Thread {
         clientThread.run();
     }
 
+    
+    /** 
+     * @param address
+     */
     public void endClientThread(InetAddress address) {
         TCPClient client = clientTable.get(address);
         client.stopClient();
     }
 
 
+    
+    /** 
+     * @param msg
+     * @param senderAddress
+     */
     protected static void notifyMessageReceived(String msg, InetAddress senderAddress) {
         AppTest.displayMsg(msg, senderAddress);
     }
 
+    
+    /** 
+     * @param msg
+     * @param receivAddress
+     */
     protected void transmitMessage(String msg, InetAddress receivAddress) {
         TCPClient client = clientTable.get(receivAddress);
         client.sendMsg(msg);

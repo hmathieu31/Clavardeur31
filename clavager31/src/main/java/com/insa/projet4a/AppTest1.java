@@ -59,7 +59,7 @@ public class AppTest1 {
      * 
      * @param receivAddress
      */
-    public static void endDiscussion(InetAddress receivAddress) {
+    private static void endDiscussion(InetAddress receivAddress) {
         transmitMessage("--END CONNECTION--", receivAddress);
         threadManager.endClientThread(receivAddress);
         threadManager.stopServer();
@@ -80,6 +80,13 @@ public class AppTest1 {
         System.out.println();
     }
 
+    
+    /** 
+     * @param args
+     * @throws UnknownHostException
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {
         InetAddress receivAddress = InetAddress.getLocalHost();
 

@@ -80,6 +80,13 @@ public class AppTest {
         System.out.println();
     }
 
+    
+    /** 
+     * @param args
+     * @throws UnknownHostException
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {
         InetAddress receivAddress = InetAddress.getLocalHost();
 

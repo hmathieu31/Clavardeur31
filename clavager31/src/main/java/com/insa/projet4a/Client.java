@@ -6,6 +6,12 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class Client {
+    
+    /** 
+     * @param args
+     * @throws UnknownHostException
+     * @throws IOException
+     */
     public static void main(String[] args) throws UnknownHostException, IOException {
         TCPClient client = new TCPClient(12, Inet4Address.getByName("localhost"));
         Scanner scanner = new Scanner(System.in);
