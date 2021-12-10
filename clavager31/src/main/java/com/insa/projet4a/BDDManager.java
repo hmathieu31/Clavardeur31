@@ -41,49 +41,40 @@ public class BDDManager {
                 + " 'content' TEXT NOT NULL,"
                 + " 'date' TEXT NOT NULL);";
 
-        try (Connection conn = this.connect()) {
-            Statement statement = conn.createStatement();
-            statement.execute(query);
-        } catch (SQLException e) {
-            System.err.println("Error at initHistory");
-        }
-        ;
+        Connection conn = this.connect();
+        Statement statement = conn.createStatement();
+        statement.execute(query);
     }
 
     public void showHistory(String user) throws SQLException{
         String query = "SELECT * FROM history "
-                        + "WHERE 'user' = " + user + ";";
+                     + "WHERE user = ? ;";
 
-        try (Connection conn = this.connect()){
-            Statement statement = conn.createStatement();
-            ResultSet result    = statement.executeQuery(query);
+        Connection conn = this.connect();
+        PreparedStatement pStatement = conn.prepareStatement(query);
+        pStatement.setString(1,user);
+
+        ResultSet result = pStatement.executeQuery();
                 
-            // loop through the result set
-            while (result.next()) {
-                System.out.println(result.getBoolean("from") +  "\t" + 
-                                result.getString("content") + "\t" +
-                                result.getString("date"));
-            }
+        // loop through the result set
+        while (result.next()) {
+            System.out.println(result.getBoolean("from") +  "\t" + 
+                               result.getString("content") + "\t" +
+                               result.getString("date"));
         }
-        catch(SQLException e) {
-                System.err.println("Error at showHistory");
-        };
     }
 
     public void insertHistory(String user, Boolean from, String content, String date) throws SQLException {
         String query = "INSERT INTO history('user','from','content','date') VALUES(?,?,?,?)";
 
-        try (Connection conn = this.connect()) {
-            PreparedStatement pStatement = conn.prepareStatement(query);
+        Connection conn = this.connect();
+        PreparedStatement pStatement = conn.prepareStatement(query);
 
-            pStatement.setString(1, user);
-            pStatement.setBoolean(2, from);
-            pStatement.setString(3, content);
-            pStatement.setString(4, date);
+        pStatement.setString(1, user);
+        pStatement.setBoolean(2, from);
+        pStatement.setString(3, content);
+        pStatement.setString(4, date);
 
-            pStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.err.println("Error at insertHistory");
-        };
+        pStatement.executeUpdate();
     }
 }

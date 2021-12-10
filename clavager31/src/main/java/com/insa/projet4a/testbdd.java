@@ -8,6 +8,6 @@ public class testbdd {
         BDDManager db = new BDDManager("test");
         db.initHistory();
         // db.insertHistory("user2", false, "content", "date");
-        db.showHistory("user"); // marche pas avec user2
+        db.showHistory("user");
     }
 }
