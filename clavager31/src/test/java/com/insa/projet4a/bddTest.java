@@ -1,6 +1,5 @@
 package com.insa.projet4a;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -20,8 +19,6 @@ public class bddTest {
     void testConnect() throws SQLException{
         String url = "jdbc:sqlite:src/main/resources/com/insa/projet4a/sqlite/db/test.db";
         DriverManager.getConnection(url);
+        assert true;
     }
-
-    
-
 }
