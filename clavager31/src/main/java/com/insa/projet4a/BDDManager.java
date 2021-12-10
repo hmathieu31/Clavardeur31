@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class BDDManager {
 
@@ -46,7 +47,7 @@ public class BDDManager {
         statement.execute(query);
     }
 
-    public void showHistory(String user) throws SQLException{
+    public ArrayList<Message> showHistory(String user) throws SQLException{
         String query = "SELECT * FROM history "
                      + "WHERE user = ? ;";
 
@@ -55,13 +56,17 @@ public class BDDManager {
         pStatement.setString(1,user);
 
         ResultSet result = pStatement.executeQuery();
+        ArrayList<Message> list = new ArrayList<Message>();
                 
         // loop through the result set
         while (result.next()) {
-            System.out.println(result.getBoolean("from") +  "\t" + 
-                               result.getString("content") + "\t" +
-                               result.getString("date"));
+
+            Message m = new Message(result.getBoolean("from"),
+                                    result.getString("date"),
+                                    result.getString("content"));
+            list.add(m);
         }
+        return list;
     }
 
     public void insertHistory(String user, Boolean from, String content, String date) throws SQLException {

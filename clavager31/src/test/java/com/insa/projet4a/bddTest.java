@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Test;
 
 public class bddTest {
     
-    static BDDManager db;
+    static BDDManager bdd;
 	
 	@BeforeAll
 	static void init() {
-		db = new BDDManager("test");
+		bdd = new BDDManager("test");
 	} 
 
     @Test

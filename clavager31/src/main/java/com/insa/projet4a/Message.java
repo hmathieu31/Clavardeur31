@@ -23,4 +23,10 @@ public class Message {
     public String getDate() {
         return date;
     }
+
+    @Override
+    public String toString() {
+        return "Message from? " + from.toString() + " "
+                + date + " -> " + content;
+    }
 }
