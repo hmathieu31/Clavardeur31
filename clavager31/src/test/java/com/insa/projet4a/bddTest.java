@@ -1,5 +1,9 @@
 package com.insa.projet4a;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -13,9 +17,11 @@ public class bddTest {
 	} 
 
     @Test
-    void testConnect(){
-        db.connect();
+    void testConnect() throws SQLException{
+        String url = "jdbc:sqlite:src/main/resources/com/insa/projet4a/sqlite/db/test.db";
+        DriverManager.getConnection(url);
     }
 
     
+
 }
