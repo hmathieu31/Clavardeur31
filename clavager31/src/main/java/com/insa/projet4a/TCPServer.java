@@ -33,7 +33,7 @@ class TCPServer extends Thread {
                 ThreadManager.notifyMessageReceived(line, socket.getInetAddress());
                 line = in.readLine();
             }
-            if (line == null) { // Case where the connection was closed by remote client
+            if (line == null && running) { // Case where the connection was closed by remote client and not local
                 ThreadManager.notifyConnectionClosed(socket.getInetAddress());
             }
             in.close();
@@ -41,7 +41,7 @@ class TCPServer extends Thread {
             this.interrupt();
 
         } catch (Exception e) {
-            System.out.println("Connection closed by client");
+            e.printStackTrace();
         }
     }
 

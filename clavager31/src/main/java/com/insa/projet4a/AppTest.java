@@ -71,7 +71,7 @@ public class AppTest {
      * @param address address of the remote client
      */
     public static void notifyConnectionClosed(InetAddress address) {
-        System.out.println("Connection closed from remote initiative with " + address);
+        System.out.println("Connection closed by remote initiative with " + address);
         isDiscussionOngoing = false;
     }
 
@@ -114,12 +114,14 @@ public class AppTest {
         }
         isDiscussionOngoing = true;
         Scanner scanner = new Scanner(System.in);
-        String txt = scanner.nextLine();
+        String txt;
 
-        while (!"close".equals(txt) && isDiscussionOngoing) {
-            transmitMessage(txt, receivAddress);
+        do {
             txt = scanner.nextLine();
-        }
+            transmitMessage(txt, receivAddress);
+        } while (isDiscussionOngoing && !"close".equals(txt));
+
+
         scanner.close();
 
         endDiscussion(receivAddress);
