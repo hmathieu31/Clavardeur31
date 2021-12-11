@@ -99,13 +99,15 @@ public class ThreadManager extends Thread {
     /**
      * Called by Server thread to notify the connection was closed by the remote
      * Client
+     * <p>
+     * Closes the Client thread and actualises both tables
      * 
      * @param address Address of the client which ended the connection
      */
     protected static void notifyConnectionClosed(InetAddress address) {
         AppTest.notifyConnectionClosed(address);
         closeClientThread(address);
-        clientTable.remove(address);
+        serverTable.remove(address);
     }
 
     /**

@@ -12,10 +12,26 @@ public class AppTest {
 
     private static ThreadManager threadManager;
     /**
-     * * Temporary boolean (used only for testing purposes as a simplification of the list containing all ongoing communications)
+     * * Temporary boolean (used only for testing purposes as a simplification of
+     * the list containing all ongoing communications)
      */
     private static boolean isDiscussionOngoing;
 
+    /**
+     * <p>
+     * Function called when the application is started.
+     * </p>
+     * <p>
+     * Starts a ThreadManager listening for incoming communications
+     * on port 12.
+     * </p>
+     */
+    public static void connect() {
+        threadManager = new ThreadManager(12);
+        threadManager.startServer();
+        System.out.println("Waiting for connexion on port 12");
+        System.out.println();
+    }
 
     /**
      * Creates a ClientThread to send messages to {@code receivAddress}
@@ -48,14 +64,14 @@ public class AppTest {
 
     /**
      * Called by the Thread Manager to notify the Application that {@code address}
-     * closed the connection 
+     * closed the connection
      * <p>
      * ! Will be changed to call the GUI
      * 
      * @param address address of the remote client
      */
     public static void notifyConnectionClosed(InetAddress address) {
-        System.out.println("Connection closed with " + address);
+        System.out.println("Connection closed from remote initiative with " + address);
         isDiscussionOngoing = false;
     }
 
@@ -78,27 +94,9 @@ public class AppTest {
      */
     public static void endDiscussion(InetAddress receivAddress) {
         ThreadManager.closeConnectionThreads(receivAddress);
-        threadManager.stopServer();
-        System.out.println("Connexion closed with " + receivAddress);
+        System.out.println("Connexion closed by local initiative with " + receivAddress);
     }
 
-    /**
-     * <p>
-     * Function called when the application is started.
-     * </p>
-     * <p>
-     * Starts a ThreadManager listening for incoming communications
-     * on port 12.
-     * </p>
-     */
-    public static void connect() {
-        threadManager = new ThreadManager(12);
-        threadManager.startServer();
-        System.out.println("Waiting for connexion on port 12");
-        System.out.println();
-    }
-
-    
     /**
      * @param args
      * @throws UnknownHostException
@@ -123,6 +121,7 @@ public class AppTest {
             txt = scanner.nextLine();
         }
         scanner.close();
+
         endDiscussion(receivAddress);
 
         threadManager.stopServer(); // Only for testing purposes. In real use, there is no reason to stop the
