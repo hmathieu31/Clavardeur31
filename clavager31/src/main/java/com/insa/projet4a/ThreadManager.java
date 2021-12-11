@@ -19,6 +19,13 @@ public class ThreadManager extends Thread {
      */
     private ServerSocket servSocket;
 
+    /**
+     * Creates a thread manager listening for incoming connections on {@code port}
+     * and handling the creation and destruction of {@link TCPClient TCPClient} and
+     * {@link TCPServer TCPServer}
+     * 
+     * @param port the port number
+     */
     public ThreadManager(int port) {
         this.port = port;
     }
@@ -40,11 +47,10 @@ public class ThreadManager extends Thread {
         this.interrupt();
     }
 
-    private HashMap<InetAddress, TCPClient> clientTable = new HashMap<InetAddress, TCPClient>();
-    private HashMap<InetAddress, TCPServer> serverTable = new HashMap<InetAddress, TCPServer>();
+    private static HashMap<InetAddress, TCPClient> clientTable = new HashMap<InetAddress, TCPClient>();
+    private static HashMap<InetAddress, TCPServer> serverTable = new HashMap<InetAddress, TCPServer>();
 
-    
-    /** 
+    /**
      * @param clientPort
      * @param clientInetAddress
      * @throws IOException
@@ -56,21 +62,29 @@ public class ThreadManager extends Thread {
         clientThread.run();
     }
 
-    
-    /** 
-     * Closes the Threads (Client and Server) dedicated to communication with {@code address}
+    /**
+     * Closes the Threads (Client and Server) dedicated to communication with
+     * {@code address} and remove the Threads from the Table
+     * 
      * @param address
      */
-    public void closeConnectionThreads(InetAddress address) {
+    public static void closeConnectionThreads(InetAddress address) {
         TCPClient client = clientTable.get(address);
-        client.stopClient();
+        if (client != null) {
+            client.stopClient();
+            clientTable.remove(address);
+        }
         TCPServer server = serverTable.get(address);
-        server.stopServer();
+        if (server != null) {
+            server.stopServer();
+            serverTable.remove(address);
+        }
     }
 
-
-    
-    /** 
+    /**
+     * Called by Server thread to pass a new received {@code msg} coming from
+     * {@code senderAddress}
+     * 
      * @param msg
      * @param senderAddress
      */
@@ -78,8 +92,17 @@ public class ThreadManager extends Thread {
         AppTest.displayMsg(msg, senderAddress);
     }
 
-    
-    /** 
+    /**
+     * Called by Server thread to notify the connection was closed by the remote
+     * Client
+     * 
+     * @param address Address of the client which ended the connection
+     */
+    protected static void notifyConnectionClosed(InetAddress address) {
+        closeConnectionThreads(address);
+    }
+
+    /**
      * @param msg
      * @param receivAddress
      */
@@ -98,7 +121,7 @@ public class ThreadManager extends Thread {
                 Socket socket = servSocket.accept();
 
                 TCPServer requestHandler = new TCPServer(socket);
-                serverTable.put(socket.getInetAddress(), requestHandler);      // Adds the listener thread to table
+                serverTable.put(socket.getInetAddress(), requestHandler); // Adds the Server thread to table
                 requestHandler.start();
             } catch (Exception e) {
                 e.printStackTrace();

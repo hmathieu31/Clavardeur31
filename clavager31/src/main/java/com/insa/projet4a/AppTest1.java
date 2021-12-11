@@ -55,13 +55,12 @@ public class AppTest1 {
      * <p>
      * Ends the discussion with a specified address{@code receivAddress}
      * </p>
-     * ! Set as private and encapsulate into endDisscussionGlobal
      * 
      * @param receivAddress
      */
-    private static void endDiscussion(InetAddress receivAddress) {
-        transmitMessage("--END CONNECTION--", receivAddress);
-        threadManager.closeConnectionThreads(receivAddress);
+    public static void endDiscussion(InetAddress receivAddress) {
+        ThreadManager.closeConnectionThreads(receivAddress);
+        threadManager.stopServer();
         System.out.println("Connexion closed with " + receivAddress);
     }
 

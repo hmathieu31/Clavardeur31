@@ -48,7 +48,6 @@ public class TCPClient extends Thread {
         this.socket = new Socket(address, port);
         this.pWriter = new PrintWriter(socket.getOutputStream(), true);
         pWriter.println("-- CONNECT from " + this);
-        pWriter.println();
     }
 
     @Override

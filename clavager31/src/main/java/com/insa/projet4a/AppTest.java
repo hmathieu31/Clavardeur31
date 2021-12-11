@@ -42,6 +42,17 @@ public class AppTest {
     }
 
     /**
+     * Called by the Thread Manager to notify the Application that {@code address}
+     * closed the connection
+     * ! Will be changed to call the GUI
+     * 
+     * @param address address of the remote client
+     */
+    public static void notifyConnectionClosed(InetAddress address) {
+        System.out.println("Connection closed with " + address);
+    }
+
+    /**
      * Transmits a message to another user
      * 
      * @param msg           Message transmitted
@@ -55,12 +66,11 @@ public class AppTest {
      * <p>
      * Ends the discussion with a specified address{@code receivAddress}
      * </p>
-     * ! Set as private and encapsulate into endDisscussionGlobal
      * 
      * @param receivAddress
      */
     public static void endDiscussion(InetAddress receivAddress) {
-        threadManager.closeConnectionThreads(receivAddress);
+        ThreadManager.closeConnectionThreads(receivAddress);
         threadManager.stopServer();
         System.out.println("Connexion closed with " + receivAddress);
     }
@@ -69,8 +79,10 @@ public class AppTest {
      * <p>
      * Function called when the application is started.
      * </p>
+     * <p>
      * Starts a ThreadManager listening for incoming communications
      * on port 12.
+     * </p>
      */
     public static void connect() {
         threadManager = new ThreadManager(12);
@@ -86,7 +98,8 @@ public class AppTest {
      * @throws InterruptedException
      */
     public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {
-        InetAddress receivAddress = InetAddress.getLocalHost();
+        InetAddress receivAddress = InetAddress.getLocalHost(); // Address of the receiver (localhost for the
+        // purposes of testing)
 
         connect();
 
@@ -103,7 +116,9 @@ public class AppTest {
         }
         scanner.close();
         endDiscussion(receivAddress);
-        threadManager.stopServer();
+
+        threadManager.stopServer(); // Only for testing purposes. In real use, there is no reason to stop the
+                                    // threadManager just because a connection was closed
     }
 
 }
