@@ -41,6 +41,7 @@ public class ThreadManager extends Thread {
     }
 
     private HashMap<InetAddress, TCPClient> clientTable = new HashMap<InetAddress, TCPClient>();
+    private HashMap<InetAddress, TCPServer> serverTable = new HashMap<InetAddress, TCPServer>();
 
     
     /** 
@@ -57,11 +58,14 @@ public class ThreadManager extends Thread {
 
     
     /** 
+     * Closes the Threads (Client and Server) dedicated to communication with {@code address}
      * @param address
      */
-    public void endClientThread(InetAddress address) {
+    public void closeConnectionThreads(InetAddress address) {
         TCPClient client = clientTable.get(address);
         client.stopClient();
+        TCPServer server = serverTable.get(address);
+        server.stopServer();
     }
 
 
@@ -94,6 +98,7 @@ public class ThreadManager extends Thread {
                 Socket socket = servSocket.accept();
 
                 TCPServer requestHandler = new TCPServer(socket);
+                serverTable.put(socket.getInetAddress(), requestHandler);      // Adds the listener thread to table
                 requestHandler.start();
             } catch (Exception e) {
                 e.printStackTrace();

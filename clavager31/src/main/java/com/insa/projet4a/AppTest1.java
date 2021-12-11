@@ -61,8 +61,7 @@ public class AppTest1 {
      */
     private static void endDiscussion(InetAddress receivAddress) {
         transmitMessage("--END CONNECTION--", receivAddress);
-        threadManager.endClientThread(receivAddress);
-        threadManager.stopServer();
+        threadManager.closeConnectionThreads(receivAddress);
         System.out.println("Connexion closed with " + receivAddress);
     }
 
@@ -80,15 +79,15 @@ public class AppTest1 {
         System.out.println();
     }
 
-    
-    /** 
+    /**
      * @param args
      * @throws UnknownHostException
      * @throws IOException
      * @throws InterruptedException
      */
     public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {
-        InetAddress receivAddress = InetAddress.getLocalHost();
+        InetAddress receivAddress = InetAddress.getLocalHost(); // Address of the receiver (localhost for the
+                                                                // purposes of testing)
 
         connect();
 
@@ -105,6 +104,7 @@ public class AppTest1 {
         }
         scanner.close();
         endDiscussion(receivAddress);
+        threadManager.stopServer();
     }
 
 }

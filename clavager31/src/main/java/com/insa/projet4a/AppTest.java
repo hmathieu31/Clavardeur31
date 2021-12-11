@@ -60,8 +60,7 @@ public class AppTest {
      * @param receivAddress
      */
     public static void endDiscussion(InetAddress receivAddress) {
-        transmitMessage("--END CONNECTION--", receivAddress);
-        threadManager.endClientThread(receivAddress);
+        threadManager.closeConnectionThreads(receivAddress);
         threadManager.stopServer();
         System.out.println("Connexion closed with " + receivAddress);
     }
@@ -80,8 +79,7 @@ public class AppTest {
         System.out.println();
     }
 
-    
-    /** 
+    /**
      * @param args
      * @throws UnknownHostException
      * @throws IOException
@@ -105,6 +103,7 @@ public class AppTest {
         }
         scanner.close();
         endDiscussion(receivAddress);
+        threadManager.stopServer();
     }
 
 }
