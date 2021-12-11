@@ -69,16 +69,20 @@ public class ThreadManager extends Thread {
      * @param address
      */
     public static void closeConnectionThreads(InetAddress address) {
+        closeClientThread(address);
+        closeServerThread(address);
+    }
+
+    private static void closeClientThread(InetAddress address) {
         TCPClient client = clientTable.get(address);
-        if (client != null) {
-            client.stopClient();
-            clientTable.remove(address);
-        }
+        client.stopClient();
+        clientTable.remove(address);
+    }
+
+    private static void closeServerThread(InetAddress address) {
         TCPServer server = serverTable.get(address);
-        if (server != null) {
-            server.stopServer();
-            serverTable.remove(address);
-        }
+        server.stopServer();
+        serverTable.remove(address);
     }
 
     /**
@@ -99,7 +103,9 @@ public class ThreadManager extends Thread {
      * @param address Address of the client which ended the connection
      */
     protected static void notifyConnectionClosed(InetAddress address) {
-        closeConnectionThreads(address);
+        AppTest.notifyConnectionClosed(address);
+        closeClientThread(address);
+        clientTable.remove(address);
     }
 
     /**

@@ -26,19 +26,15 @@ class TCPServer extends Thread {
             System.out.println("Received a connection");
             running = true;
 
-            // Get input and output streams
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            // Echo lines back to the client until the client closes the connection or we
-            // receive an empty line
             String line = in.readLine();
             while (running && line != null) {
                 ThreadManager.notifyMessageReceived(line, socket.getInetAddress());
                 line = in.readLine();
             }
-            if (line == null) {
-                System.out.println("Connection was closed by remote client");
-
+            if (line == null) { // Case where the connection was closed by remote client
+                ThreadManager.notifyConnectionClosed(socket.getInetAddress());
             }
             in.close();
             socket.close();

@@ -48,7 +48,8 @@ public class AppTest {
 
     /**
      * Called by the Thread Manager to notify the Application that {@code address}
-     * closed the connection
+     * closed the connection 
+     * <p>
      * ! Will be changed to call the GUI
      * 
      * @param address address of the remote client
@@ -105,7 +106,7 @@ public class AppTest {
      * @throws InterruptedException
      */
     public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {
-        InetAddress receivAddress = InetAddress.getByName("192.168.1.10"); // Address of the receiver (localhost for the
+        InetAddress receivAddress = InetAddress.getByName("192.168.1.84"); // Address of the receiver (localhost for the
                                                                            // purposes of testing)
 
         connect();
