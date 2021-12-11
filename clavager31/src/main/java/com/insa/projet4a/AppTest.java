@@ -11,6 +11,11 @@ import java.util.Scanner;
 public class AppTest {
 
     private static ThreadManager threadManager;
+    /**
+     * * Temporary boolean (used only for testing purposes as a simplification of the list containing all ongoing communications)
+     */
+    private static boolean isDiscussionOngoing;
+
 
     /**
      * Creates a ClientThread to send messages to {@code receivAddress}
@@ -22,7 +27,7 @@ public class AppTest {
      */
     public static boolean newDiscussion(InetAddress receivAddress) {
         try {
-            threadManager.createClientThread(13, receivAddress);
+            threadManager.createClientThread(12, receivAddress);
             return true;
         } catch (IOException e) {
             System.err.println("Failed to establish connexion with target");
@@ -50,6 +55,7 @@ public class AppTest {
      */
     public static void notifyConnectionClosed(InetAddress address) {
         System.out.println("Connection closed with " + address);
+        isDiscussionOngoing = false;
     }
 
     /**
@@ -91,6 +97,7 @@ public class AppTest {
         System.out.println();
     }
 
+    
     /**
      * @param args
      * @throws UnknownHostException
@@ -98,19 +105,19 @@ public class AppTest {
      * @throws InterruptedException
      */
     public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {
-        InetAddress receivAddress = InetAddress.getLocalHost(); // Address of the receiver (localhost for the
-        // purposes of testing)
+        InetAddress receivAddress = InetAddress.getByName("192.168.1.10"); // Address of the receiver (localhost for the
+                                                                           // purposes of testing)
 
         connect();
 
         while (newDiscussion(receivAddress) == false) {
             Thread.sleep(1000);
         }
-
+        isDiscussionOngoing = true;
         Scanner scanner = new Scanner(System.in);
         String txt = scanner.nextLine();
 
-        while (!"close".equals(txt)) {
+        while (!"close".equals(txt) && isDiscussionOngoing) {
             transmitMessage(txt, receivAddress);
             txt = scanner.nextLine();
         }
