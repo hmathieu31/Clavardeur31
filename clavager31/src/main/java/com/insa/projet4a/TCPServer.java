@@ -24,6 +24,7 @@ class TCPServer extends Thread {
     public void run() {
         try {
             System.out.println("Received a connection");
+            running = true;
 
             // Get input and output streams
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
