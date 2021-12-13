@@ -53,10 +53,12 @@ public class MainController {
         addConnected("Kevin");
 
         ArrayList<Message> list = new ArrayList<Message>();
-        list.add(new Message(true,currentDate(),"Bonjour"));
-        list.add(new Message(false,currentDate(),"Salut"));
-        list.add(new Message(true,currentDate(),"Comment ça va ? \nQuoi de neuf"));
-        list.add(new Message(false,currentDate(),"Ca va bien.\nRien de spéciale\nEnfin si :  j'ai fini le GUI"));
+        // list.add(new Message(true,currentDate(),"Bonjour"));
+        // list.add(new Message(false,currentDate(),"Salut"));
+        // list.add(new Message(true,currentDate(),"Comment ça va ? \nQuoi de neuf"));
+        // list.add(new Message(false,currentDate(),"Ca va bien.\nRien de spéciale\nEnfin si :  j'ai fini le GUI"));
+        list.add(new Message(true,currentDate(),"Bienvenue dans Clavager31"));
+        list.add(new Message(true,currentDate(),"Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives\nSelectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
         loadMessages(list);
     }
 
@@ -122,7 +124,9 @@ public class MainController {
 
                 // On vérifie qu'on discute bien avec quelqu'un
                 // Pour éviter d'avoir supprimé quelqu'un et continuer de discuter avec
-                if(GUI.currentDiscussionIndex >= 0){
+
+                if (currentDiscussionList.getSelectionModel().getSelectedIndices().size() > 0){
+                    GUI.currentDiscussionIndex = (int)currentDiscussionList.getSelectionModel().getSelectedIndices().get(0);
                     String date = currentDate();
                     addMessageTo(date,messageText);
                     messageField.clear();
