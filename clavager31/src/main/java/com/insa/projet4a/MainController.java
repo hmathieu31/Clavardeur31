@@ -28,9 +28,7 @@ public class MainController {
     @FXML private VBox messageList;
     @FXML private TextField messageField;
 
-    @FXML private VBox connectedList;
-
-    @FXML private ListView<String> currentDiscussionList;
+    @FXML private ListView<String> connectedList;
 
     Alert alert = new Alert(AlertType.ERROR,
                         "Vous n'avez pas de discussion active, veuillez choisir un utilisateur avec qui communiquer.", 
@@ -125,8 +123,8 @@ public class MainController {
                 // On vérifie qu'on discute bien avec quelqu'un
                 // Pour éviter d'avoir supprimé quelqu'un et continuer de discuter avec
 
-                if (currentDiscussionList.getSelectionModel().getSelectedIndices().size() > 0){
-                    GUI.currentDiscussionIndex = (int)currentDiscussionList.getSelectionModel().getSelectedIndices().get(0);
+                if (connectedList.getSelectionModel().getSelectedIndices().size() > 0){
+                    GUI.currentDiscussionIndex = (int)connectedList.getSelectionModel().getSelectedIndices().get(0);
                     String date = currentDate();
                     addMessageTo(date,messageText);
                     messageField.clear();
@@ -159,39 +157,16 @@ public class MainController {
 
     }
 
-    // private void loadMessagesOf(int index){
-    //     String pseudo = getPseudoFromIndex(index);
-    // }
-
-    // Rajoute une entrée (label) au Menu bas gauche 
-    // -> Appelé quand on nous broadcast l'existence
-    @FXML
-    public void addConnected(String content) throws IOException{
-        FXMLLoader loader = new FXMLLoader();   
-        AnchorPane pane = loader.load(getClass().getResource("components/connected.fxml").openStream());
-        pane.setOnMouseClicked(e -> connectToUser(pane));
-        
-        Label messageLabel = (Label) pane.getChildren().get(0);
-
-        messageLabel.setText(content);
-        connectedList.getChildren().add(pane);
+    public void addConnected(String name){
+        connectedList.getItems().add(name);
     }
 
-    // Passe un user du menu Connected(bas gauche) à celui de DiscussionActuel(haut gauche)
-    // -> Il faudra envoyer une requete de connexion TCP
-    private void connectToUser(AnchorPane pane){
-        Label messageLabel = (Label) pane.getChildren().get(0);
-        VBox parent = (VBox)pane.getParent();
-        parent.getChildren().remove(pane);
-
-        String user = messageLabel.getText();
-        currentDiscussionList.getItems().add(user);
-        
-        System.out.println(user);
+    public void removeConnected(String name){
+        connectedList.getItems().remove(name);
     }
 
     private String getPseudoFromIndex(int index){
-        return currentDiscussionList.getItems().get(index).toString();
+        return connectedList.getItems().get(index).toString();
     }
 
     // Quand on clique sur la listeView cela choisi un user (surligné en bleu)
@@ -200,8 +175,8 @@ public class MainController {
     @FXML
     private void updateCurrentDiscussion() throws SQLException, IOException{
 
-        if (currentDiscussionList.getSelectionModel().getSelectedIndices().size() > 0){
-            GUI.currentDiscussionIndex = (int)currentDiscussionList.getSelectionModel().getSelectedIndices().get(0);
+        if (connectedList.getSelectionModel().getSelectedIndices().size() > 0){
+            GUI.currentDiscussionIndex = (int)connectedList.getSelectionModel().getSelectedIndices().get(0);
             String name = getPseudoFromIndex(GUI.currentDiscussionIndex);
 
             resetMessage();
@@ -215,30 +190,11 @@ public class MainController {
         } 
     }
 
-    // Quand on appuie sur "Suppr" cela remove un user la liste des gens avec qui on discute
-    // Il est ainsi placé dans la liste des gens connectés
-    // -> On doit finir la connexion en tcp
-    @FXML
-    private void removeCurrentDiscussion(KeyEvent key) throws IOException, SQLException {
-        if(key.getCode() == KeyCode.DELETE){
-            if (currentDiscussionList.getSelectionModel().getSelectedIndices().size() > 0){
-                int index = (int)currentDiscussionList.getSelectionModel().getSelectedIndices().get(0);
-                String pseudo = getPseudoFromIndex(index);
-                addConnected(pseudo);
-                currentDiscussionList.getItems().remove(index);
-
-                resetMessage();
-                GUI.currentDiscussionIndex = -1; // équivalent à null
-                updateCurrentDiscussion(); // si on supp et qu'il reste des user ça ne laisse pas à null
-            }
-        }
-    }
-
     @FXML 
     private void clearHistory() throws SQLException{
 
-        if (currentDiscussionList.getSelectionModel().getSelectedIndices().size() > 0){
-            int index = (int)currentDiscussionList.getSelectionModel().getSelectedIndices().get(0);
+        if (connectedList.getSelectionModel().getSelectedIndices().size() > 0){
+            int index = (int)connectedList.getSelectionModel().getSelectedIndices().get(0);
             String name = getPseudoFromIndex(index);
 
             resetMessage();

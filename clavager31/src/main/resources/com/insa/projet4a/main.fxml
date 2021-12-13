@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
@@ -7,15 +8,15 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insa.projet4a.MainController">
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" stylesheets="@style/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insa.projet4a.MainController">
    <children>
       <AnchorPane>
          <children>
-            <HBox alignment="TOP_RIGHT" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: lightgray;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #23272A;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <AnchorPane layoutX="788.0" layoutY="10.0" prefHeight="200.0" prefWidth="120.0">
                      <children>
-                        <Label alignment="CENTER" text="Votre pseudo :" underline="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <Label alignment="CENTER" style="-fx-text-fill: white;" text="Votre pseudo :" underline="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="0.0">
                            <font>
                               <Font name="DejaVu Sans Bold" size="13.0" />
                            </font>
@@ -33,7 +34,7 @@
                   </AnchorPane>
                   <AnchorPane>
                      <children>
-                        <Button fx:id="changeIdentityButton" mnemonicParsing="false" onMouseClicked="#changeIdentity" text="Changer" AnchorPane.bottomAnchor="8.0" AnchorPane.topAnchor="8.0">
+                        <Button fx:id="changeIdentityButton" mnemonicParsing="false" onMouseClicked="#changeIdentity" text="Changer" AnchorPane.bottomAnchor="10.0" AnchorPane.topAnchor="10.0">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>
@@ -41,41 +42,76 @@
                      </children>
                   </AnchorPane>
                   <Pane prefHeight="50.0" prefWidth="78.0" />
+                  <AnchorPane prefHeight="45.0" prefWidth="617.0">
+                     <children>
+                        <Button fx:id="eraseHistory" mnemonicParsing="false" onMouseClicked="#clearHistory" text="Effacer historique" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
+                     </children>
+                  </AnchorPane>
                </children>
             </HBox>
          </children>
       </AnchorPane>
-      <SplitPane dividerPositions="0.281563126252505" prefHeight="900.0" prefWidth="200.0">
+      <SplitPane dividerPositions="0.281563126252505" prefHeight="900.0" prefWidth="200.0" style="-fx-background-color: #2C2F33;">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="758.0" prefWidth="265.0">
                <children>
-                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0">
+                  <VBox layoutX="20.0" layoutY="40.0" AnchorPane.bottomAnchor="40.0" AnchorPane.topAnchor="40.0">
                      <children>
                         <AnchorPane>
                            <children>
-                              <ListView fx:id="currentDiscussionList" onKeyReleased="#removeCurrentDiscussion" onMouseClicked="#updateCurrentDiscussion" prefHeight="250.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <VBox.margin>
-                                    <Insets left="20.0" right="20.0" />
-                                 </VBox.margin>
-                              </ListView>
+                              <ImageView fitHeight="150.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="0.0">
+                                 <image>
+                                    <Image url="@img/logo.png" />
+                                 </image>
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </ImageView>
                            </children>
                         </AnchorPane>
-                        <Pane prefHeight="50.0" prefWidth="500.0" />
-                        <ScrollPane prefHeight="380.0" prefViewportWidth="277.0" prefWidth="237.0">
-                           <content>
-                              <VBox fx:id="connectedList" />
-                           </content>
-                        </ScrollPane>
-                        <AnchorPane>
+                        <AnchorPane prefHeight="488.0" prefWidth="249.0">
                            <children>
-                              <Label fx:id="identityLabel1" alignment="CENTER" style="-fx-text-fill: white; -fx-background-color: red; -fx-background-radius: 10;" text="19" textFill="#cd2727" AnchorPane.rightAnchor="0.0">
-                                 <font>
-                                    <Font name="DejaVu Sans Bold" size="13.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-                                 </padding>
-                              </Label>
+                              <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <ListView fx:id="connectedList" onMouseClicked="#updateCurrentDiscussion" prefHeight="250.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <VBox.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </VBox.margin>
+                                    </ListView>
+                                 </children>
+                              </AnchorPane>
+                              <VBox layoutX="210.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <AnchorPane>
+                                       <children>
+                                          <Label fx:id="identityLabel1233" alignment="CENTER" style="-fx-text-fill: white; -fx-background-color: red; -fx-background-radius: 10;" text="19" textFill="#cd2727" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
+                                             <font>
+                                                <Font name="DejaVu Sans Bold" size="13.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                    <Pane prefHeight="40.0" prefWidth="35.0" />
+                                    <AnchorPane>
+                                       <children>
+                                          <Label fx:id="identityLabel1243" alignment="CENTER" style="-fx-text-fill: white; -fx-background-color: red; -fx-background-radius: 10;" text="19" textFill="#cd2727" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
+                                             <font>
+                                                <Font name="DejaVu Sans Bold" size="13.0" />
+                                             </font>
+                                             <padding>
+                                                <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                                             </padding>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets left="10.0" />
+                                 </HBox.margin>
+                              </VBox>
                            </children>
                         </AnchorPane>
                      </children>
@@ -86,19 +122,14 @@
                <children>
                   <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane>
-                           <children>
-                              <Button fx:id="eraseHistory" mnemonicParsing="false" onMouseClicked="#clearHistory" text="Effacer historique" />
-                           </children>
-                        </AnchorPane>
-                        <ScrollPane hbarPolicy="NEVER" prefViewportHeight="605.0" prefViewportWidth="673.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                        <ScrollPane hbarPolicy="NEVER" prefHeight="602.0" prefViewportHeight="605.0" prefViewportWidth="673.0" style="-fx-background-color: #2C2F33;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <content>
-                              <VBox fx:id="messageList" prefWidth="670.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <VBox fx:id="messageList" prefHeight="600.0" prefWidth="680.0" style="-fx-background-color: #2C2F33;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <VBox.margin>
                                     <Insets bottom="40.0" />
                                  </VBox.margin>
                                  <padding>
-                                    <Insets left="20.0" right="20.0" />
+                                    <Insets left="20.0" right="20.0" top="20.0" />
                                  </padding>
                               </VBox>
                            </content>
@@ -108,7 +139,7 @@
                               <Insets top="20.0" />
                            </VBox.margin>
                            <children>
-                              <TextField fx:id="messageField" onKeyReleased="#sendMessage" prefHeight="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                              <TextField fx:id="messageField" onKeyReleased="#sendMessage" prefHeight="50.0" style="-fx-background-color: rgb(59, 59, 59); -fx-text-fill: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                            </children>
                         </AnchorPane>
                      </children>

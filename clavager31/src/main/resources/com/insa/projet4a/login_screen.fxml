@@ -8,19 +8,19 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="650.0" style="-fx-background-color: #687387;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insa.projet4a.LoginController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="650.0" style="-fx-background-color: #23272A;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insa.projet4a.LoginController">
    <children>
-      <Label alignment="CENTER" layoutX="121.0" layoutY="37.0" prefHeight="99.0" prefWidth="390.0" text="Clavager31" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="20.0">
+      <Label alignment="CENTER" layoutX="121.0" layoutY="37.0" prefHeight="99.0" prefWidth="390.0" text="Clavager31" textFill="#bfbfbf" AnchorPane.leftAnchor="120.0" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="20.0">
          <font>
             <Font name="Rachana Bold" size="68.0" />
          </font>
       </Label>
-      <TextField fx:id="pseudoField" layoutX="220.0" layoutY="319.0" onKeyReleased="#connect" prefHeight="32.0" prefWidth="190.0" promptText=".." style="-fx-background-color: #becbd6;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="220.0">
+      <TextField fx:id="pseudoField" layoutX="220.0" layoutY="319.0" onKeyReleased="#connect" prefHeight="32.0" prefWidth="190.0" promptText="Votre pseudo...." style="-fx-background-color: rgb(59, 59, 59); -fx-text-inner-color: white;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="220.0" AnchorPane.rightAnchor="220.0">
          <effect>
             <InnerShadow />
          </effect>
       </TextField>
-      <Label alignment="CENTER" layoutX="220.0" layoutY="296.0" text="Entrez votre pseudo" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="180.0" AnchorPane.rightAnchor="180.0">
+      <Label alignment="CENTER" layoutX="220.0" layoutY="296.0" text="Entrez votre pseudo" textFill="#bfbfbf" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="180.0" AnchorPane.rightAnchor="180.0">
          <font>
             <Font name="System Bold" size="17.0" />
          </font>
