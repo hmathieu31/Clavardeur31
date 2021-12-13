@@ -1,6 +1,7 @@
 package com.insa.projet4a;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,10 +36,18 @@ public class MainController {
                         "Vous n'avez pas de discussion active, veuillez choisir un utilisateur avec qui communiquer.", 
                         ButtonType.OK);
 
+    @FXML private Button eraseHistory;
+
+    BDDManager bdd;
+
     // S'execute toujours au lancement de la fenetre
     @FXML
-    protected void initialize() throws IOException {
-        identityLabel.setText(GUI.pseudo);;
+    protected void initialize() throws IOException, SQLException {
+
+        this.bdd = new BDDManager("test");
+        this.bdd.initHistory();
+
+        identityLabel.setText(GUI.pseudo);
         addConnected("Michel");
         addConnected("Jean");
         addConnected("Kevin");
@@ -105,7 +114,7 @@ public class MainController {
     // -> Append dans l'historique correspondant
     // -> Transmettre par TCP le message
     @FXML
-    private void sendMessage(KeyEvent key) throws IOException {
+    private void sendMessage(KeyEvent key) throws IOException, SQLException {
         if(key.getCode() == KeyCode.ENTER){
             String messageText = messageField.getText();
 
@@ -117,6 +126,10 @@ public class MainController {
                     String date = currentDate();
                     addMessageTo(date,messageText);
                     messageField.clear();
+
+                    // A MODIFIER METTRE IP A LA PLACE
+                    String pseudoDest = getPseudoFromIndex(GUI.currentDiscussionIndex);
+                    this.bdd.insertHistory(pseudoDest, false, messageText, date);
                 }
                 else{
                     alert.show();
@@ -181,12 +194,18 @@ public class MainController {
     // A chaque clique on regarde quel est l'utilisateur choisi
     // -> Load l'historique correspondant
     @FXML
-    private void updateCurrentDiscussion(){
+    private void updateCurrentDiscussion() throws SQLException, IOException{
 
         if (currentDiscussionList.getSelectionModel().getSelectedIndices().size() > 0){
             GUI.currentDiscussionIndex = (int)currentDiscussionList.getSelectionModel().getSelectedIndices().get(0);
             String name = getPseudoFromIndex(GUI.currentDiscussionIndex);
+
             resetMessage();
+
+            // MODIFIER METTRE IP AU LIEU DE NOM
+            // FAUT CORRESP IP/NOM
+            ArrayList<Message> history = this.bdd.showHistory(name);
+            loadMessages(history);
 
             System.out.println(name);
         } 
@@ -196,7 +215,7 @@ public class MainController {
     // Il est ainsi placé dans la liste des gens connectés
     // -> On doit finir la connexion en tcp
     @FXML
-    private void removeCurrentDiscussion(KeyEvent key) throws IOException {
+    private void removeCurrentDiscussion(KeyEvent key) throws IOException, SQLException {
         if(key.getCode() == KeyCode.DELETE){
             if (currentDiscussionList.getSelectionModel().getSelectedIndices().size() > 0){
                 int index = (int)currentDiscussionList.getSelectionModel().getSelectedIndices().get(0);
@@ -208,6 +227,21 @@ public class MainController {
                 GUI.currentDiscussionIndex = -1; // équivalent à null
                 updateCurrentDiscussion(); // si on supp et qu'il reste des user ça ne laisse pas à null
             }
+        }
+    }
+
+    @FXML 
+    private void clearHistory() throws SQLException{
+
+        if (currentDiscussionList.getSelectionModel().getSelectedIndices().size() > 0){
+            int index = (int)currentDiscussionList.getSelectionModel().getSelectedIndices().get(0);
+            String name = getPseudoFromIndex(index);
+
+            resetMessage();
+
+            // MODIFIER METTRE IP AU LIEU DE NOM
+            // FAUT CORRESP IP/NOM
+            this.bdd.clearHistory(name);
         }
     }
 }

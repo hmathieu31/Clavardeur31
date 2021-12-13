@@ -69,6 +69,26 @@ public class BDDManager {
         return list;
     }
 
+    public ArrayList<Message> showHistory() throws SQLException{
+        String query = "SELECT * FROM history ";
+
+        Connection conn = this.connect();
+        Statement statement = conn.createStatement();
+
+        ResultSet result = statement.executeQuery(query);
+        ArrayList<Message> list = new ArrayList<Message>();
+                
+        // loop through the result set
+        while (result.next()) {
+
+            Message m = new Message(result.getBoolean("from"),
+                                    result.getString("date"),
+                                    result.getString("content"));
+            list.add(m);
+        }
+        return list;
+    }
+
     public void insertHistory(String user, Boolean from, String content, String date) throws SQLException {
         String query = "INSERT INTO history('user','from','content','date') VALUES(?,?,?,?)";
 
@@ -81,5 +101,23 @@ public class BDDManager {
         pStatement.setString(4, date);
 
         pStatement.executeUpdate();
+    }
+
+    public void clearHistory(String user) throws SQLException{
+        String query = "DELETE FROM history "
+                        + "WHERE user = ? ;";
+
+        Connection conn = this.connect();
+        PreparedStatement pStatement = conn.prepareStatement(query);
+        pStatement.setString(1,user);
+        pStatement.executeUpdate();
+    }
+
+    public void clearHistory() throws SQLException{
+        String query = "DELETE FROM history ";
+
+        Connection conn = this.connect();
+        Statement statement = conn.createStatement();
+        statement.execute(query);
     }
 }

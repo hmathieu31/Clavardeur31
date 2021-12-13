@@ -11,12 +11,11 @@ public class testbdd {
         db.initHistory();
 
         // db.insertHistory("user2", false, "content", "date");
+        // db.clearHistory();
 
-        ArrayList<Message> list = db.showHistory("user");
+        ArrayList<Message> list = db.showHistory();
         for (Message message : list) {
             System.out.println(message);
         }
-
-        // faut clear table
     }
 }
