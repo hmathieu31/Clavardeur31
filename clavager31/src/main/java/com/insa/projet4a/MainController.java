@@ -247,5 +247,8 @@ public class MainController {
             // FAUT CORRESP IP/NOM
             this.bdd.clearHistory(name);
         }
+        else{
+            alert.show();
+        }
     }
 }
