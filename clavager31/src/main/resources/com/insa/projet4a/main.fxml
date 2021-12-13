@@ -66,6 +66,18 @@
                               <VBox fx:id="connectedList" />
                            </content>
                         </ScrollPane>
+                        <AnchorPane>
+                           <children>
+                              <Label fx:id="identityLabel1" alignment="CENTER" style="-fx-text-fill: white; -fx-background-color: red; -fx-background-radius: 10;" text="19" textFill="#cd2727" AnchorPane.rightAnchor="0.0">
+                                 <font>
+                                    <Font name="DejaVu Sans Bold" size="13.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </AnchorPane>
                      </children>
                   </VBox>
                </children>
