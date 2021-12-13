@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * JavaFX App
@@ -18,6 +19,8 @@ public class GUI extends Application {
 
     public static String pseudo;
     public static int currentDiscussionIndex = -1;
+
+    public static ArrayList<User> connectedList = new ArrayList<User>();
 
     @Override
     public void start(Stage primaryStage) throws IOException {

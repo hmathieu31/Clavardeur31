@@ -6,11 +6,11 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 
-<AnchorPane prefHeight="50.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="50.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insa.projet4a.MessageToController">
    <children>
       <VBox AnchorPane.rightAnchor="10.0">
          <children>
-            <AnchorPane fx:id="messageFrom1" layoutX="107.0" style="-fx-padding: 10 0;" styleClass="messageAnchor">
+            <AnchorPane fx:id="messageTo" layoutX="107.0" style="-fx-padding: 10 0;" styleClass="messageAnchor">
                <children>
                   <Label maxWidth="600.0" style="-fx-background-color: blue; -fx-text-fill: white;" text="Impec&#10;Pas grand chose de nouveau" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <padding>

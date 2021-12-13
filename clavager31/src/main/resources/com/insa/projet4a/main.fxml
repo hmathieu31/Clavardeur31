@@ -53,9 +53,9 @@
       </AnchorPane>
       <SplitPane dividerPositions="0.281563126252505" prefHeight="900.0" prefWidth="200.0" style="-fx-background-color: #2C2F33;">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="758.0" prefWidth="265.0" style="-fx-background-color: #23272A;" SplitPane.resizableWithParent="false">
+          <AnchorPane minHeight="0.0" minWidth="0.0" style="-fx-background-color: #23272A;" SplitPane.resizableWithParent="false">
                <children>
-                  <VBox layoutX="20.0" layoutY="40.0" AnchorPane.bottomAnchor="40.0" AnchorPane.topAnchor="40.0">
+                  <VBox layoutX="20.0" layoutY="40.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0">
                      <children>
                         <AnchorPane>
                            <children>
@@ -69,33 +69,9 @@
                               </ImageView>
                            </children>
                         </AnchorPane>
-                        <ScrollPane prefViewportHeight="483.0" prefViewportWidth="238.0" style="-fx-background-color: #23272A;">
+                        <ScrollPane hbarPolicy="NEVER" prefViewportHeight="483.0" prefViewportWidth="238.0" style="-fx-background-color: #23272A;">
                            <content>
-                              <VBox prefHeight="487.0" prefWidth="238.0">
-                                 <children>
-                                    <HBox style="-fx-background-color: #23272A;">
-                                       <children>
-                                          <AnchorPane prefHeight="36.0" prefWidth="168.0">
-                                             <children>
-                                                <Label text="dzfeydvzed" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="0.0" />
-                                             </children>
-                                          </AnchorPane>
-                                          <AnchorPane>
-                                             <children>
-                                                <Label fx:id="identityLabel12332" alignment="CENTER" style="-fx-text-fill: white; -fx-background-color: red; -fx-background-radius: 10;" text="19" textFill="#cd2727" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
-                                                   <font>
-                                                      <Font name="DejaVu Sans Bold" size="13.0" />
-                                                   </font>
-                                                   <padding>
-                                                      <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-                                                   </padding>
-                                                </Label>
-                                             </children>
-                                          </AnchorPane>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
+                              <VBox fx:id="connectedContainer" prefHeight="482.0" prefWidth="238.0" style="-fx-background-color: #23272A;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                            </content>
                         </ScrollPane>
                      </children>
@@ -106,9 +82,9 @@
                <children>
                   <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <ScrollPane hbarPolicy="NEVER" prefHeight="602.0" prefViewportHeight="605.0" prefViewportWidth="673.0" style="-fx-background-color: #2C2F33;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                        <ScrollPane fx:id="scrollMessage" hbarPolicy="NEVER" prefHeight="602.0" prefViewportHeight="605.0" prefViewportWidth="673.0" style="-fx-background-color: #2C2F33;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                            <content>
-                              <VBox fx:id="messageList" prefHeight="600.0" prefWidth="680.0" style="-fx-background-color: #2C2F33;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <VBox fx:id="messageContainer" prefHeight="600.0" prefWidth="680.0" style="-fx-background-color: #2C2F33;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <VBox.margin>
                                     <Insets bottom="40.0" />
                                  </VBox.margin>

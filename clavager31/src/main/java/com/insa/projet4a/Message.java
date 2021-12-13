@@ -12,18 +12,6 @@ public class Message {
         this.content = content;
     }   
 
-    public String getContent() {
-        return content;
-    }
-
-    public Boolean getFrom() {
-        return from;
-    }
-    
-    public String getDate() {
-        return date;
-    }
-
     @Override
     public String toString() {
         return "Message from? " + from.toString() + " "

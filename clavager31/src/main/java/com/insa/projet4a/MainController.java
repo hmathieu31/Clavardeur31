@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -13,11 +14,12 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class MainController {
@@ -25,10 +27,11 @@ public class MainController {
     @FXML private Button changeIdentityButton;
     @FXML private Label identityLabel;
 
-    @FXML private VBox messageList;
+    @FXML private VBox messageContainer;
     @FXML private TextField messageField;
+    @FXML private ScrollPane scrollMessage; 
 
-    @FXML private ListView<String> connectedList;
+    @FXML private VBox connectedContainer;
 
     Alert alert = new Alert(AlertType.ERROR,
                         "Vous n'avez pas de discussion active, veuillez choisir un utilisateur avec qui communiquer.", 
@@ -46,15 +49,12 @@ public class MainController {
         this.bdd.initHistory();
 
         identityLabel.setText(GUI.pseudo);
-        addConnected("Michel");
-        addConnected("Jean");
-        addConnected("Kevin");
+        addConnected(new User(0, "localhost", "Michel"));
+        addConnected(new User(1, "localhost", "Jean"));
+        addConnected(new User(2, "localhost", "Kevin"));
+        addConnected(new User(3, "localhost", "Sebastien"));
 
         ArrayList<Message> list = new ArrayList<Message>();
-        // list.add(new Message(true,currentDate(),"Bonjour"));
-        // list.add(new Message(false,currentDate(),"Salut"));
-        // list.add(new Message(true,currentDate(),"Comment ça va ? \nQuoi de neuf"));
-        // list.add(new Message(false,currentDate(),"Ca va bien.\nRien de spéciale\nEnfin si :  j'ai fini le GUI"));
         list.add(new Message(true,currentDate(),"Bienvenue dans Clavager31"));
         list.add(new Message(true,currentDate(),"Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives\nSelectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
         loadMessages(list);
@@ -86,7 +86,12 @@ public class MainController {
         Label dateLabel = (Label) pane2.getChildren().get(0);
         dateLabel.setText(date);
         
-        messageList.getChildren().add(pane);
+        messageContainer.getChildren().add(pane);
+
+        // bizarre il se trigger avant le message ?
+        scrollMessage.applyCss();
+        scrollMessage.layout();
+        scrollMessage.setVvalue(1.0);
     }
 
     public void addMessageFrom(String date, String content) throws IOException{
@@ -99,7 +104,7 @@ public class MainController {
 
     // Efface tous les messages de la discussion actuelle
     public void resetMessage(){
-        messageList.getChildren().clear();
+        messageContainer.getChildren().clear();
     }
 
     // Quand on envoie un message on récupére la date du jour
@@ -123,15 +128,14 @@ public class MainController {
                 // On vérifie qu'on discute bien avec quelqu'un
                 // Pour éviter d'avoir supprimé quelqu'un et continuer de discuter avec
 
-                if (connectedList.getSelectionModel().getSelectedIndices().size() > 0){
-                    GUI.currentDiscussionIndex = (int)connectedList.getSelectionModel().getSelectedIndices().get(0);
+                if (GUI.currentDiscussionIndex >= 0){
                     String date = currentDate();
                     addMessageTo(date,messageText);
                     messageField.clear();
 
                     // A MODIFIER METTRE IP A LA PLACE
-                    String pseudoDest = getPseudoFromIndex(GUI.currentDiscussionIndex);
-                    this.bdd.insertHistory(pseudoDest, false, messageText, date);
+                    User user = GUI.connectedList.get(GUI.currentDiscussionIndex);
+                    this.bdd.insertHistory(user.name, false, messageText, date);
                 }
                 else{
                     alert.show();
@@ -143,9 +147,9 @@ public class MainController {
     // Utilisé quand on change de fenetre ou quand on prend l'historique
     private void loadMessages(ArrayList<Message> list) throws IOException{
         for(Message m : list){
-            Boolean from = m.getFrom();
-            String content = m.getContent();
-            String date = m.getDate();
+            Boolean from = m.from;
+            String content = m.content;
+            String date = m.date;
 
             if (from){
                 addMessageFrom(date,content);
@@ -154,54 +158,77 @@ public class MainController {
                 addMessageTo(date,content);
             }
         }
-
     }
 
-    public void addConnected(String name){
-        connectedList.getItems().add(name);
+    public void addConnected(User user) throws IOException{
+        FXMLLoader loader = new FXMLLoader();   
+        HBox hbox = loader.load(getClass().getResource("components/connected.fxml").openStream());
+
+        AnchorPane pane1 = (AnchorPane)hbox.getChildren().get(0);
+        Label nameLabel = (Label) pane1.getChildren().get(0);
+        nameLabel.setText(user.name);
+
+        AnchorPane pane2 = (AnchorPane)hbox.getChildren().get(1);
+        Label notificationLabel = (Label) pane2.getChildren().get(0);
+        notificationLabel.setText("1");
+
+        // Les éléments ne peuvent avoir comme ID que des strings (comme en html)
+        hbox.setId(user.id.toString());
+        hbox.setOnMouseClicked(e -> {
+            try {
+                updateCurrentDiscussion(e);
+            } catch (SQLException | IOException e1) {
+                e1.printStackTrace();
+            }
+        } );
+        connectedContainer.getChildren().add(hbox);
+
+        // TEMPORAIRE 
+        // normalement on ajoute dans la liste de connecté de APP puis on update le "visuel"
+        // ici on fait dans l'autre sens pour l'instant
+
+        // Faudra faire attention au fait que si un utilisateur se connecte puis deconnecte
+        // On sache qu'il était déjà dans la liste du GUI on le rajoute pas une deuxième fois
+        GUI.connectedList.add(user);
     }
 
-    public void removeConnected(String name){
-        connectedList.getItems().remove(name);
-    }
-
-    private String getPseudoFromIndex(int index){
-        return connectedList.getItems().get(index).toString();
+    public void removeConnected(Integer index){
+        connectedContainer.getChildren().remove(index);
     }
 
     // Quand on clique sur la listeView cela choisi un user (surligné en bleu)
     // A chaque clique on regarde quel est l'utilisateur choisi
     // -> Load l'historique correspondant
     @FXML
-    private void updateCurrentDiscussion() throws SQLException, IOException{
+    private void updateCurrentDiscussion(Event e) throws SQLException, IOException{
 
-        if (connectedList.getSelectionModel().getSelectedIndices().size() > 0){
-            GUI.currentDiscussionIndex = (int)connectedList.getSelectionModel().getSelectedIndices().get(0);
-            String name = getPseudoFromIndex(GUI.currentDiscussionIndex);
+            HBox hbox = (HBox)e.getSource();
+            Integer index = Integer.valueOf(hbox.getId());
+            GUI.currentDiscussionIndex = index;
 
             resetMessage();
 
             // MODIFIER METTRE IP AU LIEU DE NOM
             // FAUT CORRESP IP/NOM
-            ArrayList<Message> history = this.bdd.showHistory(name);
+            User user = GUI.connectedList.get(index);
+            ArrayList<Message> history = this.bdd.showHistory(user.name);
+
             loadMessages(history);
 
-            System.out.println(name);
-        } 
+            System.out.println(user);
     }
 
     @FXML 
     private void clearHistory() throws SQLException{
 
-        if (connectedList.getSelectionModel().getSelectedIndices().size() > 0){
-            int index = (int)connectedList.getSelectionModel().getSelectedIndices().get(0);
-            String name = getPseudoFromIndex(index);
+        if (GUI.currentDiscussionIndex >= 0){
+            User user = GUI.connectedList.get(GUI.currentDiscussionIndex);
 
             resetMessage();
 
             // MODIFIER METTRE IP AU LIEU DE NOM
             // FAUT CORRESP IP/NOM
-            this.bdd.clearHistory(name);
+            this.bdd.clearHistory(user.name);
         }
         else{
             alert.show();
