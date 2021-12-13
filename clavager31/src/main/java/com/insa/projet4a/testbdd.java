@@ -7,7 +7,7 @@ public class testbdd {
     
     public static void main(String[] args) throws SQLException {
         BDDManager db = new BDDManager("test");
-        
+
         db.initHistory();
 
         // db.insertHistory("user2", false, "content", "date");
@@ -16,5 +16,7 @@ public class testbdd {
         for (Message message : list) {
             System.out.println(message);
         }
+
+        // faut clear table
     }
 }
