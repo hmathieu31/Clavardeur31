@@ -2,6 +2,8 @@ package com.insa.projet4a;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.Hashtable;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
