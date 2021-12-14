@@ -93,7 +93,7 @@ public class ThreadManager extends Thread {
      * @param senderAddress
      */
     protected static void notifyMessageReceived(String msg, InetAddress senderAddress) {
-        AppTest.displayMsg(msg, senderAddress);
+        App.displayMsg(msg, senderAddress);
     }
 
     /**
@@ -105,7 +105,7 @@ public class ThreadManager extends Thread {
      * @param address Address of the client which ended the connection
      */
     protected static void notifyConnectionClosed(InetAddress address) {
-        AppTest.notifyConnectionClosed(address);
+        App.notifyConnectionClosed(address);
         closeClientThread(address);
         serverTable.remove(address);
     }
