@@ -2,25 +2,20 @@ package com.insa.projet4a;
 
 import java.io.IOException;
 import java.net.InetAddress;
-
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import java.net.UnknownHostException;
+import java.util.Scanner;
 
 /**
  * JavaFX App
  */
-public class App extends Application {
-
-    private static Scene scene;
-    private static Stage stage;
-
-    public static String pseudo;
-    public static int currentDiscussionIndex = -1;
+public class AppTest {
 
     private static ThreadManager threadManager;
+    /**
+     * * Temporary boolean (used only for testing purposes as a simplification of
+     * the list containing all ongoing communications)
+     */
+    private static boolean isDiscussionOngoing;
 
     /**
      * <p>
@@ -58,7 +53,7 @@ public class App extends Application {
 
     /**
      * Display a received message
-     * TODO #3 Change to call the GUI
+     * ! Will be changed to call the GUI
      * 
      * @param msg     Message received
      * @param address Address of the sender
@@ -71,13 +66,13 @@ public class App extends Application {
      * Called by the Thread Manager to notify the Application that {@code address}
      * closed the connection
      * <p>
-     * TODO #2 Change to call the GUI
+     * ! Will be changed to call the GUI
      * 
      * @param address address of the remote client
      */
     public static void notifyConnectionClosed(InetAddress address) {
         System.out.println("Connection closed by remote initiative with " + address);
-        // TODO #1 Integration with GUI - Remove the user from ongoing connections list
+        isDiscussionOngoing = false;
     }
 
     /**
@@ -102,38 +97,37 @@ public class App extends Application {
         System.out.println("Connexion closed by local initiative with " + receivAddress);
     }
 
-    @Override
-    public void start(Stage primaryStage) throws IOException {
-        stage = primaryStage;
-        scene = new Scene(loadFXML("login_screen"), 650, 400);
-        stage.setOnCloseRequest(e->closeProgram());
-        stage.setScene(scene);
-        stage.setTitle("Clavager31");
-        stage.show();
-    }
+    /**
+     * @param args
+     * @throws UnknownHostException
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public static void main(String[] args) throws UnknownHostException, IOException, InterruptedException {
+        InetAddress receivAddress = InetAddress.getByName("192.168.1.84"); // Address of the receiver (localhost for the
+                                                                           // purposes of testing)
 
-    private void closeProgram(){
-        System.out.println("GUI CLOSING");
-        stage.close();
-    }
+        connect();
 
-    public static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
-    }
+        while (newDiscussion(receivAddress) == false) {
+            Thread.sleep(1000);
+        }
+        isDiscussionOngoing = true;
+        Scanner scanner = new Scanner(System.in);
+        String txt;
 
-    public static void changeSize(int width, int height){
-        stage.setHeight(height);
-        stage.setWidth(width);
-        stage.centerOnScreen();
-    }
+        do {
+            txt = scanner.nextLine();
+            transmitMessage(txt, receivAddress);
+        } while (isDiscussionOngoing && !"close".equals(txt));
 
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
-    }
 
-    public static void main(String[] args) {
-        launch();
+        scanner.close();
+
+        endDiscussion(receivAddress);
+
+        threadManager.stopServer(); // Only for testing purposes. In real use, there is no reason to stop the
+                                    // threadManager just because a connection was closed
     }
 
 }
