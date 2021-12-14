@@ -28,9 +28,9 @@ public class LoginController {
             Collections.addAll(pseudoList, "Hugo", "Thomas", "Etchebest");
 
             if (!pseudoList.contains(pseudo)){
-                GUI.pseudo = pseudo;
-                GUI.setRoot("main");
-                GUI.changeSize(1000, 800);
+                App.pseudo = pseudo;
+                App.setRoot("main");
+                App.changeSize(1000, 800);
             }   
             else{
                 pseudoField.clear();

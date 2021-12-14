@@ -47,7 +47,7 @@ public class MainController {
         this.bdd = new BDDManager("test");
         this.bdd.initHistory();
 
-        identityLabel.setText(GUI.pseudo);
+        identityLabel.setText(App.pseudo);
         addConnected("Michel");
         addConnected("Jean");
         addConnected("Kevin");
@@ -65,8 +65,8 @@ public class MainController {
     // Pour changer de pseudo
     @FXML
     private void changeIdentity() throws IOException {
-        GUI.setRoot("login_screen");
-        GUI.changeSize(650, 450);
+        App.setRoot("login_screen");
+        App.changeSize(650, 450);
     }
 
     // Ajoute un message à l'affichage actuel
@@ -126,13 +126,13 @@ public class MainController {
                 // Pour éviter d'avoir supprimé quelqu'un et continuer de discuter avec
 
                 if (currentDiscussionList.getSelectionModel().getSelectedIndices().size() > 0){
-                    GUI.currentDiscussionIndex = (int)currentDiscussionList.getSelectionModel().getSelectedIndices().get(0);
+                    App.currentDiscussionIndex = (int)currentDiscussionList.getSelectionModel().getSelectedIndices().get(0);
                     String date = currentDate();
                     addMessageTo(date,messageText);
                     messageField.clear();
 
                     // A MODIFIER METTRE IP A LA PLACE
-                    String pseudoDest = getPseudoFromIndex(GUI.currentDiscussionIndex);
+                    String pseudoDest = getPseudoFromIndex(App.currentDiscussionIndex);
                     this.bdd.insertHistory(pseudoDest, false, messageText, date);
                 }
                 else{
@@ -201,8 +201,8 @@ public class MainController {
     private void updateCurrentDiscussion() throws SQLException, IOException{
 
         if (currentDiscussionList.getSelectionModel().getSelectedIndices().size() > 0){
-            GUI.currentDiscussionIndex = (int)currentDiscussionList.getSelectionModel().getSelectedIndices().get(0);
-            String name = getPseudoFromIndex(GUI.currentDiscussionIndex);
+            App.currentDiscussionIndex = (int)currentDiscussionList.getSelectionModel().getSelectedIndices().get(0);
+            String name = getPseudoFromIndex(App.currentDiscussionIndex);
 
             resetMessage();
 
@@ -228,7 +228,7 @@ public class MainController {
                 currentDiscussionList.getItems().remove(index);
 
                 resetMessage();
-                GUI.currentDiscussionIndex = -1; // équivalent à null
+                App.currentDiscussionIndex = -1; // équivalent à null
                 updateCurrentDiscussion(); // si on supp et qu'il reste des user ça ne laisse pas à null
             }
         }
