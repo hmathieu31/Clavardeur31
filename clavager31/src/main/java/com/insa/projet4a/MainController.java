@@ -9,7 +9,6 @@ import java.util.Date;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -49,6 +48,7 @@ public class MainController {
 
         this.bdd = new BDDManager("test");
         this.bdd.initHistory();
+        App.controller = this;
 
         identityLabel.setText(App.pseudo);
         addConnected("localhost");
