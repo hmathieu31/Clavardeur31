@@ -1,20 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.effect.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="10.0" prefWidth="235.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insa.projet4a.ConnectedController">
+<HBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insa.projet4a.ConnectedController">
    <children>
-      <Label style="-fx-background-color: white; -fx-border-color: gray;" text="Label" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <effect>
-            <DropShadow />
-         </effect>
-         <padding>
-            <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
-         </padding>
-      </Label>
+      <Pane fx:id="inactif">
+         <children>
+            <AnchorPane prefHeight="36.0" prefWidth="168.0">
+               <children>
+                  <Label text="Pseudo" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="0.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="168.0">
+               <children>
+                  <Label fx:id="notif_false" alignment="CENTER" style="-fx-background-radius: 10;" text="19" textFill="#cd2727" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
+                     <font>
+                        <Font name="DejaVu Sans Bold" size="13.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+      </Pane>
    </children>
-</AnchorPane>
+</HBox>
