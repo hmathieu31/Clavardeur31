@@ -7,29 +7,52 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * JavaFX App
  */
-public class GUI extends Application {
+public class App extends Application {
 
     private static Scene scene;
     private static Stage stage;
 
     public static String pseudo;
-    public static int currentDiscussionIndex = -1;
+    public static String currentDiscussionIp = "";
 
-    public static ArrayList<User> connectedList = new ArrayList<User>();
+    private static HashMap<String,String> userCorresp = new HashMap<String,String>();
 
     @Override
     public void start(Stage primaryStage) throws IOException {
         stage = primaryStage;
         scene = new Scene(loadFXML("login_screen"), 650, 400);
+        stage.setResizable(false);
         stage.setOnCloseRequest(e->closeProgram());
         stage.setScene(scene);
         stage.setTitle("Clavager31");
         stage.show();
+
+        // Test purpose
+        addUserCorresp("localhost",  "Jean");
+        addUserCorresp("localhost1", "Kevin");
+        addUserCorresp("localhost2", "Sebastien");
+        addUserCorresp("localhost3", "Hugues");
+    }
+
+    public static String getCurrentUserName(){
+        return getUserCorresp(currentDiscussionIp);
+    }
+
+    public static String getUserCorresp(String ip) {
+        return userCorresp.get(ip) ;
+    }
+
+    public static void removeUserCorresp(String ip) {
+        userCorresp.remove(ip);
+    }
+
+    public static void addUserCorresp(String ip, String name) {
+        userCorresp.put(ip, name);
     }
 
     private void closeProgram(){
@@ -48,7 +71,7 @@ public class GUI extends Application {
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(GUI.class.getResource(fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
 

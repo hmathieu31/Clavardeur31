@@ -1,16 +1,15 @@
-.list-view {
-    -fx-background-color : #2C2F33 ;
-    -fx-border-color : #23272A ; 
+#actif{
+    -fx-background-color :gray ;
 }
 
-.list-cell {
-    -fx-padding: 10px 8px ;
-    -fx-text-fill: white;
-    -fx-background-color: #2C2F33 ;
+#notif_true{
+    -fx-text-fill : white;
+    -fx-background-color : red;
 }
 
-.list-cell:filled:selected:focused, .list-cell:filled:selected {
-    -fx-background-color: rgb(59, 59, 59);
+#notif_false{
+    -fx-text-fill : transparent;
+    -fx-background-color : transparent;
 }
 
 .split-pane:vertical > .split-pane-divider,

@@ -9,6 +9,7 @@ import java.util.Date;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -20,6 +21,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class MainController {
@@ -48,11 +50,14 @@ public class MainController {
         this.bdd = new BDDManager("test");
         this.bdd.initHistory();
 
-        identityLabel.setText(GUI.pseudo);
-        addConnected(new User(0, "localhost", "Michel"));
-        addConnected(new User(1, "localhost", "Jean"));
-        addConnected(new User(2, "localhost", "Kevin"));
-        addConnected(new User(3, "localhost", "Sebastien"));
+        identityLabel.setText(App.pseudo);
+        addConnected("localhost");
+        addConnected("localhost1");
+        addConnected("localhost2");
+
+        removeConnected("localhost");
+        addConnected("localhost3");
+        addConnected("localhost");
 
         ArrayList<Message> list = new ArrayList<Message>();
         list.add(new Message(true,currentDate(),"Bienvenue dans Clavager31"));
@@ -63,8 +68,8 @@ public class MainController {
     // Pour changer de pseudo
     @FXML
     private void changeIdentity() throws IOException {
-        GUI.setRoot("login_screen");
-        GUI.changeSize(650, 450);
+        App.setRoot("login_screen");
+        App.changeSize(650, 450);
     }
 
     // Ajoute un message à l'affichage actuel
@@ -128,14 +133,15 @@ public class MainController {
                 // On vérifie qu'on discute bien avec quelqu'un
                 // Pour éviter d'avoir supprimé quelqu'un et continuer de discuter avec
 
-                if (GUI.currentDiscussionIndex >= 0){
+                if (!App.currentDiscussionIp.equals("")){
                     String date = currentDate();
                     addMessageTo(date,messageText);
                     messageField.clear();
 
-                    // A MODIFIER METTRE IP A LA PLACE
-                    User user = GUI.connectedList.get(GUI.currentDiscussionIndex);
-                    this.bdd.insertHistory(user.name, false, messageText, date);
+                    String name = App.getCurrentUserName();
+                    this.bdd.insertHistory(name, false, messageText, date);
+
+                    incrementNotif("localhost");
                 }
                 else{
                     alert.show();
@@ -160,20 +166,34 @@ public class MainController {
         }
     }
 
-    public void addConnected(User user) throws IOException{
+    private void paneSetText(AnchorPane pane, String text){
+        Label notificationLabel = (Label) pane.getChildren().get(0);
+        notificationLabel.setText(text);
+    }
+
+    private void incrementNotif(String ip){
+        HBox hbox = (HBox)connectedContainer.lookup("#"+ip);
+        Pane largePane = (Pane)hbox.getChildren().get(0);
+        AnchorPane pane = (AnchorPane)largePane.getChildren().get(1);
+
+        Label notificationLabel = (Label) pane.getChildren().get(0);
+        Integer nbNotif = Integer.parseInt(notificationLabel.getText()) + 1;
+        notificationLabel.setText(nbNotif.toString());
+
+        notificationLabel.setId("notif_true");
+    }
+
+    public void addConnected(String ip) throws IOException{
         FXMLLoader loader = new FXMLLoader();   
         HBox hbox = loader.load(getClass().getResource("components/connected.fxml").openStream());
+        Pane pane = (Pane)hbox.getChildren().get(0);
 
-        AnchorPane pane1 = (AnchorPane)hbox.getChildren().get(0);
-        Label nameLabel = (Label) pane1.getChildren().get(0);
-        nameLabel.setText(user.name);
-
-        AnchorPane pane2 = (AnchorPane)hbox.getChildren().get(1);
-        Label notificationLabel = (Label) pane2.getChildren().get(0);
-        notificationLabel.setText("1");
+        String name = App.getUserCorresp(ip);
+        paneSetText((AnchorPane)pane.getChildren().get(0), name); // Le pseudo
+        paneSetText((AnchorPane)pane.getChildren().get(1), "0");  // Les notifications
 
         // Les éléments ne peuvent avoir comme ID que des strings (comme en html)
-        hbox.setId(user.id.toString());
+        hbox.setId(ip);
         hbox.setOnMouseClicked(e -> {
             try {
                 updateCurrentDiscussion(e);
@@ -182,18 +202,11 @@ public class MainController {
             }
         } );
         connectedContainer.getChildren().add(hbox);
-
-        // TEMPORAIRE 
-        // normalement on ajoute dans la liste de connecté de APP puis on update le "visuel"
-        // ici on fait dans l'autre sens pour l'instant
-
-        // Faudra faire attention au fait que si un utilisateur se connecte puis deconnecte
-        // On sache qu'il était déjà dans la liste du GUI on le rajoute pas une deuxième fois
-        GUI.connectedList.add(user);
     }
 
-    public void removeConnected(Integer index){
-        connectedContainer.getChildren().remove(index);
+    public void removeConnected(String ip){
+        HBox hbox = (HBox)connectedContainer.lookup("#"+ip);
+        connectedContainer.getChildren().remove(hbox);
     }
 
     // Quand on clique sur la listeView cela choisi un user (surligné en bleu)
@@ -203,32 +216,39 @@ public class MainController {
     private void updateCurrentDiscussion(Event e) throws SQLException, IOException{
 
             HBox hbox = (HBox)e.getSource();
-            Integer index = Integer.valueOf(hbox.getId());
-            GUI.currentDiscussionIndex = index;
+            App.currentDiscussionIp = hbox.getId();
 
             resetMessage();
-
-            // MODIFIER METTRE IP AU LIEU DE NOM
-            // FAUT CORRESP IP/NOM
-            User user = GUI.connectedList.get(index);
-            ArrayList<Message> history = this.bdd.showHistory(user.name);
-
+            
+            String name = App.getCurrentUserName();
+            ArrayList<Message> history = this.bdd.showHistory(name);
             loadMessages(history);
 
-            System.out.println(user);
+            // 1 seul pane à l'id "actif"
+            // Quand on clique sur un pane on enlève l'id de l'ancien actif à ""
+            // Et on mets actif au nouveau
+            Pane oldpane = (Pane)connectedContainer.lookup("#actif");
+            if(oldpane != null){oldpane.setId("inactif");}
+            Pane newpane = (Pane)hbox.getChildren().get(0);
+            newpane.setId("actif");
+
+            // On enlève aussi les notifications si il y'en avait
+            AnchorPane pane = (AnchorPane)newpane.getChildren().get(1);
+            Label notifLabel = (Label)pane.getChildren().get(0);
+            notifLabel.setText("0");
+            notifLabel.setId("notif_false");
     }
 
     @FXML 
     private void clearHistory() throws SQLException{
 
-        if (GUI.currentDiscussionIndex >= 0){
-            User user = GUI.connectedList.get(GUI.currentDiscussionIndex);
+        if (!App.currentDiscussionIp.equals("")){
 
             resetMessage();
 
             // MODIFIER METTRE IP AU LIEU DE NOM
             // FAUT CORRESP IP/NOM
-            this.bdd.clearHistory(user.name);
+            this.bdd.clearHistory(App.getCurrentUserName());
         }
         else{
             alert.show();
