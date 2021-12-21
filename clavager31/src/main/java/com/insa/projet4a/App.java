@@ -21,6 +21,9 @@ public class App extends Application {
     public static String pseudo;
     public static String currentDiscussionIp = "";
 
+    /**
+     * HashMap with keys of IP Addresses (formatted as string) and values of Pseudonymes (formatted as Strings)
+     */
     private static HashMap<String, String> userCorresp = new HashMap<String, String>();
 
     public static MainController controller;
@@ -46,14 +49,28 @@ public class App extends Application {
         return getUserCorresp(currentDiscussionIp);
     }
 
+    /**
+     * Gets the username corresponding to {@code ip} in the Hash Map
+     * @param ip IP Address in String format
+     * @return Username corresponding in string format or {@code null} if no correspondance found 
+     */
     public static String getUserCorresp(String ip) {
         return userCorresp.get(ip);
     }
 
+    /**
+     * Removes the username corresponding to {@code ip} in the Hash Map
+     * @param ip IP Address in String format
+     */
     public static void removeUserCorresp(String ip) {
         userCorresp.remove(ip);
     }
 
+    /**
+     * Adds a user in the Hash Map of address {@code ip} and username {@code name}
+     * @param ip IP Address in string format
+     * @param name Username in string format
+     */
     public static void addUserCorresp(String ip, String name) {
         userCorresp.put(ip, name);
     }
@@ -164,6 +181,17 @@ public class App extends Application {
     public static void endDiscussion(InetAddress receivAddress) {
         ThreadManager.closeConnectionThreads(receivAddress);
         System.out.println("Connexion closed by local initiative with " + receivAddress);
+    }
+
+
+    /**
+     * Checks if {@code pseudo} is already in the the table {@link userCorresp}
+     * @param pseudo
+     * @return True if {@code pseudo} is not already contained in the table
+     */
+    public static boolean isPseudoValid(String pseudo) {
+
+        return !userCorresp.containsValue(pseudo);
     }
 
     public static void main(String[] args) {
