@@ -2,6 +2,8 @@ package com.insa.projet4a;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,10 +20,13 @@ public class App extends Application {
 
     private static ThreadManager threadManager;
 
+    private static ArrayList<InetAddress> onlineUsers = new ArrayList<InetAddress>();
+
+    public static String pseudo;
+
     /**
      * <p>
      * Function called when the application is started.
-     * </p>
      * <p>
      * Starts a ThreadManager listening for incoming communications
      * on port 12.
@@ -32,6 +37,39 @@ public class App extends Application {
         threadManager.startServer();
         System.out.println("Waiting for connexion on port 12");
         System.out.println();
+        if (threadManager.initUDPHandler("toto")) {
+            System.out.println("Pseudo valid");
+        } else {
+            System.out.println("Pseudo invalid");
+        }
+    }
+
+
+    public static ArrayList<InetAddress> getOnlineUsers() {
+        return onlineUsers;
+    }
+
+    public static void setOnlineUsers(ArrayList<InetAddress> listOnlineUsers) {
+        onlineUsers = listOnlineUsers;
+    }
+
+    /**
+     * Removes the user from list of online Users
+     * 
+     * @param userAddress Address of the user to remove
+     */
+    public static void removeOnlineUser(InetAddress userAddress) {
+        onlineUsers.remove(userAddress);
+    }
+
+    /**
+     * Adds the new user to the list of online users
+     * 
+     * @param newUserAddress Address of the new user
+     */
+    public static void addOnlineUsers(InetAddress newUserAddress, String newUserPseudo) {
+        App.onlineUsers.add(newUserAddress);
+        System.out.println(onlineUsers);
     }
 
     /**
@@ -98,6 +136,19 @@ public class App extends Application {
         System.out.println("Connexion closed by local initiative with " + receivAddress);
     }
 
+    /**
+     * Ends all the Client and Server Threads and Broadcast and exit message
+     * <p>
+     * Called when the application is closed
+     */
+    public void disconnect() {
+        for (InetAddress inetAddress : onlineUsers) {
+            endDiscussion(inetAddress);
+        }
+        threadManager.broadcastDisconnection();
+        threadManager.stopUDPHandler();
+    }
+
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("primary"), 640, 480);
@@ -114,8 +165,10 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
-    public static void main(String[] args) {
-        launch();
+    public static void main(String[] args) throws UnknownHostException {
+        connect();
+
+
     }
 
 }

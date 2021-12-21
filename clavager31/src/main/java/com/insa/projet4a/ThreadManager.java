@@ -4,7 +4,12 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import javafx.util.Pair;
 
 /**
  * The class implements the thread handling of TCP connections on the receiving
@@ -14,10 +19,9 @@ public class ThreadManager extends Thread {
     private int port;
     private boolean running = false;
 
-    /**
-     * Server socket created on acception of connexion by the server
-     */
     private ServerSocket servSocket;
+
+    private static UDPHandler udpHandler;
 
     /**
      * Creates a thread manager listening for incoming connections on {@code port}
@@ -42,7 +46,10 @@ public class ThreadManager extends Thread {
         }
     }
 
-    public void stopServer() {
+    /**
+     * Stops the Thread Handler
+     */
+    public void stopHandler() {
         running = false;
         this.interrupt();
     }
@@ -51,8 +58,10 @@ public class ThreadManager extends Thread {
     private static HashMap<InetAddress, TCPServer> serverTable = new HashMap<InetAddress, TCPServer>();
 
     /**
-     * @param clientPort
-     * @param clientInetAddress
+     * Creates a Client Thread to send messages to {@code clientInetAddress}
+     * 
+     * @param clientPort        Destination port
+     * @param clientInetAddress Destination address
      * @throws IOException
      */
     public void createClientThread(int clientPort, InetAddress clientInetAddress) throws IOException {
@@ -60,6 +69,42 @@ public class ThreadManager extends Thread {
         clientThread = new TCPClient(clientPort, clientInetAddress);
         clientTable.put(clientInetAddress, clientThread);
         clientThread.run();
+    }
+
+    /**
+     * Creates a Thread UDPHandler which broadcasts the chosen pseudo, listens for
+     * the answers then starts the listening Thread
+     * 
+     * @param firstPseudo Pseudo chosen on start of the Application
+     * 
+     * @return True if the pseudo is valid
+     */
+    public boolean initUDPHandler(String firstPseudo) {
+
+        boolean initialisationValid = true;
+
+        try {
+            udpHandler = new UDPHandler();
+            UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255"), firstPseudo);
+            ArrayList<Pair<String, InetAddress>> onlineUsers = udpHandler.listenForAnswers();
+            System.out.println("logpoint");
+            if (onlineUsers == null) {
+                initialisationValid = false;
+            }
+            Thread.sleep(3000);
+            udpHandler.startListener();
+
+        } catch (SocketException | UnknownHostException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return initialisationValid;
+    }
+
+    /**
+     * Stops the Listener on UDP broadcasts
+     */
+    public void stopUDPHandler() {
+        udpHandler.stopListener();
     }
 
     /**
@@ -93,7 +138,7 @@ public class ThreadManager extends Thread {
      * @param senderAddress
      */
     protected static void notifyMessageReceived(String msg, InetAddress senderAddress) {
-        AppTest.displayMsg(msg, senderAddress);
+        App.displayMsg(msg, senderAddress);
     }
 
     /**
@@ -105,12 +150,51 @@ public class ThreadManager extends Thread {
      * @param address Address of the client which ended the connection
      */
     protected static void notifyConnectionClosed(InetAddress address) {
-        AppTest.notifyConnectionClosed(address);
+        App.notifyConnectionClosed(address);
         closeClientThread(address);
         serverTable.remove(address);
     }
 
     /**
+     * Called by UDPHandler while listening to notify a new user has connected,
+     * disconnected or wants to change its pseudo
+     * 
+     * @param content       Content of the broadcast received: either the pseudo or
+     *                      "--OFF--" if the user broadcasts its disconection
+     * @param senderAddress Address of the broadcasting user
+     */
+    protected static void notifyOnlineModif(String content, InetAddress senderAddress) {
+        if ("--OFF--".equals(content)) { // The user has disconnected -> removal from the list
+            App.removeOnlineUser(senderAddress);
+        }
+        boolean pseudoValid = true; // TODO [CLAV-31]pseudoValid = PseudoManager.isPseudoValid(content)
+        try {
+            if (pseudoValid) { // The pseudo the new user wants to use is valid -> add to list and answer with
+                               // NAME
+                App.addOnlineUsers(senderAddress, content);
+                UDPHandler.sendMsg(senderAddress, App.pseudo);
+            } else { // The pseudo chosen by the new user is invalid -> answer INVALID
+                UDPHandler.sendMsg(senderAddress, "--INVALID--");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Broadcasts that the user is disconnecting (Sends --OFF-- to all)
+     */
+    public void broadcastDisconnection() {
+        try {
+            UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255"), "--OFF--");
+        } catch (SocketException | UnknownHostException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Transmits a {@code msg} to specified {@code receivAddress}
+     * 
      * @param msg
      * @param receivAddress
      */
