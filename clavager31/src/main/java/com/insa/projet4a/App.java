@@ -21,7 +21,7 @@ public class App extends Application {
     public static String pseudo;
     public static String currentDiscussionIp = "";
 
-    private static HashMap<String,String> userCorresp = new HashMap<String,String>();
+    private static HashMap<String, String> userCorresp = new HashMap<String, String>();
 
     public static MainController controller;
 
@@ -30,24 +30,24 @@ public class App extends Application {
         stage = primaryStage;
         scene = new Scene(loadFXML("login_screen"), 650, 400);
         stage.setResizable(false);
-        stage.setOnCloseRequest(e->closeProgram());
+        stage.setOnCloseRequest(e -> closeProgram());
         stage.setScene(scene);
         stage.setTitle("Clavager31");
         stage.show();
 
         // Test purpose
-        addUserCorresp("localhost",  "Jean");
+        addUserCorresp("localhost", "Jean");
         addUserCorresp("localhost1", "Kevin");
         addUserCorresp("localhost2", "Sebastien");
         addUserCorresp("localhost3", "Hugues");
     }
 
-    public static String getCurrentUserName(){
+    public static String getCurrentUserName() {
         return getUserCorresp(currentDiscussionIp);
     }
 
     public static String getUserCorresp(String ip) {
-        return userCorresp.get(ip) ;
+        return userCorresp.get(ip);
     }
 
     public static void removeUserCorresp(String ip) {
@@ -58,7 +58,7 @@ public class App extends Application {
         userCorresp.put(ip, name);
     }
 
-    private void closeProgram(){
+    private void closeProgram() {
         System.out.println("GUI CLOSING");
         stage.close();
     }
@@ -67,7 +67,7 @@ public class App extends Application {
         scene.setRoot(loadFXML(fxml));
     }
 
-    public static void changeSize(int width, int height){
+    public static void changeSize(int width, int height) {
         stage.setHeight(height);
         stage.setWidth(width);
         stage.centerOnScreen();
@@ -79,8 +79,10 @@ public class App extends Application {
     }
 
     /***********************************************************************/
-    /* BACKEND PART
-    /***********************************************************************/
+    /*
+     * BACKEND PART
+     * /
+     ***********************************************************************/
 
     private static ThreadManager threadManager;
 
