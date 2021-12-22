@@ -169,10 +169,14 @@ public class ThreadManager extends Thread {
         }
         boolean pseudoValid = App.isPseudoValid(content);
         try {
-            if (pseudoValid) { // The pseudo the new user wants to use is valid -> add to list and answer with
-                               // NAME
-                App.addOnlineUsers(senderAddress, content);
-                UDPHandler.sendMsg(senderAddress, App.pseudo);
+            if (pseudoValid) { // The pseudo the new user wants to use is valid
+                if (App.getUserCorresp(senderAddress.toString()) == null) { // This is a new user
+                    UDPHandler.sendMsg(senderAddress, App.pseudo);
+                    App.addOnlineUsers(senderAddress, content);
+                } else { // This is a known user wanting to change his username
+                    App.addUserCorresp(senderAddress.toString(), content); // addUserCorresp is used here not to add the
+                                                                           // IP to the ArrayList multiple times
+                }
             } else { // The pseudo chosen by the new user is invalid -> answer INVALID
                 UDPHandler.sendMsg(senderAddress, "--INVALID--");
             }
@@ -187,6 +191,19 @@ public class ThreadManager extends Thread {
     public void broadcastDisconnection() {
         try {
             UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255"), "--OFF--");
+        } catch (SocketException | UnknownHostException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Broadcast the new username to everyone
+     * 
+     * @param newUsername New username chosen ("Can't be --OFF--")
+     */
+    public void broadcastNewUsername(String newUsername) {
+        try {
+            UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255.255"), newUsername);
         } catch (SocketException | UnknownHostException e) {
             e.printStackTrace();
         }
