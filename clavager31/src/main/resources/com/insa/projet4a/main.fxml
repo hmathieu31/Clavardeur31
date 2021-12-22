@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" stylesheets="@style/main.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insa.projet4a.MainController">
+   <children>
+      <AnchorPane>
+         <children>
+            <HBox prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #23272A;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <AnchorPane layoutX="788.0" layoutY="10.0" prefHeight="200.0" prefWidth="120.0">
+                     <children>
+                        <Label alignment="CENTER" style="-fx-text-fill: white;" text="Votre pseudo :" underline="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="13.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label fx:id="identityLabel" alignment="CENTER" text="Pseudo" textFill="#cd2727" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="13.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane>
+                     <children>
+                        <Button fx:id="changeIdentityButton" mnemonicParsing="false" onMouseClicked="#changeIdentity" text="Changer" AnchorPane.bottomAnchor="10.0" AnchorPane.topAnchor="10.0">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+                  <Pane prefHeight="50.0" prefWidth="78.0" />
+                  <AnchorPane prefHeight="45.0" prefWidth="617.0">
+                     <children>
+                        <Button fx:id="eraseHistory" mnemonicParsing="false" onMouseClicked="#clearHistory" text="Effacer historique" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <SplitPane dividerPositions="0.281563126252505" prefHeight="900.0" prefWidth="200.0" style="-fx-background-color: #2C2F33;">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" style="-fx-background-color: #23272A;" SplitPane.resizableWithParent="false">
+               <children>
+                  <VBox layoutX="20.0" layoutY="40.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="40.0">
+                     <children>
+                        <AnchorPane>
+                           <children>
+                              <ImageView fitHeight="150.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="0.0">
+                                 <image>
+                                    <Image url="@img/logo.png" />
+                                 </image>
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </ImageView>
+                           </children>
+                        </AnchorPane>
+                        <ScrollPane hbarPolicy="NEVER" prefViewportHeight="483.0" prefViewportWidth="238.0" style="-fx-background-color: #23272A;">
+                           <content>
+                              <VBox fx:id="connectedContainer" prefHeight="482.0" prefWidth="238.0" style="-fx-background-color: #23272A;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="661.0" prefWidth="683.0">
+               <children>
+                  <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <ScrollPane fx:id="scrollMessage" hbarPolicy="NEVER" prefHeight="602.0" prefViewportHeight="605.0" prefViewportWidth="673.0" style="-fx-background-color: #2C2F33;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                           <content>
+                              <VBox fx:id="messageContainer" prefHeight="600.0" prefWidth="680.0" style="-fx-background-color: #2C2F33;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <VBox.margin>
+                                    <Insets bottom="40.0" />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" top="20.0" />
+                                 </padding>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                        <AnchorPane>
+                           <VBox.margin>
+                              <Insets top="20.0" />
+                           </VBox.margin>
+                           <children>
+                              <TextField fx:id="messageField" onKeyReleased="#sendMessage" prefHeight="50.0" style="-fx-background-color: rgb(59, 59, 59); -fx-text-fill: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</VBox>

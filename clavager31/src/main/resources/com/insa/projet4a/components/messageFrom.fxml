@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefWidth="200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insa.projet4a.MessageFromController">
+   <children>
+      <VBox>
+         <children>
+            <AnchorPane fx:id="messageFrom" layoutX="107.0" style="-fx-padding: 10 0;" styleClass="messageAnchor">
+               <children>
+                  <Label maxWidth="600.0" style="-fx-background-color: gray; -fx-text-fill: white;" text="Salut comment çava&#10;quoi de neuf" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane>
+               <children>
+                  <Label text="Dimanche 2 juin à 10h45" textFill="#a4a4a4" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="-7.0">
+                     <font>
+                        <Font name="OpenSymbol" size="11.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

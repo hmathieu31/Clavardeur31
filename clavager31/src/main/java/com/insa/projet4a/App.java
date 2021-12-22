@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -17,12 +18,100 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     private static Scene scene;
+    private static Stage stage;
+
+    public static String pseudo;
+    public static String currentDiscussionIp = "";
+
+    /**
+     * HashMap with keys of IP Addresses (formatted as string) and values of
+     * Pseudonymes (formatted as Strings)
+     */
+    private static HashMap<String, String> userCorresp = new HashMap<String, String>();
+
+    public static MainController controller;
+
+    @Override
+    public void start(Stage primaryStage) throws IOException {
+        stage = primaryStage;
+        scene = new Scene(loadFXML("login_screen"), 650, 400);
+        stage.setResizable(false);
+        stage.setOnCloseRequest(e -> closeProgram());
+        stage.setScene(scene);
+        stage.setTitle("Clavager31");
+        stage.show();
+
+        // Test purpose
+        addUserCorresp("localhost", "Jean");
+        addUserCorresp("localhost1", "Kevin");
+        addUserCorresp("localhost2", "Sebastien");
+        addUserCorresp("localhost3", "Hugues");
+    }
+
+    public static String getCurrentUserName() {
+        return getUserCorresp(currentDiscussionIp);
+    }
+
+    /**
+     * Gets the username corresponding to {@code ip} in the Hash Map
+     * 
+     * @param ip IP Address in String format
+     * @return Username corresponding in string format or {@code null} if no
+     *         correspondance found
+     */
+    public static String getUserCorresp(String ip) {
+        return userCorresp.get(ip);
+    }
+
+    /**
+     * Removes the username corresponding to {@code ip} in the Hash Map
+     * 
+     * @param ip IP Address in String format
+     */
+    public static void removeUserCorresp(String ip) {
+        userCorresp.remove(ip);
+    }
+
+    /**
+     * Adds a user in the Hash Map of address {@code ip} and username {@code name}
+     * 
+     * @param ip   IP Address in string format
+     * @param name Username in string format
+     */
+    public static void addUserCorresp(String ip, String name) {
+        userCorresp.put(ip, name);
+    }
+
+    private void closeProgram() {
+        System.out.println("GUI CLOSING");
+        stage.close();
+    }
+
+    public static void setRoot(String fxml) throws IOException {
+        scene.setRoot(loadFXML(fxml));
+    }
+
+    public static void changeSize(int width, int height) {
+        stage.setHeight(height);
+        stage.setWidth(width);
+        stage.centerOnScreen();
+    }
+
+    private static Parent loadFXML(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        return fxmlLoader.load();
+    }
+
+    /***********************************************************************/
+    /*
+     * BACKEND PART
+     * /
+     ***********************************************************************/
 
     private static ThreadManager threadManager;
 
     private static ArrayList<InetAddress> onlineUsers = new ArrayList<InetAddress>();
 
-    public static String pseudo;
 
     /**
      * <p>
@@ -43,7 +132,6 @@ public class App extends Application {
             System.out.println("Pseudo invalid");
         }
     }
-
 
     public static ArrayList<InetAddress> getOnlineUsers() {
         return onlineUsers;
@@ -150,25 +238,19 @@ public class App extends Application {
         threadManager.stopUDPHandler();
     }
 
-    @Override
-    public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
-        stage.setScene(scene);
-        stage.show();
-    }
+    /**
+     * Checks if {@code pseudo} is already in the the table {@link userCorresp}
+     * 
+     * @param pseudo
+     * @return True if {@code pseudo} is not already contained in the table
+     */
+    public static boolean isPseudoValid(String pseudo) {
 
-    static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
-    }
-
-    private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
+        return !userCorresp.containsValue(pseudo);
     }
 
     public static void main(String[] args) throws UnknownHostException {
         connect();
-
 
     }
 
