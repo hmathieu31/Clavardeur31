@@ -60,6 +60,7 @@ public class App extends Application {
      */
     public static void removeOnlineUser(InetAddress userAddress) {
         onlineUsers.remove(userAddress);
+        System.out.println("user " + userAddress + " removed");
     }
 
     /**

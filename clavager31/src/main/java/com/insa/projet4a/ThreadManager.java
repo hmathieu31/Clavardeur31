@@ -167,7 +167,7 @@ public class ThreadManager extends Thread {
         if ("--OFF--".equals(content)) { // The user has disconnected -> removal from the list
             App.removeOnlineUser(senderAddress);
         }
-        boolean pseudoValid = true; // TODO [CLAV-31]pseudoValid = PseudoManager.isPseudoValid(content)
+        boolean pseudoValid = true;
         try {
             if (pseudoValid) { // The pseudo the new user wants to use is valid -> add to list and answer with
                                // NAME
