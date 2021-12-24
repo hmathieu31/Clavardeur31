@@ -124,23 +124,30 @@ public class App extends Application {
 
     /**
      * <p>
-     * Function called when the application is started.
+     * Called when the application is started.
      * <p>
-     * Starts a ThreadManager listening for incoming communications
-     * on port 12.
-     * </p>
+     * If the {@code username} chosen by the user is not forbidden, broadcasts
+     * {@code username} and waits for answers to fill-in {@code onlineUsers} and
+     * {@code userCorresp} and check if the username was already taken
+     * <p>
+     * If the username was not already taken, starts a ThreadManager listening for
+     * incoming communications on port 12 and completes the initialisation of
+     * Clavarder31
+     * <p>
+     * Else, prompts the user to change its username and is called until the
+     * username is valid
      * 
      * @param username Username chosen when starting the connection
      */
     public static void connect(String username) {
-        threadManager = new ThreadManager(12);
-        threadManager.startServer();
-        // System.out.println("Waiting for connexion on port 12");
-        System.out.println();
-        if (threadManager.initUDPHandler(username)) {
-            System.out.println("Pseudo valid");
+        if (threadManager.initUDPHandler(username) && isPseudoValid(username)) {
+            System.out.println("Pseudo valid"); // ! Remove after testing
+            threadManager = new ThreadManager(12);
+            threadManager.startServer();
+            // System.out.println("Waiting for connexion on port 12");
         } else {
-            System.out.println("Pseudo invalid");
+            System.err.println("Invalid username!"); // ! Remove after testing
+            // TODO Prompt for a a new username when chosen invalid
         }
     }
 

@@ -67,7 +67,7 @@ public class UDPHandler extends Thread {
      * Called by Thread Manager after a new connection broadcast with given
      * pseudo
      * 
-     * @return The list of all connected users and their pseudo ; Or an null
+     * @return The list of all connected users and their pseudo ; Or  {@code null}
      *         if the pseudo was already taken
      */
     public ArrayList<Pair<String, InetAddress>> listenForAnswers() {
