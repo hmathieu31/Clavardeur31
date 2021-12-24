@@ -189,7 +189,7 @@ public class ThreadManager extends Thread {
     }
 
     /**
-     * Broadcasts that the user is disconnecting (Sends --OFF-- to all)
+     * Broadcasts (UDP) that the user is disconnecting (Sends --OFF-- to all)
      */
     public void broadcastDisconnection() {
         try {
@@ -200,7 +200,20 @@ public class ThreadManager extends Thread {
     }
 
     /**
-     * Transmits a {@code msg} to specified {@code receivAddress}
+     * Broadcast (UDP) the new username to everyone
+     * 
+     * @param newUsername New username chosen ("Can't be --OFF--")
+     */
+    public void broadcastNewUsername(String newUsername) {
+        try {
+            UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255.255"), newUsername);
+        } catch (SocketException | UnknownHostException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Transmits a {@code msg} to specified {@code receivAddress} (TCP communication)
      * 
      * @param msg Message to be send through TCP
      * @param receivAddress Destinary IP Address

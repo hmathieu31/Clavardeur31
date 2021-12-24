@@ -83,7 +83,8 @@ public class App extends Application {
     }
 
     /**
-     * Adds a user in the Hash Map of address {@code ip} and username {@code name}
+     * Adds / Updates a user in the Hash Map of address {@code ip} and username
+     * {@code name}
      * 
      * @param ip   IP Address in string format
      * @param name Username in string format
@@ -160,25 +161,43 @@ public class App extends Application {
     }
 
     /**
-     * Removes the user from list of online Users
+     * Removes the user from list of online Users and the Correspondances Map
      * 
      * @param userAddress Address of the user to remove
      */
     public static void removeOnlineUser(InetAddress userAddress) {
         onlineUsers.remove(userAddress);
         removeUserCorresp(userAddress.toString());
-        System.out.println("user " + userAddress + " removed");
+        System.out.println("user " + userAddress + " removed"); // ? Testing purposes
     }
 
     /**
-     * Adds the new user to the list of online users
+     * Adds the new user to the list of online users and to the Correspondances Map
      * 
      * @param newUserAddress Address of the new user
+     * @param newUserPseudo  Pseudo of the new user
      */
     public static void addOnlineUsers(InetAddress newUserAddress, String newUserPseudo) {
-        App.onlineUsers.add(newUserAddress);
+        onlineUsers.add(newUserAddress);
         addUserCorresp(newUserAddress.toString(), newUserPseudo);
-        System.out.println(onlineUsers);
+        System.out.println(onlineUsers); // ? Testing purposes
+    }
+
+    /**
+     * Tries to change the username to {@code newUserName}
+     * <p>
+     * Fails and calls a method from the GUI if {@code newUserName} is invalid
+     * 
+     * @param newUserName New username, invalid if already taken by a user or if
+     *                    --OFF--
+     */
+    public void changeUsername(String newUserName) {
+        if (isPseudoValid(newUserName)) {
+            threadManager.broadcastNewUsername(newUserName);
+            pseudo = newUserName;
+        } else {
+            // TODO Notify GUI that the chosen username was invalid
+        }
     }
 
     /**
@@ -262,11 +281,16 @@ public class App extends Application {
      * Checks if {@code pseudo} is already in the the table {@link userCorresp}
      * 
      * @param pseudo
-     * @return True if {@code pseudo} is not already contained in the table
+     * @return True if {@code pseudo} is not already contained in the table and is
+     *         not the current App pseudo
      */
     public static boolean isPseudoValid(String pseudo) {
 
-        return !userCorresp.containsValue(pseudo);
+        return !userCorresp.containsValue(pseudo) &&
+                !"--OFF--".equals(pseudo) &&
+                !"--INVALID--".equals(pseudo) &&
+                !pseudo.equals(App.pseudo); // The user can't choose --OFF-- as
+                                            // username nor his previous username nor --INVALID--
     }
 
     public static void main(String[] args) throws UnknownHostException {
