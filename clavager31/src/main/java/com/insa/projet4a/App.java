@@ -166,6 +166,7 @@ public class App extends Application {
      */
     public static void removeOnlineUser(InetAddress userAddress) {
         onlineUsers.remove(userAddress);
+        removeUserCorresp(userAddress.toString());
         System.out.println("user " + userAddress + " removed");
     }
 
@@ -176,6 +177,7 @@ public class App extends Application {
      */
     public static void addOnlineUsers(InetAddress newUserAddress, String newUserPseudo) {
         App.onlineUsers.add(newUserAddress);
+        addUserCorresp(newUserAddress.toString(), newUserPseudo);
         System.out.println(onlineUsers);
     }
 
