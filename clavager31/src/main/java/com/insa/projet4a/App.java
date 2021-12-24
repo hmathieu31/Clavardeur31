@@ -73,7 +73,8 @@ public class App extends Application {
     }
 
     /**
-     * Adds / Updates a user in the Hash Map of address {@code ip} and username {@code name}
+     * Adds / Updates a user in the Hash Map of address {@code ip} and username
+     * {@code name}
      * 
      * @param ip   IP Address in string format
      * @param name Username in string format
@@ -162,7 +163,7 @@ public class App extends Application {
     public static void addOnlineUsers(InetAddress newUserAddress, String newUserPseudo) {
         onlineUsers.add(newUserAddress);
         addUserCorresp(newUserAddress.toString(), newUserPseudo);
-        System.out.println(onlineUsers);    // ? Testing purposes
+        System.out.println(onlineUsers); // ? Testing purposes
     }
 
     /**
@@ -263,12 +264,16 @@ public class App extends Application {
      * Checks if {@code pseudo} is already in the the table {@link userCorresp}
      * 
      * @param pseudo
-     * @return True if {@code pseudo} is not already contained in the table
+     * @return True if {@code pseudo} is not already contained in the table and is
+     *         not the current App pseudo
      */
     public static boolean isPseudoValid(String pseudo) {
 
-        return !userCorresp.containsValue(pseudo) && "--OFF-".equals(pseudo); // The user can't choose --OFF-- as
-                                                                              // username
+        return !userCorresp.containsValue(pseudo) &&
+                !"--OFF--".equals(pseudo) &&
+                !"--INVALID--".equals(pseudo) &&
+                !pseudo.equals(App.pseudo); // The user can't choose --OFF-- as
+                                            // username nor his previous username nor --INVALID--
     }
 
     public static void main(String[] args) throws UnknownHostException {
