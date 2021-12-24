@@ -47,5 +47,8 @@ public class AppTest {
         assertFalse(App.isPseudoValid("titi"));
         App.pseudo = "foo";
         assertFalse(App.isPseudoValid("foo"));
+
+        assertFalse(App.isPseudoValid("--OFF--"));
+        assertFalse(App.isPseudoValid("--INVALID--"));
     }
 }
