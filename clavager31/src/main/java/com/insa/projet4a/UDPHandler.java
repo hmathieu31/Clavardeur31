@@ -27,19 +27,31 @@ public class UDPHandler extends Thread {
     private boolean running;
     private static DatagramSocket broadcasterSocket;
 
+    /**
+     * Creates a new UDPHandler listening for broadcasts on port {@code 13} and
+     * emitting on port {@code 14}
+     * 
+     * @throws SocketException
+     */
     public UDPHandler() throws SocketException {
         super();
         this.listenerSocket = new DatagramSocket(portListener);
         broadcasterSocket = new DatagramSocket(portBroadcaster);
     }
 
+    /**
+     * Stops this UDPHandler
+     */
     public void stopListener() {
         running = false;
         listenerSocket.close();
-        this.interrupt();
         broadcasterSocket.close();
+        this.interrupt();
     }
 
+    /**
+     * Starts this UDPHandler
+     */
     public void startListener() {
         running = true;
         this.start();
@@ -50,7 +62,7 @@ public class UDPHandler extends Thread {
      * 
      * @param destinAddress Address of the destinary
      * @param msg           Message to pass
-     * @throws SocketException If the Socket could not be opened or bound to the
+     * @throws SocketException if the Socket could not be opened or bound to the
      *                         local port (13)
      */
     public static void sendMsg(InetAddress destinAddress, String msg) throws SocketException {
@@ -64,11 +76,14 @@ public class UDPHandler extends Thread {
     }
 
     /**
-     * Called by Thread Manager after a new connection broadcast with given
-     * pseudo
+     * Called by Thread Manager after a first connection broadcast with given
+     * pseudo.
      * 
-     * @return The list of all connected users and their pseudo ; Or  {@code null}
-     *         if the pseudo was already taken
+     * Listens for the usernames of everyone connected or --INVALID-- if the given
+     * pseudo was already taken.
+     * 
+     * @return The list of all connected users and their pseudo ; Or {@code null}
+     *         if the pseudo is already taken
      */
     public ArrayList<Pair<String, InetAddress>> listenForAnswers() {
         ArrayList<Pair<String, InetAddress>> onlineUsers = new ArrayList<Pair<String, InetAddress>>();
@@ -80,7 +95,6 @@ public class UDPHandler extends Thread {
             DatagramPacket inPacket = new DatagramPacket(buffer, buffer.length);
             DatagramSocket inSocket = new DatagramSocket(portBroadcaster);
             while (keepListening) { // Keep listening until a user answers with "--INVALID--" or until 10s have
-                                    // expired
                                     // expired <=> no more answers are expected
                 try {
                     inSocket.setSoTimeout(3000);
