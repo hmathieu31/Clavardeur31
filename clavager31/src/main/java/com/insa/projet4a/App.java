@@ -22,7 +22,8 @@ public class App extends Application {
     public static String currentDiscussionIp = "";
 
     /**
-     * HashMap with keys of IP Addresses (formatted as string) and values of Pseudonymes (formatted as Strings)
+     * HashMap with keys of IP Addresses (formatted as string) and values of
+     * Pseudonymes (formatted as Strings)
      */
     private static HashMap<String, String> userCorresp = new HashMap<String, String>();
 
@@ -51,8 +52,10 @@ public class App extends Application {
 
     /**
      * Gets the username corresponding to {@code ip} in the Hash Map
+     * 
      * @param ip IP Address in String format
-     * @return Username corresponding in string format or {@code null} if no correspondance found 
+     * @return Username corresponding in string format or {@code null} if no
+     *         correspondance found
      */
     public static String getUserCorresp(String ip) {
         return userCorresp.get(ip);
@@ -60,6 +63,7 @@ public class App extends Application {
 
     /**
      * Removes the username corresponding to {@code ip} in the Hash Map
+     * 
      * @param ip IP Address in String format
      */
     public static void removeUserCorresp(String ip) {
@@ -68,7 +72,8 @@ public class App extends Application {
 
     /**
      * Adds a user in the Hash Map of address {@code ip} and username {@code name}
-     * @param ip IP Address in string format
+     * 
+     * @param ip   IP Address in string format
      * @param name Username in string format
      */
     public static void addUserCorresp(String ip, String name) {
@@ -183,15 +188,16 @@ public class App extends Application {
         System.out.println("Connexion closed by local initiative with " + receivAddress);
     }
 
-
     /**
      * Checks if {@code pseudo} is already in the the table {@link userCorresp}
+     * 
      * @param pseudo
-     * @return True if {@code pseudo} is not already contained in the table
+     * @return True if {@code pseudo} is not already contained in the table and is
+     *         not the current App pseudo
      */
     public static boolean isPseudoValid(String pseudo) {
 
-        return !userCorresp.containsValue(pseudo);
+        return !userCorresp.containsValue(pseudo) && !pseudo.equals(App.pseudo);
     }
 
     public static void main(String[] args) {
