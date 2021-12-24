@@ -256,7 +256,8 @@ public class App extends Application {
     }
 
     public static void main(String[] args) throws UnknownHostException {
-        connect(args[0]);
+        pseudo = args[0];
+        connect(pseudo);
     }
 
 }
