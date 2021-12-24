@@ -87,7 +87,7 @@ public class ThreadManager extends Thread {
             udpHandler = new UDPHandler();
             UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255"), firstPseudo);
             ArrayList<Pair<String, InetAddress>> onlineUsers = udpHandler.listenForAnswers();
-            System.out.println("logpoint");
+            System.out.println("logpoint initUDPHandler after listening for answers");
             if (onlineUsers == null) {
                 initialisationValid = false;
             }
@@ -208,7 +208,7 @@ public class ThreadManager extends Thread {
         running = true;
         while (running) {
             try {
-                System.out.println("Listening for connections on port " + port);
+                // System.out.println("Listening for connections on port " + port);
 
                 Socket socket = servSocket.accept();
 

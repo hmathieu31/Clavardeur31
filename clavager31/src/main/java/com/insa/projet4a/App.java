@@ -20,6 +20,11 @@ public class App extends Application {
     private static Scene scene;
     private static Stage stage;
 
+    /**
+     * Username chosen by the App user and possibly changed
+     * <p>
+     * TODO  [CLAV-32]Change to scope to private and generate getters and setters
+     */
     public static String pseudo;
     public static String currentDiscussionIp = "";
 
@@ -112,7 +117,6 @@ public class App extends Application {
 
     private static ArrayList<InetAddress> onlineUsers = new ArrayList<InetAddress>();
 
-
     /**
      * <p>
      * Function called when the application is started.
@@ -120,13 +124,15 @@ public class App extends Application {
      * Starts a ThreadManager listening for incoming communications
      * on port 12.
      * </p>
+     * 
+     * @param username Username chosen when starting the connection
      */
-    public static void connect() {
+    public static void connect(String username) {
         threadManager = new ThreadManager(12);
         threadManager.startServer();
-        System.out.println("Waiting for connexion on port 12");
+        // System.out.println("Waiting for connexion on port 12");
         System.out.println();
-        if (threadManager.initUDPHandler("toto")) {
+        if (threadManager.initUDPHandler(username)) {
             System.out.println("Pseudo valid");
         } else {
             System.out.println("Pseudo invalid");
@@ -250,8 +256,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) throws UnknownHostException {
-        connect();
-
+        connect(args[0]);
     }
 
 }
