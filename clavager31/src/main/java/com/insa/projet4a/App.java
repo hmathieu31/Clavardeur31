@@ -23,7 +23,7 @@ public class App extends Application {
     /**
      * Username chosen by the App user and possibly changed
      * <p>
-     * TODO  [CLAV-32]Change to scope to private and generate getters and setters
+     * TODO [CLAV-32]Change to scope to private and generate getters and setters
      */
     public static String pseudo;
     public static String currentDiscussionIp = "";
@@ -53,6 +53,11 @@ public class App extends Application {
         addUserCorresp("localhost3", "Hugues");
     }
 
+    /**
+     * Gets the username of the person the App is currently communicating with
+     * 
+     * @return Pseudo corresponding to the IP Address of the current discussion
+     */
     public static String getCurrentUserName() {
         return getUserCorresp(currentDiscussionIp);
     }
