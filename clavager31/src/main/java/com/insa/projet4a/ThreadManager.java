@@ -12,8 +12,11 @@ import java.util.HashMap;
 import javafx.util.Pair;
 
 /**
- * The class implements the thread handling of TCP connections on the receiving
- * end
+ * The {@code ThreadManager} class defines a Thread Manager
+ * <p>
+ * A Thread Manager creates a {@link UDPHandler}, listens for incoming
+ * connections and creates a {@linkplain TCPServer Server} and
+ * a {@linkplain TCPClient Client} Thread for each connection
  */
 public class ThreadManager extends Thread {
     private int port;
@@ -35,9 +38,9 @@ public class ThreadManager extends Thread {
     }
 
     /**
-     * Starts the server handler
+     * Starts this {@code ThreadManager}
      */
-    public void startServer() {
+    public void startHandler() {
         try {
             servSocket = new ServerSocket(port);
             this.start();
@@ -47,7 +50,7 @@ public class ThreadManager extends Thread {
     }
 
     /**
-     * Stops the Thread Handler
+     * Stops this ThreadManager
      */
     public void stopHandler() {
         running = false;
@@ -58,7 +61,8 @@ public class ThreadManager extends Thread {
     private static HashMap<InetAddress, TCPServer> serverTable = new HashMap<InetAddress, TCPServer>();
 
     /**
-     * Creates a Client Thread to send messages to {@code clientInetAddress}
+     * Creates a Client Thread to send messages to specified
+     * {@code clientInetAddress}
      * 
      * @param clientPort        Destination port
      * @param clientInetAddress Destination address
@@ -72,8 +76,9 @@ public class ThreadManager extends Thread {
     }
 
     /**
-     * Creates a Thread UDPHandler which broadcasts the chosen pseudo, listens for
-     * the answers then starts the listening Thread
+     * Creates a {@link UDPHandler} Thread which broadcasts the chosen pseudo,
+     * listens for
+     * the answers then starts listening for broadcasts from other users
      * 
      * @param firstPseudo Pseudo chosen on start of the Application
      * 
@@ -87,7 +92,7 @@ public class ThreadManager extends Thread {
             udpHandler = new UDPHandler();
             UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255"), firstPseudo);
             ArrayList<Pair<String, InetAddress>> onlineUsers = udpHandler.listenForAnswers();
-            System.out.println("logpoint");
+            System.out.println("logpoint initUDPHandler after listening for answers");
             if (onlineUsers == null) {
                 initialisationValid = false;
             }
@@ -101,7 +106,7 @@ public class ThreadManager extends Thread {
     }
 
     /**
-     * Stops the Listener on UDP broadcasts
+     * Stops the {@link UDPHandler} Thread listening for broadcasts
      */
     public void stopUDPHandler() {
         udpHandler.stopListener();
@@ -109,7 +114,7 @@ public class ThreadManager extends Thread {
 
     /**
      * Closes the Threads (Client and Server) dedicated to communication with
-     * {@code address} and remove the Threads from the Table
+     * {@code address} and remove the corresponding Threads from the Table
      * 
      * @param address
      */
@@ -134,8 +139,8 @@ public class ThreadManager extends Thread {
      * Called by Server thread to pass a new received {@code msg} coming from
      * {@code senderAddress}
      * 
-     * @param msg
-     * @param senderAddress
+     * @param msg           Message received via TCP
+     * @param senderAddress Address of the sender
      */
     protected static void notifyMessageReceived(String msg, InetAddress senderAddress) {
         App.displayMsg(msg, senderAddress);
@@ -145,7 +150,7 @@ public class ThreadManager extends Thread {
      * Called by Server thread to notify the connection was closed by the remote
      * Client
      * <p>
-     * Closes the Client thread and actualises both tables
+     * Closes the Client thread, actualises both tables and notifies the Application
      * 
      * @param address Address of the client which ended the connection
      */
@@ -167,18 +172,16 @@ public class ThreadManager extends Thread {
         if ("--OFF--".equals(content)) { // The user has disconnected -> removal from the list
             App.removeOnlineUser(senderAddress);
         }
-        boolean pseudoValid = App.isPseudoValid(content);
+        boolean pseudoTaken = !content.equals(App.pseudo); // Compare the desired pseudo to the App pseudo
         try {
-            if (pseudoValid) { // The pseudo the new user wants to use is valid
-                if (App.getUserCorresp(senderAddress.toString()) == null) { // This is a new user
-                    UDPHandler.sendMsg(senderAddress, App.pseudo);
+            if (!"--INVALID--".equals(content)) { // Ignore --INVALID-- messages
+                if (pseudoTaken) { // The pseudo the new user wants to use is valid -> add to list and answer with
+                                   // NAME
                     App.addOnlineUsers(senderAddress, content);
-                } else { // This is a known user wanting to change his username
-                    App.addUserCorresp(senderAddress.toString(), content); // addUserCorresp is used here not to add the
-                                                                           // IP to the ArrayList multiple times
+                    UDPHandler.sendMsg(senderAddress, App.pseudo);
+                } else { // The pseudo chosen by the new user is taken -> answer INVALID
+                    UDPHandler.sendMsg(senderAddress, "--INVALID--");
                 }
-            } else { // The pseudo chosen by the new user is invalid -> answer INVALID
-                UDPHandler.sendMsg(senderAddress, "--INVALID--");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -212,8 +215,8 @@ public class ThreadManager extends Thread {
     /**
      * Transmits a {@code msg} to specified {@code receivAddress} (TCP communication)
      * 
-     * @param msg
-     * @param receivAddress
+     * @param msg Message to be send through TCP
+     * @param receivAddress Destinary IP Address
      */
     protected void transmitMessage(String msg, InetAddress receivAddress) {
         TCPClient client = clientTable.get(receivAddress);
@@ -225,7 +228,7 @@ public class ThreadManager extends Thread {
         running = true;
         while (running) {
             try {
-                System.out.println("Listening for connections on port " + port);
+                // ! System.out.println("Listening for connections on port " + port);
 
                 Socket socket = servSocket.accept();
 

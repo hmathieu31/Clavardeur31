@@ -20,6 +20,11 @@ public class App extends Application {
     private static Scene scene;
     private static Stage stage;
 
+    /**
+     * Username chosen by the App user and possibly changed
+     * <p>
+     * TODO [CLAV-32]Change to scope to private and generate getters and setters
+     */
     public static String pseudo;
     public static String currentDiscussionIp = "";
 
@@ -48,6 +53,11 @@ public class App extends Application {
         addUserCorresp("localhost3", "Hugues");
     }
 
+    /**
+     * Gets the username of the person the App is currently communicating with
+     * 
+     * @return Pseudo corresponding to the IP Address of the current discussion
+     */
     public static String getCurrentUserName() {
         return getUserCorresp(currentDiscussionIp);
     }
@@ -115,23 +125,30 @@ public class App extends Application {
 
     /**
      * <p>
-     * Function called when the application is started.
+     * Called when the application is started.
      * <p>
-     * Starts a ThreadManager listening for incoming communications
-     * on port 12.
-     * </p>
+     * If the {@code username} chosen by the user is not forbidden, broadcasts
+     * {@code username} and waits for answers to fill-in {@code onlineUsers} and
+     * {@code userCorresp} and check if the username was already taken
+     * <p>
+     * If the username was not already taken, starts a ThreadManager listening for
+     * incoming communications on port 12 and completes the initialisation of
+     * Clavarder31
+     * <p>
+     * Else, prompts the user to change its username and is called until the
+     * username is valid
+     * 
+     * @param username Username chosen when starting the connection
      */
-    public static void connect() {
-        threadManager = new ThreadManager(12);
-        threadManager.startServer();
-        System.out.println("Waiting for connexion on port 12");
-        System.out.println();
-        if (threadManager.initUDPHandler("toto")) {
-            System.out.println("Pseudo valid");
-            pseudo = "toto";
+    public static void connect(String username) {
+        if (threadManager.initUDPHandler(username) && isPseudoValid(username)) {
+            System.out.println("Pseudo valid"); // ! Remove after testing
+            threadManager = new ThreadManager(12);
+            threadManager.startHandler();
+            // System.out.println("Waiting for connexion on port 12");
         } else {
-            System.out.println("Pseudo invalid");
-            // TODO Call a askForNewPseudo routine again while false
+            System.err.println("Invalid username!"); // ! Remove after testing
+            // TODO Prompt for a a new username when chosen invalid
         }
     }
 
@@ -277,8 +294,8 @@ public class App extends Application {
     }
 
     public static void main(String[] args) throws UnknownHostException {
-        connect();
-
+        pseudo = args[0];
+        connect(pseudo);
     }
 
 }
