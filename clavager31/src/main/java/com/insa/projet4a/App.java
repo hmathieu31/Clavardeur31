@@ -23,7 +23,6 @@ public class App extends Application {
     /**
      * Username chosen by the App user and possibly changed
      * <p>
-     * TODO [CLAV-32]Change to scope to private and generate getters and setters
      */
     public static String pseudo;
     public static String currentDiscussionIp = "";
