@@ -93,13 +93,11 @@ public class ThreadManager extends Thread {
                 udpHandler = new UDPHandler();
             UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255"), firstPseudo);
             ArrayList<Pair<String, InetAddress>> onlineUsers = udpHandler.listenForAnswers();
-            System.out.println("logpoint initUDPHandler after listening for answers");
             if (onlineUsers == null) {
                 initialisationValid = false;
             }
-            Thread.sleep(3000);
 
-        } catch (SocketException | UnknownHostException | InterruptedException e) {
+        } catch (SocketException | UnknownHostException e) {
             e.printStackTrace();
         }
         return initialisationValid;
