@@ -52,6 +52,7 @@ public class App extends Application {
     private static HashMap<String, String> userCorresp = new HashMap<String, String>();
 
     public static MainController controller;
+    private static boolean hasConnected = false;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -176,6 +177,8 @@ public class App extends Application {
             pseudoValidity = true;
             threadManager.startHandler();
             threadManager.startUDPListener();
+            hasConnected = true;
+            
             System.out.println("Pseudo valid"); // ! Remove after testing
         }
         return pseudoValidity;
@@ -197,7 +200,7 @@ public class App extends Application {
     public static void removeOnlineUser(InetAddress userAddress) {
         onlineUsers.remove(userAddress);
         removeUserCorresp(userAddress.toString());
-        System.out.println("user " + userAddress + " removed"); // ? Testing purposes
+        System.out.println("user " + userAddress + " removed"); // ! Testing purposes
     }
 
     /**
@@ -242,7 +245,7 @@ public class App extends Application {
             threadManager.createClientThread(12, receivAddress);
             return true;
         } catch (IOException e) {
-            System.err.println("Failed to establish connexion with target");
+            System.err.println("Failed to establish connexion with target " + receivAddress);
             return false;
         }
     }
@@ -302,8 +305,10 @@ public class App extends Application {
         for (InetAddress inetAddress : onlineUsers) {
             endDiscussion(inetAddress);
         }
-        threadManager.broadcastDisconnection();
-        threadManager.stopUDPHandler();
+        if (hasConnected) {
+            threadManager.broadcastDisconnection();
+            threadManager.stopUDPHandler();
+        }
     }
 
     /**

@@ -172,9 +172,11 @@ public class ThreadManager extends Thread {
      * @param content       Content of the broadcast received: either the pseudo or
      *                      "--OFF--" if the user broadcasts its disconection
      * @param senderAddress Address of the broadcasting user
+     * @throws UnknownHostException
      */
-    protected static void notifyOnlineModif(String content, InetAddress senderAddress) {
-        if ("--OFF--".equals(content)) { // The user has disconnected -> removal from the list
+    protected static void notifyOnlineModif(String content, InetAddress senderAddress) throws UnknownHostException {
+        if ("--OFF--".equals(content) && !isAddressLocalhost(senderAddress)) { // The user has disconnected -> removal
+                                                                               // from the list
             App.removeOnlineUser(senderAddress);
         }
         boolean pseudoFree = !content.equals(App.getPseudo()); // Compare the desired pseudo to the App pseudo
