@@ -103,7 +103,8 @@ public class App extends Application {
      * Adds / Updates a user in the Hash Map of address {@code ip} and username
      * {@code name}
      * 
-     * @param ip   IP Address in string format
+     * @param ip   IP Address in string format --> if the address was already in,
+     *             changes the corresponding username
      * @param name Username in string format
      */
     public static void addUserCorresp(String ip, String name) {
@@ -311,8 +312,10 @@ public class App extends Application {
     }
 
     public static void main(String[] args) throws UnknownHostException {
-        // pseudo = args[0];
-        connect("toto");
+        launch();
+
+        pseudo = "toto";
+        connect(pseudo);
     }
 
 }
