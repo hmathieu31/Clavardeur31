@@ -172,13 +172,13 @@ public class ThreadManager extends Thread {
         if ("--OFF--".equals(content)) { // The user has disconnected -> removal from the list
             App.removeOnlineUser(senderAddress);
         }
-        boolean pseudoTaken = !content.equals(App.pseudo); // Compare the desired pseudo to the App pseudo
+        boolean pseudoTaken = !content.equals(App.getPseudo()); // Compare the desired pseudo to the App pseudo
         try {
             if (!"--INVALID--".equals(content)) { // Ignore --INVALID-- messages
                 if (pseudoTaken) { // The pseudo the new user wants to use is valid -> add to list and answer with
                                    // NAME
                     App.addOnlineUsers(senderAddress, content);
-                    UDPHandler.sendMsg(senderAddress, App.pseudo);
+                    UDPHandler.sendMsg(senderAddress, App.getPseudo());
                 } else { // The pseudo chosen by the new user is taken -> answer INVALID
                     UDPHandler.sendMsg(senderAddress, "--INVALID--");
                 }

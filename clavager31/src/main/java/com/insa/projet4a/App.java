@@ -22,9 +22,27 @@ public class App extends Application {
 
     /**
      * Username chosen by the App user and possibly changed
-     * <p>
      */
-    public static String pseudo;
+    private static String pseudo;
+
+    /**
+     * Getter for App pseudo
+     * 
+     * @return Current username
+     */
+    public static String getPseudo() {
+        return pseudo;
+    }
+
+    /**
+     * Setter for App pseudo
+     * 
+     * @param pseudo Chosen username
+     */
+    public static void setPseudo(String pseudo) {
+        App.pseudo = pseudo;
+    }
+
     public static String currentDiscussionIp = "";
 
     /**
@@ -195,7 +213,7 @@ public class App extends Application {
             threadManager.broadcastNewUsername(newUserName);
             pseudo = newUserName;
         } else {
-            // TODO Notify GUI that the chosen username was invalid
+            // TODO [CLAV-34]Notify GUI that the chosen username was invalid
         }
     }
 
@@ -293,8 +311,8 @@ public class App extends Application {
     }
 
     public static void main(String[] args) throws UnknownHostException {
-        pseudo = args[0];
-        connect(pseudo);
+        // pseudo = args[0];
+        connect("toto");
     }
 
 }

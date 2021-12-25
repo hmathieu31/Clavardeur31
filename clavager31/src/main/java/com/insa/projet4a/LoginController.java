@@ -20,7 +20,7 @@ public class LoginController {
     @FXML private TextField pseudoField;
 
     @FXML
-    private void connect(KeyEvent key) throws IOException {
+    private void connect(KeyEvent key) throws IOException { // TODO Handle conflicts with App.connect
         if(key.getCode() == KeyCode.ENTER){
             String pseudo = pseudoField.getText();
 
@@ -28,7 +28,7 @@ public class LoginController {
             Collections.addAll(pseudoList, "Hugo", "Thomas", "Etchebest");
 
             if (!pseudoList.contains(pseudo)){
-                App.pseudo = pseudo;
+                App.setPseudo(pseudo);
                 App.setRoot("main");
                 App.changeSize(1000, 800);
             }   

@@ -50,7 +50,7 @@ public class MainController {
         this.bdd.initHistory();
         App.controller = this;
 
-        identityLabel.setText(App.pseudo);
+        identityLabel.setText(App.getPseudo());
         addConnected("localhost");
         addConnected("localhost1");
         addConnected("localhost2");
