@@ -143,44 +143,32 @@ public class App extends Application {
 
     /**
      * <p>
-     * Called when the application is started.
+     * Called by the {@code Login Screen} when the User enters his username to check
+     * if the pseudo is valid.
      * <p>
-     * If the {@code username} chosen by the user is not forbidden, broadcasts
+     * If the {@code username} chosen by the user is not a forbidden keyword,
+     * broadcasts
      * {@code username} and waits for answers to fill-in {@code onlineUsers} and
      * {@code userCorresp} and check if the username was already taken
      * <p>
-     * If the username was not already taken, starts the ThreadManager listening for
+     * --> If the username was not already taken, starts the ThreadManager listening
+     * for
      * incoming communications on port 12 and completes the initialisation of
      * Clavarder31
      * <p>
-     * Else, prompts the user to change its username and is called until the
-     * username is valid
+     * --> Else returns false and is called again by the {@code Login Screen} until
+     * a
+     * valid username is provided
      * 
      * @param username Username chosen when starting the connection
+     * @return True if the chosen username is valid
      */
-    public static void connect(String username) {
-        if (isInitPseudoValid(username)) {
-            System.out.println("Pseudo valid"); // ! Remove after testing
-            threadManager.startHandler();
-            threadManager.startUDPListener();
-            // System.out.println("Waiting for connexion on port 12");
-        } else {
-            System.err.println("Invalid username!"); // ! Remove after testing
-            // TODO Prompt for a a new username when chosen invalid
-
-            while (!isInitPseudoValid(username)) {
-                System.err.println("Invalid username!"); // ! Remove after testing
-
-            }
-        }
-    }
-
-
     public static boolean isInitPseudoValid(String username) {
         boolean pseudoValidity = false;
         if (threadManager.initUDPHandler(username) && isPseudoValid(username)) {
             pseudoValidity = true;
             threadManager.startHandler();
+            threadManager.startUDPListener();
             System.out.println("Pseudo valid"); // ! Remove after testing
         }
         return pseudoValidity;

@@ -1,14 +1,12 @@
 package com.insa.projet4a;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -29,9 +27,6 @@ public class LoginController {
 
             App.setPseudo(pseudo); // The App username is set, regardless of whether the chosen username is valid
                                    // to allow notifyOnlineModifs to work properly
-
-            ArrayList<String> pseudoList = new ArrayList<String>();
-            Collections.addAll(pseudoList, "Hugo", "Thomas", "Etchebest");
 
             boolean pseudoValid = App.isInitPseudoValid(pseudo);
 
