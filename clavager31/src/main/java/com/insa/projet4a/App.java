@@ -137,7 +137,7 @@ public class App extends Application {
      * /
      ***********************************************************************/
 
-    private static ThreadManager threadManager;
+    private static ThreadManager threadManager = new ThreadManager(12);
 
     private static ArrayList<InetAddress> onlineUsers = new ArrayList<InetAddress>();
 
@@ -149,7 +149,7 @@ public class App extends Application {
      * {@code username} and waits for answers to fill-in {@code onlineUsers} and
      * {@code userCorresp} and check if the username was already taken
      * <p>
-     * If the username was not already taken, starts a ThreadManager listening for
+     * If the username was not already taken, starts the ThreadManager listening for
      * incoming communications on port 12 and completes the initialisation of
      * Clavarder31
      * <p>
@@ -159,15 +159,30 @@ public class App extends Application {
      * @param username Username chosen when starting the connection
      */
     public static void connect(String username) {
-        threadManager = new ThreadManager(12);
-        if (threadManager.initUDPHandler(username) && isPseudoValid(username)) {
+        if (isInitPseudoValid(username)) {
             System.out.println("Pseudo valid"); // ! Remove after testing
             threadManager.startHandler();
             // System.out.println("Waiting for connexion on port 12");
         } else {
             System.err.println("Invalid username!"); // ! Remove after testing
             // TODO Prompt for a a new username when chosen invalid
+
+            while (!isInitPseudoValid(username)) {
+                System.err.println("Invalid username!"); // ! Remove after testing
+
+            }
         }
+    }
+
+
+    public static boolean isInitPseudoValid(String username) {
+        boolean pseudoValidity = false;
+        if (threadManager.initUDPHandler(username) && isPseudoValid(username)) {
+            pseudoValidity = true;
+            threadManager.startHandler();
+            System.out.println("Pseudo valid"); // ! Remove after testing
+        }
+        return pseudoValidity;
     }
 
     public static ArrayList<InetAddress> getOnlineUsers() {
@@ -314,8 +329,7 @@ public class App extends Application {
     public static void main(String[] args) throws UnknownHostException {
         launch();
 
-        pseudo = "toto";
-        connect(pseudo);
+        // connect("toto");
     }
 
 }

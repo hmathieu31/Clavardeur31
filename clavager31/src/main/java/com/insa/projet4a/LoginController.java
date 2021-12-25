@@ -11,29 +11,36 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+
 public class LoginController {
 
-    Alert alert = new Alert(AlertType.ERROR, 
-                        "This name is taken, try again with another one.", 
-                        ButtonType.OK);
-    
-    @FXML private TextField pseudoField;
+    @FXML
+    Alert alert = new Alert(AlertType.ERROR,
+            "This name is taken, try again with another one.",
+            ButtonType.OK);
 
     @FXML
-    private void connect(KeyEvent key) throws IOException { // TODO  [CLAV-35]Handle conflicts with App.connect
-        if(key.getCode() == KeyCode.ENTER){
+    private TextField pseudoField;
+
+    @FXML
+    private void connect(KeyEvent key) throws IOException { // TODO [CLAV-35]Handle conflicts with App.connect
+        if (key.getCode() == KeyCode.ENTER) {
             String pseudo = pseudoField.getText();
+
+            App.setPseudo(pseudo); // The App username is set, regardless of whether the chosen username is valid
+                                   // to allow notifyOnlineModifs to work properly
 
             ArrayList<String> pseudoList = new ArrayList<String>();
             Collections.addAll(pseudoList, "Hugo", "Thomas", "Etchebest");
 
-            if (!pseudoList.contains(pseudo)){
-                App.setPseudo(pseudo);
+            boolean pseudoValid = App.isInitPseudoValid(pseudo);
+
+            if (pseudoValid) {
                 App.setRoot("main");
                 App.changeSize(1000, 800);
-            }   
-            else{
+            } else {
                 pseudoField.clear();
+                App.setPseudo(null);
                 alert.show();
             }
         }
