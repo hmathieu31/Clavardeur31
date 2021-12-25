@@ -109,8 +109,15 @@ public class App extends Application {
      */
     public static void addUserCorresp(String ip, String name) {
         userCorresp.put(ip, name);
+        System.out.println("user " + ip + " - " + name);
     }
 
+    /**
+     * Called when the GUI is closed.
+     * <p>
+     * Close the current {@code stage}.
+     * TODO  [CLAV-36]Handle disconnect
+     */
     private void closeProgram() {
         System.out.println("GUI CLOSING");
         stage.close();

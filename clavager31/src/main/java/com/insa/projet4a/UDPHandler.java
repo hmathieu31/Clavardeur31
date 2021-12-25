@@ -97,7 +97,7 @@ public class UDPHandler extends Thread {
             while (keepListening) { // Keep listening until a user answers with "--INVALID--" or until 10s have
                                     // expired <=> no more answers are expected
                 try {
-                    listenerSocket.setSoTimeout(7000);
+                    listenerSocket.setSoTimeout(4000);
                     while (keepListening) {
                         listenerSocket.receive(inPacket);
 
