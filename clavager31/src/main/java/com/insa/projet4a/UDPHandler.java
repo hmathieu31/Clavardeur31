@@ -93,13 +93,12 @@ public class UDPHandler extends Thread {
         boolean pseudoInvalid = false;
         try {
             DatagramPacket inPacket = new DatagramPacket(buffer, buffer.length);
-            DatagramSocket inSocket = new DatagramSocket(portBroadcaster);
             while (keepListening) { // Keep listening until a user answers with "--INVALID--" or until 10s have
                                     // expired <=> no more answers are expected
                 try {
-                    inSocket.setSoTimeout(3000);
+                    listenerSocket.setSoTimeout(7000);
                     while (keepListening) {
-                        inSocket.receive(inPacket);
+                        listenerSocket.receive(inPacket);
 
                         InetAddress inAddress = inPacket.getAddress();
                         String content = new String(inPacket.getData(), 0, inPacket.getLength());
@@ -111,10 +110,8 @@ public class UDPHandler extends Thread {
 
                 } catch (SocketException timeout) {
                     keepListening = false;
-                    break;
                 }
             }
-            inSocket.close();
 
         } catch (Exception e) {
             // e.printStackTrace();
@@ -134,7 +131,8 @@ public class UDPHandler extends Thread {
         try {
             while (running) {
                 DatagramSocket listenerRunnableSocket = listenerSocket;
-
+                
+                listenerRunnableSocket.setSoTimeout(0);
                 listenerRunnableSocket.receive(inPacket);
                 InetAddress inAddress = inPacket.getAddress();
 
