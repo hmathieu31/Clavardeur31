@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 
 import javafx.util.Pair;
@@ -108,13 +109,16 @@ public class UDPHandler extends Thread {
                         keepListening = !"--INVALID--".equals(content);
                     }
 
-                } catch (SocketException timeout) {
+                } catch (SocketTimeoutException timeout) {
                     keepListening = false;
                 }
             }
 
         } catch (Exception e) {
-            // e.printStackTrace();
+            if (e instanceof SocketTimeoutException) {
+            } else {
+                e.printStackTrace();
+            }
         }
         if (pseudoInvalid) { // If the loop was exited due to invalid pseudo, onlineUsers is null
             onlineUsers = null;
