@@ -20,7 +20,7 @@ public class LoginController {
     @FXML private TextField pseudoField;
 
     @FXML
-    private void connect(KeyEvent key) throws IOException { // TODO Handle conflicts with App.connect
+    private void connect(KeyEvent key) throws IOException { // TODO  [CLAV-35]Handle conflicts with App.connect
         if(key.getCode() == KeyCode.ENTER){
             String pseudo = pseudoField.getText();
 
