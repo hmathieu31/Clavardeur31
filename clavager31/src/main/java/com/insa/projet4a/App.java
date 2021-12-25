@@ -116,11 +116,11 @@ public class App extends Application {
      * Called when the GUI is closed.
      * <p>
      * Close the current {@code stage}.
-     * TODO  [CLAV-36]Handle disconnect
      */
     private void closeProgram() {
         System.out.println("GUI CLOSING");
         stage.close();
+        disconnect();
     }
 
     public static void setRoot(String fxml) throws IOException {
