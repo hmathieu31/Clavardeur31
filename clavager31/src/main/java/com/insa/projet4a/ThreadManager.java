@@ -89,7 +89,8 @@ public class ThreadManager extends Thread {
         boolean initialisationValid = true;
 
         try {
-            udpHandler = new UDPHandler();
+            if (udpHandler == null)
+                udpHandler = new UDPHandler();
             UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255"), firstPseudo);
             ArrayList<Pair<String, InetAddress>> onlineUsers = udpHandler.listenForAnswers();
             System.out.println("logpoint initUDPHandler after listening for answers");
@@ -97,12 +98,18 @@ public class ThreadManager extends Thread {
                 initialisationValid = false;
             }
             Thread.sleep(3000);
-            udpHandler.startListener();
 
         } catch (SocketException | UnknownHostException | InterruptedException e) {
             e.printStackTrace();
         }
         return initialisationValid;
+    }
+
+    /**
+     * Starts the Thread listening for broadcasts in {@link UDPHandler}
+     */
+    public void startUDPListener() {
+        udpHandler.startListener();
     }
 
     /**

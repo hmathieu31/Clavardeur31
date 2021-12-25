@@ -162,6 +162,7 @@ public class App extends Application {
         if (isInitPseudoValid(username)) {
             System.out.println("Pseudo valid"); // ! Remove after testing
             threadManager.startHandler();
+            threadManager.startUDPListener();
             // System.out.println("Waiting for connexion on port 12");
         } else {
             System.err.println("Invalid username!"); // ! Remove after testing
@@ -321,9 +322,7 @@ public class App extends Application {
 
         return !userCorresp.containsValue(pseudo) &&
                 !"--OFF--".equals(pseudo) &&
-                !"--INVALID--".equals(pseudo) &&
-                !pseudo.equals(App.pseudo); // The user can't choose --OFF-- as
-                                            // username nor his previous username nor --INVALID--
+                !"--INVALID--".equals(pseudo);
     }
 
     public static void main(String[] args) throws UnknownHostException {
