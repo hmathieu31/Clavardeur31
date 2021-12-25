@@ -140,9 +140,9 @@ public class App extends Application {
      * @param username Username chosen when starting the connection
      */
     public static void connect(String username) {
+        threadManager = new ThreadManager(12);
         if (threadManager.initUDPHandler(username) && isPseudoValid(username)) {
             System.out.println("Pseudo valid"); // ! Remove after testing
-            threadManager = new ThreadManager(12);
             threadManager.startHandler();
             // System.out.println("Waiting for connexion on port 12");
         } else {
