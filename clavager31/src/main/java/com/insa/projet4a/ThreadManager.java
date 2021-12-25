@@ -181,9 +181,9 @@ public class ThreadManager extends Thread {
         }
         boolean pseudoFree = !content.equals(App.getPseudo()); // Compare the desired pseudo to the App pseudo
         try {
-            if (!"--INVALID--".equals(content)) { // Ignore --INVALID-- messages
-                if (pseudoFree) { // The pseudo the new user wants to use is valid -> add to list and answer with
-                                  // NAME
+            if (!"--INVALID--".equals(content) && !isAddressLocalhost(senderAddress)) { // Ignore --INVALID-- messages
+                                                                                        // and messages from localhost
+                if (pseudoFree) {
                     App.addOnlineUsers(senderAddress, content);
                     UDPHandler.sendMsg(senderAddress, App.getPseudo());
                 } else { // The pseudo chosen by the new user is taken -> answer INVALID
@@ -204,7 +204,7 @@ public class ThreadManager extends Thread {
      * @throws UnknownHostException If the IP Address of the host could not be
      *                              determined
      */
-    public boolean isAddressLocalhost(InetAddress address) throws UnknownHostException {
+    public static boolean isAddressLocalhost(InetAddress address) throws UnknownHostException {
         String localhost = InetAddress.getLocalHost().getHostAddress();
         return localhost.equals(address.getHostAddress());
     }
