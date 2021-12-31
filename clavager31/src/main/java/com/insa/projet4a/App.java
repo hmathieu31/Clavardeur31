@@ -116,7 +116,7 @@ public class App extends Application {
      * Called when the GUI is closed.
      * <p>
      * Close the current {@code stage}.
-     * TODO  [CLAV-36]Handle disconnect
+     * TODO [CLAV-36]Handle disconnect
      */
     private void closeProgram() {
         System.out.println("GUI CLOSING");
@@ -211,7 +211,7 @@ public class App extends Application {
             onlineUsers.add(newUserAddress);
         }
         addUserCorresp(newUserAddress.toString(), newUserPseudo);
-        System.out.println(onlineUsers); // ? Testing purposes
+        System.out.println("IP: " + newUserAddress + " - name:" + newUserPseudo); // ! Testing purposes
     }
 
     /**
@@ -219,15 +219,16 @@ public class App extends Application {
      * <p>
      * Fails and calls a method from the GUI if {@code newUserName} is invalid
      * 
-     * @param newUserName New username, invalid if already taken by a user or if
-     *                    --OFF--
+     * @param newUserName New username, invalid if already taken by a user or
+     *                    unallowed keyword
      */
-    public void changeUsername(String newUserName) {
+    public static void changeUsername(String newUserName) {
         if (isPseudoValid(newUserName)) {
             threadManager.broadcastNewUsername(newUserName);
             pseudo = newUserName;
         } else {
             // TODO [CLAV-34]Notify GUI that the chosen username was invalid
+            System.out.println("Invalid username");
         }
     }
 
@@ -326,13 +327,12 @@ public class App extends Application {
         // launch();
 
         // ! Test phase
-        App.setPseudo(args[0]);
-        System.out.println(isInitPseudoValid(pseudo));
+        App.setPseudo("toto");
+        App.isInitPseudoValid(pseudo);
 
-        while (true) {
-            System.out.println("oneline users -- " + onlineUsers);
-            Thread.sleep(3000);
-            System.out.println("online name -- " + userCorresp.values());
-        }
+        // Thread.sleep(5000);
+        // App.setPseudo(args[0]);
+        App.changeUsername(pseudo);
+
     }
 }

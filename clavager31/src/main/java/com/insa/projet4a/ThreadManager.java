@@ -237,7 +237,7 @@ public class ThreadManager extends Thread {
      */
     public void broadcastNewUsername(String newUsername) {
         try {
-            UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255.255"), newUsername);
+            UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255"), newUsername);
         } catch (SocketException | UnknownHostException e) {
             e.printStackTrace();
         }
