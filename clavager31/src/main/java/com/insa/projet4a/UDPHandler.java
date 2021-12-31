@@ -110,7 +110,8 @@ public class UDPHandler extends Thread {
                             onlineUsers.add(new Pair<String, InetAddress>(content, inAddress));
                         }
 
-                        keepListening = !"--INVALID--".equals(content);
+                        pseudoInvalid = "--INVALID--".equals(content);
+                        keepListening = !pseudoInvalid;
                     }
 
                 } catch (SocketTimeoutException timeout) {
