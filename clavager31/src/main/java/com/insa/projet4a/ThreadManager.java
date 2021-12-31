@@ -182,26 +182,26 @@ public class ThreadManager extends Thread {
      * @throws UnknownHostException
      */
     protected static void notifyOnlineModif(String content, InetAddress senderAddress) throws UnknownHostException {
-        if ("--OFF--".equals(content) && !isAddressLocalhost(senderAddress)) { // The user has disconnected -> removal
-                                                                               // from the list
-            App.removeOnlineUser(senderAddress);
-        } else {
-            boolean pseudoFree = !content.equals(App.getPseudo()); // Compare the desired pseudo to the App pseudo
-            try {
-                if (!"--INVALID--".equals(content) && !isAddressLocalhost(senderAddress)) { // Ignore --INVALID--
-                                                                                            // messages
-                                                                                            // and messages from
-                                                                                            // localhost
-                    if (pseudoFree) {
-                        App.addOnlineUsers(senderAddress, content);
-                        UDPHandler.sendMsg(senderAddress, App.getPseudo());
-                    } else { // The pseudo chosen by the new user is taken -> answer INVALID
-                        UDPHandler.sendMsg(senderAddress, "--INVALID--");
-                    }
+
+        boolean pseudoFree = !content.equals(App.getPseudo()); // Compare the desired pseudo to the App pseudo
+        try {
+            if ("--OFF--".equals(content)) { // The user has disconnected -> removal
+                // from the list
+                App.removeOnlineUser(senderAddress);
+            } else if (!"--INVALID--".equals(content)) { // Ignore --INVALID--
+                                                         // messages
+                                                         // and messages from
+                                                         // localhost
+                if (pseudoFree) {
+                    App.addOnlineUsers(senderAddress, content);
+                    UDPHandler.sendMsg(senderAddress, App.getPseudo());
+                } else { // The pseudo chosen by the new user is taken -> answer INVALID
+                    UDPHandler.sendMsg(senderAddress, "--INVALID--");
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
