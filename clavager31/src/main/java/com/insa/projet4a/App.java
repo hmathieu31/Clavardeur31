@@ -207,7 +207,9 @@ public class App extends Application {
      * @param newUserPseudo  Pseudo of the new user
      */
     public static void addOnlineUsers(InetAddress newUserAddress, String newUserPseudo) {
-        onlineUsers.add(newUserAddress);
+        if (!onlineUsers.contains(newUserAddress)) {
+            onlineUsers.add(newUserAddress);
+        }
         addUserCorresp(newUserAddress.toString(), newUserPseudo);
         System.out.println(onlineUsers); // ? Testing purposes
     }
@@ -320,10 +322,17 @@ public class App extends Application {
                 !"--INVALID--".equals(pseudo);
     }
 
-    public static void main(String[] args) throws UnknownHostException {
-        launch();
+    public static void main(String[] args) throws UnknownHostException, InterruptedException {
+        // launch();
 
-        // connect("toto");
+        // ! Test phase
+        App.setPseudo(args[0]);
+        System.out.println(isInitPseudoValid(pseudo));
+
+        while (true) {
+            System.out.println("oneline users -- " + onlineUsers);
+            Thread.sleep(3000);
+            System.out.println("online name -- " + userCorresp.values());
+        }
     }
-
 }
