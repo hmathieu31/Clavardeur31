@@ -104,7 +104,11 @@ public class UDPHandler extends Thread {
                         InetAddress inAddress = inPacket.getAddress();
                         String content = new String(inPacket.getData(), 0, inPacket.getLength());
 
-                        onlineUsers.add(new Pair<String, InetAddress>(content, inAddress));
+                        if (!ThreadManager.isAddressLocalhost(inAddress)
+                                && !"--OFF--".equals(content)
+                                && !"--INVALID--".equals(content)) {
+                            onlineUsers.add(new Pair<String, InetAddress>(content, inAddress));
+                        }
 
                         keepListening = !"--INVALID--".equals(content);
                     }
@@ -135,7 +139,7 @@ public class UDPHandler extends Thread {
         try {
             while (running) {
                 DatagramSocket listenerRunnableSocket = listenerSocket;
-                
+
                 listenerRunnableSocket.setSoTimeout(0);
                 listenerRunnableSocket.receive(inPacket);
                 InetAddress inAddress = inPacket.getAddress();
