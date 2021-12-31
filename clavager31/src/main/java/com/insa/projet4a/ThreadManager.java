@@ -95,8 +95,11 @@ public class ThreadManager extends Thread {
             ArrayList<Pair<String, InetAddress>> onlineUsers = udpHandler.listenForAnswers();
             if (onlineUsers == null) {
                 initialisationValid = false;
+            } else {
+                for (Pair<String, InetAddress> pair : onlineUsers) {
+                    App.addOnlineUsers(pair.getValue(), pair.getKey());
+                }
             }
-
         } catch (SocketException | UnknownHostException e) {
             e.printStackTrace();
         }
@@ -124,20 +127,24 @@ public class ThreadManager extends Thread {
      * @param address
      */
     public static void closeConnectionThreads(InetAddress address) {
-        closeClientThread(address);
-        closeServerThread(address);
+            closeClientThread(address);
+            closeServerThread(address);
     }
 
     private static void closeClientThread(InetAddress address) {
         TCPClient client = clientTable.get(address);
-        client.stopClient();
-        clientTable.remove(address);
+        if (client != null) {
+            client.stopClient();
+            clientTable.remove(address);
+        }
     }
 
     private static void closeServerThread(InetAddress address) {
         TCPServer server = serverTable.get(address);
-        server.stopServer();
-        serverTable.remove(address);
+        if (server != null) {
+            server.stopServer();
+            serverTable.remove(address);
+        }
     }
 
     /**
@@ -172,9 +179,10 @@ public class ThreadManager extends Thread {
      * @param content       Content of the broadcast received: either the pseudo or
      *                      "--OFF--" if the user broadcasts its disconection
      * @param senderAddress Address of the broadcasting user
+     * @throws UnknownHostException
      */
-    protected static void notifyOnlineModif(String content, InetAddress senderAddress) {
-        if ("--OFF--".equals(content)) { // The user has disconnected -> removal from the list
+    protected static void notifyOnlineModif(String content, InetAddress senderAddress) throws UnknownHostException {
+        if ("--OFF--".equals(content) && !isAddressLocalhost(senderAddress)) { // The user has disconnected -> removal from the list
             App.removeOnlineUser(senderAddress);
         }
         boolean pseudoFree = !content.equals(App.getPseudo()); // Compare the desired pseudo to the App pseudo
