@@ -52,6 +52,7 @@ public class App extends Application {
     private static HashMap<String, String> userCorresp = new HashMap<String, String>();
 
     public static MainController controller;
+    private static boolean hasConnected = false;
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -118,11 +119,11 @@ public class App extends Application {
      * Called when the GUI is closed.
      * <p>
      * Close the current {@code stage}.
-     * TODO [CLAV-36]Handle disconnect
      */
     private void closeProgram() {
         System.out.println("GUI CLOSING");
         stage.close();
+        disconnect();
     }
 
     public static void setRoot(String fxml) throws IOException {
@@ -178,6 +179,8 @@ public class App extends Application {
             pseudoValidity = true;
             threadManager.startHandler();
             threadManager.startUDPListener();
+            hasConnected = true;
+
             System.out.println("Pseudo valid"); // ! Remove after testing
         }
         return pseudoValidity;
@@ -199,7 +202,7 @@ public class App extends Application {
     public static void removeOnlineUser(InetAddress userAddress) {
         onlineUsers.remove(userAddress);
         removeUserCorresp(userAddress.toString());
-        System.out.println("user " + userAddress + " removed"); // ? Testing purposes
+        System.out.println("user " + userAddress + " removed"); // ! Testing purposes
     }
 
     /**
@@ -221,10 +224,10 @@ public class App extends Application {
      * <p>
      * Fails and calls a method from the GUI if {@code newUserName} is invalid
      * 
-     * @param newUserName New username, invalid if already taken by a user or
-     *                    unallowed keyword
+     * @param newUserName New username, invalid if already taken by a user or if
+     *                    --OFF--
      */
-    public static void changeUsername(String newUserName) {
+    public void changeUsername(String newUserName) {
         if (isPseudoValid(newUserName)) {
             threadManager.broadcastNewUsername(newUserName);
             pseudo = newUserName;
@@ -247,7 +250,7 @@ public class App extends Application {
             threadManager.createClientThread(12, receivAddress);
             return true;
         } catch (IOException e) {
-            System.err.println("Failed to establish connexion with target");
+            System.err.println("Failed to establish connexion with target " + receivAddress);
             return false;
         }
     }
@@ -307,8 +310,15 @@ public class App extends Application {
         for (InetAddress inetAddress : onlineUsers) {
             endDiscussion(inetAddress);
         }
-        threadManager.broadcastDisconnection();
-        threadManager.stopUDPHandler();
+        if (hasConnected) {
+            threadManager.broadcastDisconnection();
+            threadManager.stopUDPHandler();
+            try {
+                threadManager.stopHandler();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -325,7 +335,8 @@ public class App extends Application {
                 !"--INVALID--".equals(pseudo);
     }
 
-    public static void main(String[] args) throws UnknownHostException, InterruptedException {
+    public static void main(String[] args) throws UnknownHostException {
         launch();
+        System.out.println("Exited");
     }
 }

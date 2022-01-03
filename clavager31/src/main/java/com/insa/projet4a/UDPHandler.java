@@ -137,7 +137,6 @@ public class UDPHandler extends Thread {
         try {
             while (running) {
                 DatagramSocket listenerRunnableSocket = listenerSocket;
-
                 listenerRunnableSocket.setSoTimeout(0);
                 listenerRunnableSocket.receive(inPacket);
                 InetAddress inAddress = inPacket.getAddress();

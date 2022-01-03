@@ -51,9 +51,11 @@ public class ThreadManager extends Thread {
 
     /**
      * Stops this ThreadManager
+     * @throws IOException
      */
-    public void stopHandler() {
+    public void stopHandler() throws IOException {
         running = false;
+        servSocket.close();
         this.interrupt();
     }
 
@@ -201,7 +203,6 @@ public class ThreadManager extends Thread {
                     UDPHandler.sendMsg(senderAddress, "--INVALID--");
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -270,6 +271,7 @@ public class ThreadManager extends Thread {
                 serverTable.put(socket.getInetAddress(), requestHandler); // Adds the Server thread to table
                 requestHandler.start();
             } catch (Exception e) {
+                if(!(e instanceof SocketException))
                 e.printStackTrace();
             }
         }
