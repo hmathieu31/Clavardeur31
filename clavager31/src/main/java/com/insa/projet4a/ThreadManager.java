@@ -194,7 +194,9 @@ public class ThreadManager extends Thread {
                                                          // localhost
                 if (pseudoFree) {
                     App.addOnlineUsers(senderAddress, content);
-                    UDPHandler.sendMsg(senderAddress, App.getPseudo());
+                    if (!App.getOnlineUsers().contains(senderAddress)) { // Send own pseudo only if this is a new user
+                        UDPHandler.sendMsg(senderAddress, App.getPseudo());
+                    }
                 } else { // The pseudo chosen by the new user is taken -> answer INVALID
                     UDPHandler.sendMsg(senderAddress, "--INVALID--");
                 }
