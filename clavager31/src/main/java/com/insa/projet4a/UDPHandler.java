@@ -21,8 +21,8 @@ import javafx.util.Pair;
  * is closed
  */
 public class UDPHandler extends Thread {
-    private static final int portBroadcaster = 13;
-    private static final int portListener = 14;
+    private static final int portBroadcaster = 50001;
+    private static final int portListener = 50002;
 
     private DatagramSocket listenerSocket;
     private boolean running;
@@ -100,15 +100,17 @@ public class UDPHandler extends Thread {
                     listenerSocket.setSoTimeout(4000);
                     while (keepListening) {
                         listenerSocket.receive(inPacket);
-
                         InetAddress inAddress = inPacket.getAddress();
                         String content = new String(inPacket.getData(), 0, inPacket.getLength());
 
-                        onlineUsers.add(new Pair<String, InetAddress>(content, inAddress));
-
-                        keepListening = !"--INVALID--".equals(content);
+                        if (!ThreadManager.isAddressLocalhost(inAddress)) {
+                            if (!"--OFF--".equals(content) && !"--INVALID--".equals(content)) {
+                                onlineUsers.add(new Pair<String, InetAddress>(content, inAddress));
+                            }
+                            pseudoInvalid = "--INVALID--".equals(content);
+                            keepListening = !pseudoInvalid;
+                        }
                     }
-
                 } catch (SocketTimeoutException timeout) {
                     keepListening = false;
                 }
@@ -135,19 +137,18 @@ public class UDPHandler extends Thread {
         try {
             while (running) {
                 DatagramSocket listenerRunnableSocket = listenerSocket;
-                
                 listenerRunnableSocket.setSoTimeout(0);
                 listenerRunnableSocket.receive(inPacket);
                 InetAddress inAddress = inPacket.getAddress();
 
                 String content = new String(inPacket.getData(), 0, inPacket.getLength());
-                ThreadManager.notifyOnlineModif(content, inAddress);
+                if (!ThreadManager.isAddressLocalhost(inAddress)) { // Ignore all broadcasts coming from oneself
+                    ThreadManager.notifyOnlineModif(content, inAddress);
+                }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         super.run();
     }
 

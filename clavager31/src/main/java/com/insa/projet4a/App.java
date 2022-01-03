@@ -103,6 +103,8 @@ public class App extends Application {
     /**
      * Adds / Updates a user in the Hash Map of address {@code ip} and username
      * {@code name}
+     * TODO [CLAV-38]Should check whether keeping an arraylist and a HashMap for
+     * online users with different access methods is relevant
      * 
      * @param ip   IP Address in string format --> if the address was already in,
      *             changes the corresponding username
@@ -178,7 +180,7 @@ public class App extends Application {
             threadManager.startHandler();
             threadManager.startUDPListener();
             hasConnected = true;
-            
+
             System.out.println("Pseudo valid"); // ! Remove after testing
         }
         return pseudoValidity;
@@ -210,9 +212,11 @@ public class App extends Application {
      * @param newUserPseudo  Pseudo of the new user
      */
     public static void addOnlineUsers(InetAddress newUserAddress, String newUserPseudo) {
-        onlineUsers.add(newUserAddress);
+        if (!onlineUsers.contains(newUserAddress)) {
+            onlineUsers.add(newUserAddress);
+        }
         addUserCorresp(newUserAddress.toString(), newUserPseudo);
-        System.out.println(onlineUsers); // ? Testing purposes
+        System.out.println("IP: " + newUserAddress + " - name:" + newUserPseudo); // ! Testing purposes
     }
 
     /**
@@ -229,6 +233,7 @@ public class App extends Application {
             pseudo = newUserName;
         } else {
             // TODO [CLAV-34]Notify GUI that the chosen username was invalid
+            System.out.println("Invalid username");
         }
     }
 
@@ -334,5 +339,4 @@ public class App extends Application {
         launch();
         System.out.println("Exited");
     }
-
 }

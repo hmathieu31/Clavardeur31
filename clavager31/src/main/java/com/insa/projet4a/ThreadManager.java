@@ -97,8 +97,11 @@ public class ThreadManager extends Thread {
             ArrayList<Pair<String, InetAddress>> onlineUsers = udpHandler.listenForAnswers();
             if (onlineUsers == null) {
                 initialisationValid = false;
+            } else {
+                for (Pair<String, InetAddress> pair : onlineUsers) {
+                    App.addOnlineUsers(pair.getValue(), pair.getKey());
+                }
             }
-
         } catch (SocketException | UnknownHostException e) {
             e.printStackTrace();
         }
@@ -132,14 +135,18 @@ public class ThreadManager extends Thread {
 
     private static void closeClientThread(InetAddress address) {
         TCPClient client = clientTable.get(address);
-        client.stopClient();
-        clientTable.remove(address);
+        if (client != null) {
+            client.stopClient();
+            clientTable.remove(address);
+        }
     }
 
     private static void closeServerThread(InetAddress address) {
         TCPServer server = serverTable.get(address);
-        server.stopServer();
-        serverTable.remove(address);
+        if (server != null) {
+            server.stopServer();
+            serverTable.remove(address);
+        }
     }
 
     /**
@@ -177,17 +184,21 @@ public class ThreadManager extends Thread {
      * @throws UnknownHostException
      */
     protected static void notifyOnlineModif(String content, InetAddress senderAddress) throws UnknownHostException {
-        if ("--OFF--".equals(content) && !isAddressLocalhost(senderAddress)) { // The user has disconnected -> removal
-                                                                               // from the list
-            App.removeOnlineUser(senderAddress);
-        }
+
         boolean pseudoFree = !content.equals(App.getPseudo()); // Compare the desired pseudo to the App pseudo
         try {
-            if (!"--INVALID--".equals(content) && !isAddressLocalhost(senderAddress)) { // Ignore --INVALID-- messages
-                                                                                        // and messages from localhost
+            if ("--OFF--".equals(content)) { // The user has disconnected -> removal
+                // from the list
+                App.removeOnlineUser(senderAddress);
+            } else if (!"--INVALID--".equals(content)) { // Ignore --INVALID--
+                                                         // messages
+                                                         // and messages from
+                                                         // localhost
                 if (pseudoFree) {
+                    if (!App.getOnlineUsers().contains(senderAddress)) { // Send own pseudo only if this is a new user
+                        UDPHandler.sendMsg(senderAddress, App.getPseudo());
+                    }
                     App.addOnlineUsers(senderAddress, content);
-                    UDPHandler.sendMsg(senderAddress, App.getPseudo());
                 } else { // The pseudo chosen by the new user is taken -> answer INVALID
                     UDPHandler.sendMsg(senderAddress, "--INVALID--");
                 }
@@ -229,7 +240,7 @@ public class ThreadManager extends Thread {
      */
     public void broadcastNewUsername(String newUsername) {
         try {
-            UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255.255"), newUsername);
+            UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255"), newUsername);
         } catch (SocketException | UnknownHostException e) {
             e.printStackTrace();
         }
