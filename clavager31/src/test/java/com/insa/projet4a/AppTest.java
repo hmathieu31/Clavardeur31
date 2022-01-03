@@ -46,22 +46,9 @@ public class AppTest {
         assertTrue(App.isPseudoValid("toto"));
         assertFalse(App.isPseudoValid("titi"));
         App.setPseudo("foo");
-        assertFalse(App.isPseudoValid("foo"));
+        assertTrue(App.isPseudoValid("foo"));
 
         assertFalse(App.isPseudoValid("--OFF--"));
         assertFalse(App.isPseudoValid("--INVALID--"));
     }
-
-    @Test
-    void testIsInitPseudoValid() {
-        App.addUserCorresp("128.135.165.198", "zitron");
-        App.addUserCorresp("192.168.10.10", "titi");
-
-        assertTrue(App.isInitPseudoValid("toto"));
-        assertFalse(App.isInitPseudoValid("titi"));
-        App.setPseudo("foo");
-        assertFalse(App.isInitPseudoValid("foo"));
-
-        assertFalse(App.isInitPseudoValid("--OFF--"));
-        assertFalse(App.isInitPseudoValid("--INVALID--"));    }
 }

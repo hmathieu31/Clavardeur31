@@ -326,21 +326,6 @@ public class App extends Application {
     }
 
     public static void main(String[] args) throws UnknownHostException, InterruptedException {
-        // launch();
-
-        // ! Test phase
-        App.setPseudo("toto");
-        if (App.isInitPseudoValid(pseudo)) {
-
-            Thread.sleep(5000);
-            App.setPseudo(args[0]);
-            App.changeUsername(pseudo);
-
-            while (true) {
-                System.out.println(onlineUsers);
-                System.out.println(userCorresp);
-                Thread.sleep(4000);
-            }
-        }
+        launch();
     }
 }
