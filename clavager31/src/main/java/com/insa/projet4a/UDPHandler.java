@@ -21,8 +21,8 @@ import javafx.util.Pair;
  * is closed
  */
 public class UDPHandler extends Thread {
-    private static final int portBroadcaster = 13;
-    private static final int portListener = 14;
+    private static final int portBroadcaster = 50001;
+    private static final int portListener = 50002;
 
     private DatagramSocket listenerSocket;
     private boolean running;

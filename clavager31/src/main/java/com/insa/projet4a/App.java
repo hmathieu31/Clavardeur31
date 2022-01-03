@@ -102,6 +102,8 @@ public class App extends Application {
     /**
      * Adds / Updates a user in the Hash Map of address {@code ip} and username
      * {@code name}
+     * TODO [CLAV-38]Should check whether keeping an arraylist and a HashMap for
+     * online users with different access methods is relevant
      * 
      * @param ip   IP Address in string format --> if the address was already in,
      *             changes the corresponding username
@@ -328,11 +330,17 @@ public class App extends Application {
 
         // ! Test phase
         App.setPseudo("toto");
-        App.isInitPseudoValid(pseudo);
+        if (App.isInitPseudoValid(pseudo)) {
 
-        // Thread.sleep(5000);
-        // App.setPseudo(args[0]);
-        App.changeUsername(pseudo);
+            Thread.sleep(5000);
+            App.setPseudo(args[0]);
+            App.changeUsername(pseudo);
 
+            while (true) {
+                System.out.println(onlineUsers);
+                System.out.println(userCorresp);
+                Thread.sleep(4000);
+            }
+        }
     }
 }
