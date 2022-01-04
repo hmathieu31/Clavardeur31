@@ -166,8 +166,6 @@ public class MainController {
     /**
      * Is called when {@code ENTER} key is pressed after a message.
      * <p>
-     * TODO [CLAV-41] Notifies the App to send the message through TCP.
-     * <p>
      * Append the message in display
      * 
      * @param key
