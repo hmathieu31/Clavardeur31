@@ -147,7 +147,7 @@ public class App extends Application {
      * /
      ***********************************************************************/
 
-    private static ThreadManager threadManager = new ThreadManager(12);
+    private static ThreadManager threadManager = new ThreadManager(60000);
 
     private static ArrayList<InetAddress> onlineUsers = new ArrayList<InetAddress>();
 
@@ -175,7 +175,7 @@ public class App extends Application {
      */
     public static boolean isInitPseudoValid(String username) {
         boolean pseudoValidity = false;
-        if (userCorresp.size() == 0) {
+        if (!hasConnected) {
             if (threadManager.initUDPHandler(username) && isPseudoValid(username)) {
                 pseudoValidity = true;
                 threadManager.startHandler();
@@ -344,12 +344,12 @@ public class App extends Application {
     public static void main(String[] args) throws UnknownHostException, InterruptedException {
         launch();
 
-        while (true) {
-            System.out.println(onlineUsers);
-            System.out.println(userCorresp);
-            Thread.sleep(4000);
-        }
+        // while (true) {
+        //     System.out.println(onlineUsers);
+        //     System.out.println(userCorresp);
+        //     Thread.sleep(4000);
+        // }
 
-        // System.out.println("Exited");
+        System.out.println("Exited");
     }
 }
