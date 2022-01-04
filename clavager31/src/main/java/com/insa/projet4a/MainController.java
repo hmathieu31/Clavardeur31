@@ -235,7 +235,7 @@ public class MainController {
     }
 
     private void incrementNotif(String ip) {
-        HBox hbox = (HBox) connectedContainer.lookup("#" + ip);
+        HBox hbox = lookup(ip);
         Pane largePane = (Pane) hbox.getChildren().get(0);
         AnchorPane pane = (AnchorPane) largePane.getChildren().get(1);
 
