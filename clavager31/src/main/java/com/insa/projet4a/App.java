@@ -202,8 +202,8 @@ public class App extends Application {
 
         Platform.runLater(() -> {
             controller.removeConnected(userAddress.getHostAddress());
-
         });
+        endDiscussion(userAddress);
 
         removeUserCorresp(userAddress.getHostAddress());
         System.out.println("user " + userAddress + " removed"); // ! Testing purposes
@@ -228,6 +228,7 @@ public class App extends Application {
                         e.printStackTrace();
                     }
                 });
+                newDiscussion(newUserAddress);
             }
         } else {
             if (isMainControllerInit) { // ! Possibly useless conditional
