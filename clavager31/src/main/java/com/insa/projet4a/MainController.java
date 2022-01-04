@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -70,7 +71,7 @@ public class MainController {
         ArrayList<Message> list = new ArrayList<Message>();
         list.add(new Message(true, currentDate(), "Bienvenue dans Clavager31"));
         list.add(new Message(true, currentDate(),
-                "Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives\nSelectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
+                "Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives \n Selectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
         loadMessages(list);
         App.isMainControllerInit = true;
         App.currentDiscussionIp = "";
@@ -91,16 +92,30 @@ public class MainController {
 
     private String formatMessage(String messageText){
         int maxSize = 45;
+        int i = 0;
         String newMessage = "";
+        String phrase     = "";
+        String[] mots = messageText.split(" ");
 
-        String subM;
-        int step;
+        while(i < mots.length) {
 
-        for (int i = 0; i < messageText.length()/maxSize; i++) {
-            step = messageText.length()/maxSize;
-            subM = messageText.substring(i*step, (i+1)*step);
-            newMessage += subM + "\n";
+            while(phrase.length() < maxSize && i < mots.length){
+                if(phrase.length() > 0){
+                    phrase += " ";
+                }
+                if(mots[i].equals("\n")){
+                    newMessage += phrase + "\n";
+                    phrase = "";
+                }
+                else{
+                    phrase += mots[i];
+                }
+                i++;
+            }
+            newMessage += phrase + "\n";
+            phrase = "";
         }
+
         return newMessage;
     }
 
