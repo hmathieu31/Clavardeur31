@@ -79,7 +79,6 @@ public class MainController {
     /**
      * Is called when the user wishes the change screen
      * <p>
-     * TODO [CLAV-37]Implement pseudo change (GUI)
      * 
      * @throws IOException
      */

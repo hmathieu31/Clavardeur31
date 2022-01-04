@@ -211,9 +211,9 @@ public class App extends Application {
 
         Platform.runLater(() -> {
             controller.removeConnected(userAddress.getHostAddress());
-            
+
         });
-        
+
         removeUserCorresp(userAddress.getHostAddress());
         System.out.println("user " + userAddress + " removed"); // ! Testing purposes
     }
@@ -249,24 +249,6 @@ public class App extends Application {
     }
 
     /**
-     * Tries to change the username to {@code newUserName}
-     * <p>
-     * Fails and calls a method from the GUI if {@code newUserName} is invalid
-     * 
-     * @param newUserName New username, invalid if already taken by a user or if
-     *                    --OFF--
-     */
-    public void changeUsername(String newUserName) {
-        if (isPseudoValid(newUserName)) {
-            threadManager.broadcastNewUsername(newUserName);
-            pseudo = newUserName;
-        } else {
-            // TODO [CLAV-34]Notify GUI that the chosen username was invalid
-            System.out.println("Invalid username");
-        }
-    }
-
-    /**
      * Creates a ClientThread to send messages to {@code receivAddress}
      * 
      * @param receivAddress Address of the destinary
@@ -293,19 +275,6 @@ public class App extends Application {
      */
     public static void displayMsg(String msg, InetAddress address) {
         System.out.println("Msg received from " + address + " --- " + msg);
-    }
-
-    /**
-     * Called by the Thread Manager to notify the Application that {@code address}
-     * closed the connection
-     * <p>
-     * TODO #2 Change to call the GUI
-     * 
-     * @param address address of the remote client
-     */
-    public static void notifyConnectionClosed(InetAddress address) {
-        System.out.println("Connection closed by remote initiative with " + address);
-        // TODO #1 Integration with GUI - Remove the user from ongoing connections list
     }
 
     /**

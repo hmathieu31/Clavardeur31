@@ -169,7 +169,6 @@ public class ThreadManager extends Thread {
      * @param address Address of the client which ended the connection
      */
     protected static void notifyConnectionClosed(InetAddress address) {
-        App.notifyConnectionClosed(address);
         closeClientThread(address);
         serverTable.remove(address);
     }
