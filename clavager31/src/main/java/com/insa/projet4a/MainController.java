@@ -283,10 +283,13 @@ public class MainController {
         
         for (Node child : connectedContainer.getChildren()) {
             HBox pane = (HBox)child;
-            System.out.println(pane);
+            System.out.println(pane.getId());
+            System.out.println(pane.getId().equals(ip));
         }
 
         HBox hbox = (HBox) connectedContainer.lookup("#" + ip);
+        System.out.println(hbox);
+        hbox = (HBox) connectedContainer.lookup("#10.32.46.153");
         System.out.println(hbox);
 
         // if (hbox != null){
