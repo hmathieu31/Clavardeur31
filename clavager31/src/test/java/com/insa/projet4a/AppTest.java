@@ -20,10 +20,10 @@ public class AppTest {
         mapTest.put("192.168.13.13", "toto");
         mapTest.put("128.135.165.198", "zitron");
 
-        assertEquals("toto", App.getUserCorresp("192.168.13.13"));
-        assertEquals("zitron", App.getUserCorresp("128.135.165.198"));
-        assertNotEquals(App.getUserCorresp("iuiuhfzef"), "zitron");
-        assertEquals(App.getUserCorresp("iugerhger"), null);
+        assertEquals("toto", App.getPseudoFromIP("192.168.13.13"));
+        assertEquals("zitron", App.getPseudoFromIP("128.135.165.198"));
+        assertNotEquals(App.getPseudoFromIP("iuiuhfzef"), "zitron");
+        assertEquals(App.getPseudoFromIP("iugerhger"), null);
 
     }
 
@@ -32,9 +32,9 @@ public class AppTest {
         App.addUserCorresp("192.168.13.13", "toto");
         App.addUserCorresp("128.135.165.198", "zitron");
 
-        assertEquals(App.getUserCorresp("192.168.13.13"), "toto");
+        assertEquals(App.getPseudoFromIP("192.168.13.13"), "toto");
         App.removeUserCorresp("192.168.13.13");
-        assertEquals(App.getUserCorresp("192.168.13.13"), null);
+        assertEquals(App.getPseudoFromIP("192.168.13.13"), null);
 
         App.removeUserCorresp("zitrlogon"); // Testing a case where one tries to remove an non-existent element
     }

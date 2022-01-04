@@ -64,11 +64,6 @@ public class App extends Application {
         stage.setTitle("Clavager31");
         stage.show();
 
-        // // Test purpose
-        // addUserCorresp("localhost", "Jean");
-        // addUserCorresp("localhost1", "Kevin");
-        // addUserCorresp("localhost2", "Sebastien");
-        // addUserCorresp("localhost3", "Hugues");
     }
 
     /**
@@ -77,7 +72,11 @@ public class App extends Application {
      * @return Pseudo corresponding to the IP Address of the current discussion
      */
     public static String getCurrentUserName() {
-        return getUserCorresp(currentDiscussionIp);
+        return getPseudoFromIP(currentDiscussionIp);
+    }
+
+    public static HashMap<String,String> getUserCorresp() {
+        return userCorresp;
     }
 
     /**
@@ -87,7 +86,7 @@ public class App extends Application {
      * @return Username corresponding in string format or {@code null} if no
      *         correspondance found
      */
-    public static String getUserCorresp(String ip) {
+    public static String getPseudoFromIP(String ip) {
         return userCorresp.get(ip);
     }
 
@@ -224,7 +223,6 @@ public class App extends Application {
         if (!onlineUsers.contains(newUserAddress)) {
             onlineUsers.add(newUserAddress);
         }
-        controller.addConnected(newUserAddress.getHostAddress());
         addUserCorresp(newUserAddress.toString(), newUserPseudo);
         System.out.println("IP: " + newUserAddress + " - name:" + newUserPseudo); // ! Testing purposes
     }
@@ -348,9 +346,9 @@ public class App extends Application {
         launch();
 
         // while (true) {
-        //     System.out.println(onlineUsers);
-        //     System.out.println(userCorresp);
-        //     Thread.sleep(4000);
+        // System.out.println(onlineUsers);
+        // System.out.println(userCorresp);
+        // Thread.sleep(4000);
         // }
 
         System.out.println("Exited");

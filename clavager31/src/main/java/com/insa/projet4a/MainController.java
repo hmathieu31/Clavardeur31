@@ -57,6 +57,11 @@ public class MainController {
 
         this.bdd = new BDDManager("test");
         this.bdd.initHistory();
+
+        for (String ip : App.getUserCorresp().keySet()) {
+            this.addConnected(ip);
+        }
+
         App.controller = this;
 
         identityLabel.setText(App.getPseudo());
@@ -242,7 +247,7 @@ public class MainController {
         HBox hbox = loader.load(getClass().getResource("components/connected.fxml").openStream());
         Pane pane = (Pane) hbox.getChildren().get(0);
 
-        String name = App.getUserCorresp(ip);
+        String name = App.getPseudoFromIP(ip);
         paneSetText((AnchorPane) pane.getChildren().get(0), name); // Le pseudo
         paneSetText((AnchorPane) pane.getChildren().get(1), "0"); // Les notifications
 
