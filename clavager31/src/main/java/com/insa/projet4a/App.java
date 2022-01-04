@@ -78,7 +78,7 @@ public class App extends Application {
         return getPseudoFromIP(currentDiscussionIp);
     }
 
-    public static HashMap<String,String> getUserCorresp() {
+    public static HashMap<String, String> getUserCorresp() {
         return userCorresp;
     }
 
@@ -223,20 +223,29 @@ public class App extends Application {
      * @throws IOException
      */
     public static void addOnlineUsers(InetAddress newUserAddress, String newUserPseudo) throws IOException {
+        addUserCorresp(newUserAddress.getHostAddress(), newUserPseudo);
         if (!onlineUsers.contains(newUserAddress)) {
             onlineUsers.add(newUserAddress);
+            if (isMainControllerInit) {
+                Platform.runLater(() -> {
+                    try {
+                        controller.addConnected(newUserAddress.getHostAddress());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+        } else {
+            if (isMainControllerInit) { // ! Possibly useless conditional
+                Platform.runLater(() -> {
+                    try {
+                        controller.updateConnected(newUserAddress.getHostAddress());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
         }
-        if (isMainControllerInit) {
-            
-            Platform.runLater(() -> {
-                try {
-                    controller.addConnected(newUserAddress.getHostAddress());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        }
-        addUserCorresp(newUserAddress.getHostAddress(), newUserPseudo);
         System.out.println("IP: " + newUserAddress + " - name:" + newUserPseudo); // ! Testing purposes
     }
 
