@@ -89,6 +89,21 @@ public class MainController {
         App.changeSize(650, 450);
     }
 
+    private String formatMessage(String messageText){
+        int maxSize = 45;
+        String newMessage = "";
+
+        String subM;
+        int step;
+
+        for (int i = 0; i < messageText.length()/maxSize; i++) {
+            step = messageText.length()/maxSize;
+            subM = messageText.substring(i*step, (i+1)*step)
+            newMessage += subM + "\n";
+        }
+        return newMessage;
+    }
+
     /**
      * Ajoute un message à l'affichage actuel.
      * <p>
