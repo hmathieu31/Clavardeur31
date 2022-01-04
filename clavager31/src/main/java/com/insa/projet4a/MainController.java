@@ -272,7 +272,18 @@ public class MainController {
      */
     public void removeConnected(String ip) {
         HBox hbox = (HBox) connectedContainer.lookup("#" + ip);
-        connectedContainer.getChildren().remove(hbox);
+        if (hbox != null){
+            connectedContainer.getChildren().remove(hbox);
+        } 
+    }
+
+    public void updateConnected(String ip) {
+        HBox hbox = (HBox) connectedContainer.lookup("#" + ip);
+        if (hbox != null){
+            Pane pane = (Pane) hbox.getChildren().get(0);
+            String new_name = App.getPseudoFromIP(ip);
+            paneSetText((AnchorPane) pane.getChildren().get(0), new_name);
+        } 
     }
 
     /**
