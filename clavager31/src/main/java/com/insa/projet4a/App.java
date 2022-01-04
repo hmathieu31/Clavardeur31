@@ -156,7 +156,7 @@ public class App extends Application {
      * <p>
      * --> If the username was not already taken, starts the ThreadManager listening
      * for
-     * incoming communications on port 12 and completes the initialisation of
+     * incoming communications on port 60000 and completes the initialisation of
      * Clavarder31
      * <p>
      * --> Else returns false and is called again by the {@code Login Screen} until
@@ -228,8 +228,8 @@ public class App extends Application {
                         e.printStackTrace();
                     }
                 });
-                newDiscussion(newUserAddress);
             }
+            newDiscussion(newUserAddress);
         } else {
             if (isMainControllerInit) { // ! Possibly useless conditional
                 Platform.runLater(() -> {
@@ -250,7 +250,7 @@ public class App extends Application {
      */
     public static boolean newDiscussion(InetAddress receivAddress) {
         try {
-            threadManager.createClientThread(12, receivAddress);
+            threadManager.createClientThread(60000, receivAddress);
             return true;
         } catch (IOException e) {
             System.err.println("Failed to establish connexion with target " + receivAddress);
