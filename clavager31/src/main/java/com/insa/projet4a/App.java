@@ -175,13 +175,20 @@ public class App extends Application {
      */
     public static boolean isInitPseudoValid(String username) {
         boolean pseudoValidity = false;
-        if (threadManager.initUDPHandler(username) && isPseudoValid(username)) {
-            pseudoValidity = true;
-            threadManager.startHandler();
-            threadManager.startUDPListener();
-            hasConnected = true;
+        if (userCorresp.size() == 0) {
+            if (threadManager.initUDPHandler(username) && isPseudoValid(username)) {
+                pseudoValidity = true;
+                threadManager.startHandler();
+                threadManager.startUDPListener();
+                hasConnected = true;
 
-            System.out.println("Pseudo valid"); // ! Remove after testing
+                System.out.println("Pseudo valid"); // ! Remove after testing
+            }
+        } else {
+            if (isPseudoValid(username)) {
+                pseudoValidity = true;
+                threadManager.broadcastNewUsername(username);
+            }
         }
         return pseudoValidity;
     }
@@ -329,7 +336,6 @@ public class App extends Application {
      *         not the current App pseudo
      */
     public static boolean isPseudoValid(String pseudo) {
-
         return !userCorresp.containsValue(pseudo) &&
                 !"--OFF--".equals(pseudo) &&
                 !"--INVALID--".equals(pseudo);
