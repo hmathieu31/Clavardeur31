@@ -73,6 +73,7 @@ public class MainController {
                 "Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives\nSelectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
         loadMessages(list);
         App.isMainControllerInit = true;
+        App.currentDiscussionIp = "";
     }
 
     // Pour changer de pseudo
