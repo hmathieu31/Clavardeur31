@@ -54,6 +54,8 @@ public class App extends Application {
     public static MainController controller;
     private static boolean hasConnected = false;
 
+    public static boolean isMainControllerInit = false;
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         stage = primaryStage;
@@ -222,6 +224,9 @@ public class App extends Application {
     public static void addOnlineUsers(InetAddress newUserAddress, String newUserPseudo) throws IOException {
         if (!onlineUsers.contains(newUserAddress)) {
             onlineUsers.add(newUserAddress);
+        }
+        if (isMainControllerInit) {
+            controller.addConnected(newUserAddress.getHostAddress());
         }
         addUserCorresp(newUserAddress.toString(), newUserPseudo);
         System.out.println("IP: " + newUserAddress + " - name:" + newUserPseudo); // ! Testing purposes
