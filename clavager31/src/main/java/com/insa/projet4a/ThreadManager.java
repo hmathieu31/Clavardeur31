@@ -218,7 +218,7 @@ public class ThreadManager extends Thread {
      *                              determined
      */
     public static boolean isAddressLocalhost(InetAddress address) throws UnknownHostException {
-        String localhost = InetAddress.getLocalHost().getHostAddress();
+        String localhost = InetAddressLocalHostUtil.getLocalHostAsString();
         return localhost.equals(address.getHostAddress());
     }
 
