@@ -69,15 +69,6 @@ public class App extends Application {
 
     }
 
-    /**
-     * Gets the username of the person the App is currently communicating with
-     * 
-     * @return Pseudo corresponding to the IP Address of the current discussion
-     */
-    public static String getCurrentUserName() {
-        return getPseudoFromIP(currentDiscussionIp);
-    }
-
     public static HashMap<String, String> getUserCorresp() {
         return userCorresp;
     }

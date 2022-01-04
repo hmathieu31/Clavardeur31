@@ -1,6 +1,7 @@
 package com.insa.projet4a;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -189,10 +190,11 @@ public class MainController {
                     addMessageTo(date, messageText);
                     messageField.clear();
 
-                    String name = App.getCurrentUserName();
-                    this.bdd.insertHistory(name, false, messageText, date);
+                    String ip = App.currentDiscussionIp;
+                    this.bdd.insertHistory(ip, false, messageText, date);
 
-                    incrementNotif("localhost");
+                    App.transmitMessage(messageText, InetAddress.getByName(ip) );
+                    // incrementNotif("localhost");
                 } else {
                     alert.show();
                 }
@@ -318,8 +320,8 @@ public class MainController {
 
         resetMessage();
 
-        String name = App.getCurrentUserName();
-        ArrayList<Message> history = this.bdd.showHistory(name);
+        String ip = App.currentDiscussionIp;
+        ArrayList<Message> history = this.bdd.showHistory(ip);
         loadMessages(history);
 
         // 1 seul pane à l'id "actif"
@@ -353,7 +355,7 @@ public class MainController {
 
             // MODIFIER METTRE IP AU LIEU DE NOM
             // FAUT CORRESP IP/NOM
-            this.bdd.clearHistory(App.getCurrentUserName());
+            this.bdd.clearHistory(App.currentDiscussionIp);
         } else {
             alert.show();
         }
