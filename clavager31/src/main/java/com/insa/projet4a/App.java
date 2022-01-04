@@ -183,8 +183,6 @@ public class App extends Application {
                 threadManager.startHandler();
                 threadManager.startUDPListener();
                 hasConnected = true;
-
-                System.out.println("Pseudo valid"); // ! Remove after testing
             }
         } else {
             if (isPseudoValid(username)) {
@@ -368,12 +366,6 @@ public class App extends Application {
 
     public static void main(String[] args) throws UnknownHostException, InterruptedException {
         launch();
-
-        // while (true) {
-        // System.out.println(onlineUsers);
-        // System.out.println(userCorresp);
-        // Thread.sleep(4000);
-        // }
 
         System.out.println("Exited");
     }
