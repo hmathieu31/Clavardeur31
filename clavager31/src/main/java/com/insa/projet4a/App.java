@@ -183,8 +183,6 @@ public class App extends Application {
                 threadManager.startHandler();
                 threadManager.startUDPListener();
                 hasConnected = true;
-
-                System.out.println("Pseudo valid"); // ! Remove after testing
             }
         } else {
             if (isPseudoValid(username)) {
@@ -210,8 +208,13 @@ public class App extends Application {
      */
     public static void removeOnlineUser(InetAddress userAddress) {
         onlineUsers.remove(userAddress);
+
+        Platform.runLater(() -> {
+            controller.removeConnected(userAddress.getHostAddress());
+            
+        });
+        
         removeUserCorresp(userAddress.getHostAddress());
-        controller.removeConnected(userAddress.getHostAddress());
         System.out.println("user " + userAddress + " removed"); // ! Testing purposes
     }
 
@@ -357,17 +360,12 @@ public class App extends Application {
     public static boolean isPseudoValid(String pseudo) {
         return !userCorresp.containsValue(pseudo) &&
                 !"--OFF--".equals(pseudo) &&
-                !"--INVALID--".equals(pseudo);
+                !"--INVALID--".equals(pseudo) &&
+                !"".equals(pseudo);
     }
 
     public static void main(String[] args) throws UnknownHostException, InterruptedException {
         launch();
-
-        // while (true) {
-        // System.out.println(onlineUsers);
-        // System.out.println(userCorresp);
-        // Thread.sleep(4000);
-        // }
 
         System.out.println("Exited");
     }
