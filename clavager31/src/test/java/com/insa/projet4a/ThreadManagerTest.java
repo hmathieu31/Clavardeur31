@@ -12,7 +12,7 @@ public class ThreadManagerTest {
 
     @Test
     void testIsAddressLocalhost() throws UnknownHostException {
-        System.out.println(InetAddressLocalHostUtil.getLocalHost());
+        System.out.println(InetAddressLocalHostUtil.getLocalHostAsString());
         assertTrue(ThreadManager.isAddressLocalhost(InetAddress.getByName("10.32.46.153")));
         assertFalse(ThreadManager.isAddressLocalhost(InetAddress.getByName("192.168.1.12")));
         assertFalse(ThreadManager.isAddressLocalhost(InetAddress.getByName("localhost")));

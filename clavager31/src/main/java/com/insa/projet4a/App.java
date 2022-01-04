@@ -64,11 +64,11 @@ public class App extends Application {
         stage.setTitle("Clavager31");
         stage.show();
 
-        // Test purpose
-        addUserCorresp("localhost", "Jean");
-        addUserCorresp("localhost1", "Kevin");
-        addUserCorresp("localhost2", "Sebastien");
-        addUserCorresp("localhost3", "Hugues");
+        // // Test purpose
+        // addUserCorresp("localhost", "Jean");
+        // addUserCorresp("localhost1", "Kevin");
+        // addUserCorresp("localhost2", "Sebastien");
+        // addUserCorresp("localhost3", "Hugues");
     }
 
     /**
@@ -341,8 +341,15 @@ public class App extends Application {
                 !"--INVALID--".equals(pseudo);
     }
 
-    public static void main(String[] args) throws UnknownHostException {
+    public static void main(String[] args) throws UnknownHostException, InterruptedException {
         launch();
-        System.out.println("Exited");
+
+        while (true) {
+            System.out.println(onlineUsers);
+            System.out.println(userCorresp);
+            Thread.sleep(4000);
+        }
+
+        // System.out.println("Exited");
     }
 }
