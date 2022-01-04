@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -226,8 +227,13 @@ public class App extends Application {
             onlineUsers.add(newUserAddress);
         }
         if (isMainControllerInit) {
-            Platform.runLater(new Runnable(){
-                controller.addConnected(newUserAddress.getHostAddress());
+            
+            Platform.runLater(() -> {
+                try {
+                    controller.addConnected(newUserAddress.getHostAddress());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             });
         }
         addUserCorresp(newUserAddress.toString(), newUserPseudo);
