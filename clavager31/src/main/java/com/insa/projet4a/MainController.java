@@ -80,7 +80,6 @@ public class MainController {
     /**
      * Is called when the user wishes the change screen
      * <p>
-     * TODO [CLAV-37]Implement pseudo change (GUI)
      * 
      * @throws IOException
      */
@@ -167,7 +166,7 @@ public class MainController {
     /**
      * Is called when {@code ENTER} key is pressed after a message.
      * <p>
-     * TODO  [CLAV-41] Notifies the App to send the message through TCP.
+     * TODO [CLAV-41] Notifies the App to send the message through TCP.
      * <p>
      * Append the message in display
      * 
@@ -274,32 +273,26 @@ public class MainController {
      * @param ip IP address of the user who disconnected
      */
     public void removeConnected(String ip) {
-        HBox hbox = (HBox) connectedContainer.lookup("#" + ip);
-        if (hbox != null){
+        HBox hbox = lookup(ip);
+        if (hbox != null) {
             connectedContainer.getChildren().remove(hbox);
-        } 
+        }
     }
 
+    /**
+     * Updates the username corresponding to {@code ip} in the list of online users
+     * when the username has changed pseudo
+     * 
+     * @param ip IP address of the user who changed his pseudo
+     */
     public void updateConnected(String ip) {
-        System.out.println(ip);
-        
-        for (Node child : connectedContainer.getChildren()) {
-            HBox pane = (HBox)child;
-            System.out.println(pane.getId());
-            System.out.println(pane.getId().equals(ip));
+        HBox hbox = lookup(ip);
+        if (hbox != null) {
+            Pane pane = (Pane) hbox.getChildren().get(0);
+            String new_name = App.getPseudoFromIP(ip);
+            System.out.println(new_name);
+            paneSetText((AnchorPane) pane.getChildren().get(0), new_name);
         }
-
-        HBox hbox = (HBox) connectedContainer.lookup("#" + ip);
-        System.out.println(hbox);
-        hbox = (HBox) connectedContainer.lookup("#10.32.46.153");
-        System.out.println(hbox);
-
-        // if (hbox != null){
-        //     Pane pane = (Pane) hbox.getChildren().get(0);
-        //     String new_name = App.getPseudoFromIP(ip);
-        //     System.out.println(new_name);
-        //     paneSetText((AnchorPane) pane.getChildren().get(0), new_name);
-        // } 
     }
 
     /**
@@ -359,5 +352,13 @@ public class MainController {
         } else {
             alert.show();
         }
+    }
+
+    private HBox lookup(String ip) {
+        HBox hbox = null;
+        for (Node child : connectedContainer.getChildren()) {
+            hbox = (HBox) child;
+        }
+        return hbox;
     }
 }
