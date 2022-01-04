@@ -209,6 +209,7 @@ public class App extends Application {
     public static void removeOnlineUser(InetAddress userAddress) {
         onlineUsers.remove(userAddress);
         removeUserCorresp(userAddress.toString());
+        controller.removeConnected(userAddress.getHostAddress());
         System.out.println("user " + userAddress + " removed"); // ! Testing purposes
     }
 
@@ -217,11 +218,13 @@ public class App extends Application {
      * 
      * @param newUserAddress Address of the new user
      * @param newUserPseudo  Pseudo of the new user
+     * @throws IOException
      */
-    public static void addOnlineUsers(InetAddress newUserAddress, String newUserPseudo) {
+    public static void addOnlineUsers(InetAddress newUserAddress, String newUserPseudo) throws IOException {
         if (!onlineUsers.contains(newUserAddress)) {
             onlineUsers.add(newUserAddress);
         }
+        controller.addConnected(newUserAddress.getHostAddress());
         addUserCorresp(newUserAddress.toString(), newUserPseudo);
         System.out.println("IP: " + newUserAddress + " - name:" + newUserPseudo); // ! Testing purposes
     }

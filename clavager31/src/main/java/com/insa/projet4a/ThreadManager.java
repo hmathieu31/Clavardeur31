@@ -102,7 +102,7 @@ public class ThreadManager extends Thread {
                     App.addOnlineUsers(pair.getValue(), pair.getKey());
                 }
             }
-        } catch (SocketException | UnknownHostException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return initialisationValid;

@@ -60,13 +60,6 @@ public class MainController {
         App.controller = this;
 
         identityLabel.setText(App.getPseudo());
-        addConnected("localhost");
-        addConnected("localhost1");
-        addConnected("localhost2");
-
-        removeConnected("localhost");
-        addConnected("localhost3");
-        addConnected("localhost");
 
         ArrayList<Message> list = new ArrayList<Message>();
         list.add(new Message(true, currentDate(), "Bienvenue dans Clavager31"));
