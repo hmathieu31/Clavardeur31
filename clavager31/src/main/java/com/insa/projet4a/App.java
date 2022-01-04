@@ -232,7 +232,7 @@ public class App extends Application {
             }
             newDiscussion(newUserAddress);
         } else {
-            if (isMainControllerInit) { // ! Possibly useless conditional
+            if (isMainControllerInit) { // ! Possibly useless condition
                 Platform.runLater(() -> {
                     controller.updateConnected(newUserAddress.getHostAddress());
                 });
@@ -267,7 +267,6 @@ public class App extends Application {
      * @param address Address of the sender
      */
     public static void displayMsg(String msg, InetAddress address) {
-        System.out.println("Msg received from " + address + " --- " + msg);
         Platform.runLater(() -> {
             try {
                 controller.receiveMessage(address.getHostAddress(), msg);

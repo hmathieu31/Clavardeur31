@@ -68,6 +68,7 @@ public class UDPHandler extends Thread {
      */
     public static void sendMsg(InetAddress destinAddress, String msg) throws SocketException {
         DatagramPacket outPacket = new DatagramPacket(msg.getBytes(), msg.length(), destinAddress, portListener);
+        System.out.println("UDP sending - " + msg);
         try {
             broadcasterSocket.send(outPacket);
 
