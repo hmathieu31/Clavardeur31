@@ -9,6 +9,7 @@ import java.util.Date;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -278,12 +279,22 @@ public class MainController {
     }
 
     public void updateConnected(String ip) {
+        System.out.println(ip);
+        
+        for (Node child : connectedContainer.getChildren()) {
+            HBox pane = (HBox)child;
+            System.out.println(pane);
+        }
+
         HBox hbox = (HBox) connectedContainer.lookup("#" + ip);
-        if (hbox != null){
-            Pane pane = (Pane) hbox.getChildren().get(0);
-            String new_name = App.getPseudoFromIP(ip);
-            paneSetText((AnchorPane) pane.getChildren().get(0), new_name);
-        } 
+        System.out.println(hbox);
+
+        // if (hbox != null){
+        //     Pane pane = (Pane) hbox.getChildren().get(0);
+        //     String new_name = App.getPseudoFromIP(ip);
+        //     System.out.println(new_name);
+        //     paneSetText((AnchorPane) pane.getChildren().get(0), new_name);
+        // } 
     }
 
     /**

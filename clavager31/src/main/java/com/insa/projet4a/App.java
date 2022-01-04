@@ -238,11 +238,7 @@ public class App extends Application {
         } else {
             if (isMainControllerInit) { // ! Possibly useless conditional
                 Platform.runLater(() -> {
-                    try {
-                        controller.updateConnected(newUserAddress.getHostAddress());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    controller.updateConnected(newUserAddress.getHostAddress());
                 });
             }
         }
