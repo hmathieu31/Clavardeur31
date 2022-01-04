@@ -165,7 +165,7 @@ public class MainController {
     /**
      * Is called when {@code ENTER} key is pressed after a message.
      * <p>
-     * TODO  [CLAV-41] Notifies the App to send the message through TCP.
+     * TODO [CLAV-41] Notifies the App to send the message through TCP.
      * <p>
      * Append the message in display
      * 
@@ -272,19 +272,25 @@ public class MainController {
      */
     public void removeConnected(String ip) {
         HBox hbox = lookup(ip);
-        if (hbox != null){
+        if (hbox != null) {
             connectedContainer.getChildren().remove(hbox);
-        } 
+        }
     }
 
+    /**
+     * Updates the username corresponding to {@code ip} in the list of online users
+     * when the username has changed pseudo
+     * 
+     * @param ip IP address of the user who changed his pseudo
+     */
     public void updateConnected(String ip) {
         HBox hbox = lookup(ip);
-        if (hbox != null){
+        if (hbox != null) {
             Pane pane = (Pane) hbox.getChildren().get(0);
             String new_name = App.getPseudoFromIP(ip);
             System.out.println(new_name);
             paneSetText((AnchorPane) pane.getChildren().get(0), new_name);
-        } 
+        }
     }
 
     /**
@@ -346,10 +352,10 @@ public class MainController {
         }
     }
 
-    private HBox lookup (String ip){
+    private HBox lookup(String ip) {
         HBox hbox = null;
         for (Node child : connectedContainer.getChildren()) {
-            hbox = (HBox)child;
+            hbox = (HBox) child;
         }
         return hbox;
     }
