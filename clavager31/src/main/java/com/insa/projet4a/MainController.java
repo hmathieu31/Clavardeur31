@@ -272,32 +272,20 @@ public class MainController {
      * @param ip IP address of the user who disconnected
      */
     public void removeConnected(String ip) {
-        HBox hbox = (HBox) connectedContainer.lookup("#" + ip);
+        HBox hbox = lookup(ip);
         if (hbox != null){
             connectedContainer.getChildren().remove(hbox);
         } 
     }
 
     public void updateConnected(String ip) {
-        System.out.println(ip);
-        
-        for (Node child : connectedContainer.getChildren()) {
-            HBox pane = (HBox)child;
-            System.out.println(pane.getId());
-            System.out.println(pane.getId().equals(ip));
-        }
-
-        HBox hbox = (HBox) connectedContainer.lookup("#" + ip);
-        System.out.println(hbox);
-        hbox = (HBox) connectedContainer.lookup("#10.32.46.153");
-        System.out.println(hbox);
-
-        // if (hbox != null){
-        //     Pane pane = (Pane) hbox.getChildren().get(0);
-        //     String new_name = App.getPseudoFromIP(ip);
-        //     System.out.println(new_name);
-        //     paneSetText((AnchorPane) pane.getChildren().get(0), new_name);
-        // } 
+        HBox hbox = lookup(ip);
+        if (hbox != null){
+            Pane pane = (Pane) hbox.getChildren().get(0);
+            String new_name = App.getPseudoFromIP(ip);
+            System.out.println(new_name);
+            paneSetText((AnchorPane) pane.getChildren().get(0), new_name);
+        } 
     }
 
     /**
@@ -357,5 +345,13 @@ public class MainController {
         } else {
             alert.show();
         }
+    }
+
+    private HBox lookup (String ip){
+        HBox hbox = null;
+        for (Node child : connectedContainer.getChildren()) {
+            hbox = (HBox)child;
+        }
+        return hbox;
     }
 }

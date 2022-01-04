@@ -210,8 +210,13 @@ public class App extends Application {
      */
     public static void removeOnlineUser(InetAddress userAddress) {
         onlineUsers.remove(userAddress);
+
+        Platform.runLater(() -> {
+            controller.removeConnected(userAddress.getHostAddress());
+            
+        });
+        
         removeUserCorresp(userAddress.getHostAddress());
-        controller.removeConnected(userAddress.getHostAddress());
         System.out.println("user " + userAddress + " removed"); // ! Testing purposes
     }
 
