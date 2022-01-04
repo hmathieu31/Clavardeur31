@@ -178,7 +178,11 @@ public class App extends Application {
         } else {
             if (isPseudoValid(username)) {
                 pseudoValidity = true;
-                threadManager.broadcastNewUsername(username);
+                try {
+                    threadManager.broadcastChangeUsername(username);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return pseudoValidity;
@@ -308,9 +312,9 @@ public class App extends Application {
             endDiscussion(inetAddress);
         }
         if (hasConnected) {
-            threadManager.broadcastDisconnection();
-            threadManager.stopUDPHandler();
             try {
+                threadManager.broadcastDisconnection();
+                threadManager.stopUDPHandler();
                 threadManager.stopHandler();
             } catch (IOException e) {
                 e.printStackTrace();

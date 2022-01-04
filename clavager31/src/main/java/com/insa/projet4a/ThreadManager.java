@@ -221,26 +221,22 @@ public class ThreadManager extends Thread {
 
     /**
      * Broadcasts (UDP) that the user is disconnecting (Sends --OFF-- to all)
+     * @throws IOException
+     * @throws UnknownHostException
      */
-    public void broadcastDisconnection() {
-        try {
+    public void broadcastDisconnection() throws UnknownHostException, IOException {
             UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255"), "--OFF--");
-        } catch (SocketException | UnknownHostException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
      * Broadcast (UDP) the new username to everyone
      * 
      * @param newUsername New username chosen ("Can't be --OFF--")
+     * @throws IOException
+     * @throws UnknownHostException
      */
-    public void broadcastNewUsername(String newUsername) {
-        try {
+    public void broadcastChangeUsername(String newUsername) throws UnknownHostException, IOException {
             UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255"), newUsername);
-        } catch (SocketException | UnknownHostException e) {
-            e.printStackTrace();
-        }
     }
 
     /**

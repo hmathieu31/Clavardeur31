@@ -24,19 +24,17 @@ public class UDPHandler extends Thread {
     private static final int portBroadcaster = 50001;
     private static final int portListener = 50002;
 
-    // private DatagramSocket listenerSocket;
     private boolean running;
     private static DatagramSocket broadcasterSocket;
 
     /**
-     * Creates a new UDPHandler listening for broadcasts on port {@code 13} and
-     * emitting on port {@code 14}
+     * Creates a new UDPHandler listening for broadcasts on port {@code 60000} and
+     * emitting on port {@code 60001}
      * 
      * @throws SocketException
      */
     public UDPHandler() throws SocketException {
         super();
-        // listenerSocket = new DatagramSocket(portListener);
         broadcasterSocket = new DatagramSocket(portBroadcaster);
     }
 
@@ -45,7 +43,6 @@ public class UDPHandler extends Thread {
      */
     public void stopListener() {
         running = false;
-        // listenerSocket.close();
         broadcasterSocket.close();
         this.interrupt();
     }
@@ -63,18 +60,13 @@ public class UDPHandler extends Thread {
      * 
      * @param destinAddress Address of the destinary
      * @param msg           Message to pass
-     * @throws SocketException if the Socket could not be opened or bound to the
-     *                         local port
+     * @throws IOException
      */
-    public static void sendMsg(InetAddress destinAddress, String msg) throws SocketException {
+    public synchronized static void sendMsg(InetAddress destinAddress, String msg) throws IOException {
         DatagramPacket outPacket = new DatagramPacket(msg.getBytes(), msg.length(), destinAddress, portListener);
+        System.out.println("UDP sending to " + destinAddress);
+        broadcasterSocket.send(outPacket);
         System.out.println("UDP sending - " + msg);
-        try {
-            broadcasterSocket.send(outPacket);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -99,7 +91,7 @@ public class UDPHandler extends Thread {
         while (keepListening) { // Keep listening until a user answers with "--INVALID--" or until 10s have
                                 // expired <=> no more answers are expected
             try {
-                listenerInitSocket.setSoTimeout(500);
+                listenerInitSocket.setSoTimeout(50);
                 while (keepListening) {
                     listenerInitSocket.receive(inPacket);
                     InetAddress inAddress = inPacket.getAddress();
@@ -139,8 +131,8 @@ public class UDPHandler extends Thread {
 
                 String content = new String(inPacket.getData(), 0, inPacket.getLength());
 
-                System.out.println("Received broadcast from " + inAddress + " - " + content);
                 if (!ThreadManager.isAddressLocalhost(inAddress)) { // Ignore all broadcasts coming from oneself
+                    System.out.println("Received broadcast from " + inAddress + " - " + content);
                     ThreadManager.notifyOnlineModif(content, inAddress);
                 }
             }
