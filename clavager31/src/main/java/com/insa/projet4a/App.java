@@ -3,6 +3,7 @@ package com.insa.projet4a;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -267,6 +268,13 @@ public class App extends Application {
      */
     public static void displayMsg(String msg, InetAddress address) {
         System.out.println("Msg received from " + address + " --- " + msg);
+        Platform.runLater(() -> {
+            try {
+                controller.receiveMessage(address.getHostAddress(), msg);
+            } catch (SQLException | IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     /**

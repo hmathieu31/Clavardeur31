@@ -65,7 +65,6 @@ public class MainController {
         }
 
         App.controller = this;
-
         identityLabel.setText(App.getPseudo());
 
         ArrayList<Message> list = new ArrayList<Message>();
@@ -193,11 +192,22 @@ public class MainController {
                     this.bdd.insertHistory(ip, false, messageText, date);
 
                     App.transmitMessage(messageText, InetAddress.getByName(ip));
-                    // incrementNotif("localhost");
                 } else {
                     alert.show();
                 }
             }
+        }
+    }
+
+    public void receiveMessage(String ip, String messageText) throws SQLException, IOException{
+        String date = currentDate();
+        this.bdd.insertHistory(ip, true, messageText, date);
+        
+        if (App.currentDiscussionIp.equals(ip)){
+            addMessageFrom(date, messageText);
+        }
+        else{
+            incrementNotif(ip);
         }
     }
 
