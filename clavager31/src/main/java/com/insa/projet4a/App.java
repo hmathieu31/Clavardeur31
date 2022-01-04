@@ -97,7 +97,6 @@ public class App extends Application {
     /**
      * Adds / Updates a user in the Hash Map of address {@code ip} and username
      * {@code name}
-     * TODO [CLAV-38]Should check whether keeping an arraylist and a HashMap for
      * online users with different access methods is relevant
      * 
      * @param ip   IP Address in string format --> if the address was already in,
@@ -208,6 +207,8 @@ public class App extends Application {
 
         removeUserCorresp(userAddress.getHostAddress());
         System.out.println("user " + userAddress + " removed"); // ! Testing purposes
+        System.out.println(onlineUsers);
+        System.out.println(userCorresp);
     }
 
     /**
@@ -261,7 +262,6 @@ public class App extends Application {
 
     /**
      * Display a received message
-     * TODO #3 Change to call the GUI
      * 
      * @param msg     Message received
      * @param address Address of the sender

@@ -191,8 +191,6 @@ public class ThreadManager extends Thread {
                 App.removeOnlineUser(senderAddress);
             } else if (!"--INVALID--".equals(content)) { // Ignore --INVALID--
                                                          // messages
-                                                         // and messages from
-                                                         // localhost
                 if (pseudoFree) {
                     if (!App.getOnlineUsers().contains(senderAddress)) { // Send own pseudo only if this is a new user
                         UDPHandler.sendMsg(senderAddress, App.getPseudo());
@@ -262,7 +260,6 @@ public class ThreadManager extends Thread {
         running = true;
         while (running) {
             try {
-                // ! System.out.println("Listening for connections on port " + port);
 
                 Socket socket = servSocket.accept();
 
