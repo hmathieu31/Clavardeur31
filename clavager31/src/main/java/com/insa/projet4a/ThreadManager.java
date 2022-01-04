@@ -253,7 +253,9 @@ public class ThreadManager extends Thread {
      * @param receivAddress Destinary IP Address
      */
     protected void transmitMessage(String msg, InetAddress receivAddress) {
+        System.out.println(clientTable);
         TCPClient client = clientTable.get(receivAddress);
+        System.out.println(client);
         client.sendMsg(msg);
     }
 
