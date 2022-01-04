@@ -98,7 +98,7 @@ public class MainController {
 
         for (int i = 0; i < messageText.length()/maxSize; i++) {
             step = messageText.length()/maxSize;
-            subM = messageText.substring(i*step, (i+1)*step)
+            subM = messageText.substring(i*step, (i+1)*step);
             newMessage += subM + "\n";
         }
         return newMessage;
@@ -123,6 +123,7 @@ public class MainController {
 
         AnchorPane pane1 = (AnchorPane) vbox.getChildren().get(0);
         Label messageLabel = (Label) pane1.getChildren().get(0);
+        content = formatMessage(content);
         messageLabel.setText(content);
 
         AnchorPane pane2 = (AnchorPane) vbox.getChildren().get(1);
