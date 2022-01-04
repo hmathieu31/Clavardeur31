@@ -362,7 +362,8 @@ public class App extends Application {
     public static boolean isPseudoValid(String pseudo) {
         return !userCorresp.containsValue(pseudo) &&
                 !"--OFF--".equals(pseudo) &&
-                !"--INVALID--".equals(pseudo);
+                !"--INVALID--".equals(pseudo) &&
+                !"".equals(pseudo);
     }
 
     public static void main(String[] args) throws UnknownHostException, InterruptedException {
