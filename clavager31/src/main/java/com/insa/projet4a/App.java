@@ -210,7 +210,7 @@ public class App extends Application {
      */
     public static void removeOnlineUser(InetAddress userAddress) {
         onlineUsers.remove(userAddress);
-        removeUserCorresp(userAddress.toString());
+        removeUserCorresp(userAddress.getHostAddress());
         controller.removeConnected(userAddress.getHostAddress());
         System.out.println("user " + userAddress + " removed"); // ! Testing purposes
     }
@@ -236,7 +236,7 @@ public class App extends Application {
                 }
             });
         }
-        addUserCorresp(newUserAddress.toString(), newUserPseudo);
+        addUserCorresp(newUserAddress.getHostAddress(), newUserPseudo);
         System.out.println("IP: " + newUserAddress + " - name:" + newUserPseudo); // ! Testing purposes
     }
 
