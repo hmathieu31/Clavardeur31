@@ -226,7 +226,9 @@ public class App extends Application {
             onlineUsers.add(newUserAddress);
         }
         if (isMainControllerInit) {
-            controller.addConnected(newUserAddress.getHostAddress());
+            Platform.runLater(new Runnable(){
+                controller.addConnected(newUserAddress.getHostAddress());
+            });
         }
         addUserCorresp(newUserAddress.toString(), newUserPseudo);
         System.out.println("IP: " + newUserAddress + " - name:" + newUserPseudo); // ! Testing purposes
