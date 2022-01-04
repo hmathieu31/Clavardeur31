@@ -192,7 +192,7 @@ public class MainController {
                     String ip = App.currentDiscussionIp;
                     this.bdd.insertHistory(ip, false, messageText, date);
 
-                    App.transmitMessage(messageText, InetAddress.getByName(ip) );
+                    App.transmitMessage(messageText, InetAddress.getByName(ip));
                     // incrementNotif("localhost");
                 } else {
                     alert.show();
