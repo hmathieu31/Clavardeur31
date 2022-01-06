@@ -14,6 +14,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -27,6 +28,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class MainController {
 
@@ -88,8 +90,15 @@ public class MainController {
      */
     @FXML
     private void changeIdentity() throws IOException {
-        App.setRoot("login_screen");
-        App.changeSize(650, 450);
+        Stage stage = new Stage();
+        Scene scene = new Scene(App.loadFXML("login_screen"), 650, 459);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.setTitle("Clavager31");
+
+        App.stage.close();
+        App.stage = stage;
+        App.stage.show();
     }
 
     private String formatMessage(String messageText){

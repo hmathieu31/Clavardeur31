@@ -3,12 +3,14 @@ package com.insa.projet4a;
 import java.io.IOException;
 
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
 public class LoginController {
 
@@ -31,8 +33,16 @@ public class LoginController {
             boolean pseudoValid = App.isInitPseudoValid(pseudo);
 
             if (pseudoValid) {
-                App.setRoot("main");
-                App.changeSize(1000, 800);
+                Stage stage = new Stage();
+                Scene scene = new Scene(App.loadFXML("main"), 1000, 800);
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.setTitle("Clavager31");
+
+                App.stage.close();
+                App.stage = stage;
+                App.stage.show();
+
             } else {
                 pseudoField.clear();
                 App.setPseudo(null);
