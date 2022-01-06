@@ -3,6 +3,7 @@ package com.insa.projet4a;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -67,15 +68,6 @@ public class App extends Application {
         stage.setTitle("Clavager31");
         stage.show();
 
-    }
-
-    /**
-     * Gets the username of the person the App is currently communicating with
-     * 
-     * @return Pseudo corresponding to the IP Address of the current discussion
-     */
-    public static String getCurrentUserName() {
-        return getPseudoFromIP(currentDiscussionIp);
     }
 
     public static HashMap<String, String> getUserCorresp() {
@@ -165,7 +157,7 @@ public class App extends Application {
      * <p>
      * --> If the username was not already taken, starts the ThreadManager listening
      * for
-     * incoming communications on port 12 and completes the initialisation of
+     * incoming communications on port 60000 and completes the initialisation of
      * Clavarder31
      * <p>
      * --> Else returns false and is called again by the {@code Login Screen} until
@@ -210,10 +202,14 @@ public class App extends Application {
         onlineUsers.remove(userAddress);
 
         Platform.runLater(() -> {
-            controller.removeConnected(userAddress.getHostAddress());
-            
+            try {
+                controller.removeConnected(userAddress.getHostAddress());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
-        
+        endDiscussion(userAddress);
+
         removeUserCorresp(userAddress.getHostAddress());
         System.out.println("user " + userAddress + " removed"); // ! Testing purposes
     }
@@ -238,6 +234,7 @@ public class App extends Application {
                     }
                 });
             }
+            newDiscussion(newUserAddress);
         } else {
             if (isMainControllerInit) { // ! Possibly useless conditional
                 Platform.runLater(() -> {
@@ -246,24 +243,6 @@ public class App extends Application {
             }
         }
         System.out.println("IP: " + newUserAddress + " - name:" + newUserPseudo); // ! Testing purposes
-    }
-
-    /**
-     * Tries to change the username to {@code newUserName}
-     * <p>
-     * Fails and calls a method from the GUI if {@code newUserName} is invalid
-     * 
-     * @param newUserName New username, invalid if already taken by a user or if
-     *                    --OFF--
-     */
-    public void changeUsername(String newUserName) {
-        if (isPseudoValid(newUserName)) {
-            threadManager.broadcastNewUsername(newUserName);
-            pseudo = newUserName;
-        } else {
-            // TODO [CLAV-34]Notify GUI that the chosen username was invalid
-            System.out.println("Invalid username");
-        }
     }
 
     /**
@@ -276,7 +255,7 @@ public class App extends Application {
      */
     public static boolean newDiscussion(InetAddress receivAddress) {
         try {
-            threadManager.createClientThread(12, receivAddress);
+            threadManager.createClientThread(60000, receivAddress);
             return true;
         } catch (IOException e) {
             System.err.println("Failed to establish connexion with target " + receivAddress);
@@ -293,19 +272,13 @@ public class App extends Application {
      */
     public static void displayMsg(String msg, InetAddress address) {
         System.out.println("Msg received from " + address + " --- " + msg);
-    }
-
-    /**
-     * Called by the Thread Manager to notify the Application that {@code address}
-     * closed the connection
-     * <p>
-     * TODO #2 Change to call the GUI
-     * 
-     * @param address address of the remote client
-     */
-    public static void notifyConnectionClosed(InetAddress address) {
-        System.out.println("Connection closed by remote initiative with " + address);
-        // TODO #1 Integration with GUI - Remove the user from ongoing connections list
+        Platform.runLater(() -> {
+            try {
+                controller.receiveMessage(address.getHostAddress(), msg);
+            } catch (SQLException | IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     /**

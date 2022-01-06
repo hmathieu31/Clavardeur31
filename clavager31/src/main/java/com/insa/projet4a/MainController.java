@@ -1,11 +1,15 @@
 package com.insa.projet4a;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -64,22 +68,21 @@ public class MainController {
         }
 
         App.controller = this;
-
         identityLabel.setText(App.getPseudo());
 
         ArrayList<Message> list = new ArrayList<Message>();
         list.add(new Message(true, currentDate(), "Bienvenue dans Clavager31"));
         list.add(new Message(true, currentDate(),
-                "Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives\nSelectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
+                "Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives \n Selectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
         loadMessages(list);
         App.isMainControllerInit = true;
+        App.currentDiscussionIp = "";
     }
 
     // Pour changer de pseudo
     /**
      * Is called when the user wishes the change screen
      * <p>
-     * TODO [CLAV-37]Implement pseudo change (GUI)
      * 
      * @throws IOException
      */
@@ -87,6 +90,35 @@ public class MainController {
     private void changeIdentity() throws IOException {
         App.setRoot("login_screen");
         App.changeSize(650, 450);
+    }
+
+    private String formatMessage(String messageText){
+        int maxSize = 45;
+        int i = 0;
+        String newMessage = "";
+        String phrase     = "";
+        String[] mots = messageText.split(" ");
+
+        while(i < mots.length) {
+
+            while(phrase.length() < maxSize && i < mots.length){
+                if(phrase.length() > 0){
+                    phrase += " ";
+                }
+                if(mots[i].equals("\n")){
+                    newMessage += phrase + "\n";
+                    phrase = "";
+                }
+                else{
+                    phrase += mots[i];
+                }
+                i++;
+            }
+            newMessage += phrase + "\n";
+            phrase = "";
+        }
+
+        return newMessage;
     }
 
     /**
@@ -108,6 +140,7 @@ public class MainController {
 
         AnchorPane pane1 = (AnchorPane) vbox.getChildren().get(0);
         Label messageLabel = (Label) pane1.getChildren().get(0);
+        content = formatMessage(content);
         messageLabel.setText(content);
 
         AnchorPane pane2 = (AnchorPane) vbox.getChildren().get(1);
@@ -166,8 +199,6 @@ public class MainController {
     /**
      * Is called when {@code ENTER} key is pressed after a message.
      * <p>
-     * TODO  [CLAV-41] Notifies the App to send the message through TCP.
-     * <p>
      * Append the message in display
      * 
      * @param key
@@ -189,14 +220,26 @@ public class MainController {
                     addMessageTo(date, messageText);
                     messageField.clear();
 
-                    String name = App.getCurrentUserName();
-                    this.bdd.insertHistory(name, false, messageText, date);
+                    String ip = App.currentDiscussionIp;
+                    this.bdd.insertHistory(ip, false, messageText, date);
 
-                    incrementNotif("localhost");
+                    App.transmitMessage(messageText, InetAddress.getByName(ip));
                 } else {
                     alert.show();
                 }
             }
+        }
+    }
+
+    public void receiveMessage(String ip, String messageText) throws SQLException, IOException{
+        String date = currentDate();
+        this.bdd.insertHistory(ip, true, messageText, date);
+        
+        if (App.currentDiscussionIp.equals(ip)){
+            addMessageFrom(date, messageText);
+        }
+        else{
+            incrementNotif(ip);
         }
     }
 
@@ -226,7 +269,7 @@ public class MainController {
     }
 
     private void incrementNotif(String ip) {
-        HBox hbox = (HBox) connectedContainer.lookup("#" + ip);
+        HBox hbox = lookup(ip);
         Pane largePane = (Pane) hbox.getChildren().get(0);
         AnchorPane pane = (AnchorPane) largePane.getChildren().get(1);
 
@@ -267,25 +310,58 @@ public class MainController {
 
     /**
      * Removes the user in the GUI corresponding {@code ip} from the list of online
-     * users
+     * users, it then select the previous user in the connected list. 
+     * I there isn't any the default page is shown instead.
      * 
      * @param ip IP address of the user who disconnected
+     * @throws IOException
      */
-    public void removeConnected(String ip) {
-        HBox hbox = lookup(ip);
-        if (hbox != null){
-            connectedContainer.getChildren().remove(hbox);
-        } 
+    public void removeConnected(String ip) throws IOException {
+
+        HBox old_current = null;
+        ObservableList<Node> connected_list = connectedContainer.getChildren();
+
+        int i;
+        for (i=0; i < connected_list.size() ; i++) {
+            HBox connected = (HBox)connected_list.get(i);
+            if (connected.getId().equals(ip)){
+                old_current = connected;
+                System.out.println(old_current);
+            }
+        }
+
+        if(old_current != null){ // si l'user à enlever est affiché
+            connectedContainer.getChildren().remove(old_current);
+
+            if(i > 1){ // on prend celui d'au dessus 
+                HBox new_current = (HBox)connected_list.get(i-1);
+                new_current.fireEvent(new ActionEvent());
+            }
+            else{ // si y'en a pas au dessus on remet l'écran d'acceuil
+                App.currentDiscussionIp = "";
+                resetMessage();
+                ArrayList<Message> list = new ArrayList<Message>();
+                list.add(new Message(true, currentDate(), "Bienvenue dans Clavager31"));
+                list.add(new Message(true, currentDate(),
+                        "Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives \n Selectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
+                loadMessages(list);
+            }
+        }
     }
 
+    /**
+     * Updates the username corresponding to {@code ip} in the list of online users
+     * when the username has changed pseudo
+     * 
+     * @param ip IP address of the user who changed his pseudo
+     */
     public void updateConnected(String ip) {
         HBox hbox = lookup(ip);
-        if (hbox != null){
+        if (hbox != null) {
             Pane pane = (Pane) hbox.getChildren().get(0);
             String new_name = App.getPseudoFromIP(ip);
-            System.out.println(new_name);
             paneSetText((AnchorPane) pane.getChildren().get(0), new_name);
-        } 
+        }
     }
 
     /**
@@ -306,8 +382,8 @@ public class MainController {
 
         resetMessage();
 
-        String name = App.getCurrentUserName();
-        ArrayList<Message> history = this.bdd.showHistory(name);
+        String ip = App.currentDiscussionIp;
+        ArrayList<Message> history = this.bdd.showHistory(ip);
         loadMessages(history);
 
         // 1 seul pane à l'id "actif"
@@ -341,16 +417,18 @@ public class MainController {
 
             // MODIFIER METTRE IP AU LIEU DE NOM
             // FAUT CORRESP IP/NOM
-            this.bdd.clearHistory(App.getCurrentUserName());
+            this.bdd.clearHistory(App.currentDiscussionIp);
         } else {
             alert.show();
         }
     }
 
-    private HBox lookup (String ip){
+    private HBox lookup(String ip) {
         HBox hbox = null;
         for (Node child : connectedContainer.getChildren()) {
-            hbox = (HBox)child;
+            if (((HBox) child).getId().equals(ip)){
+                hbox = (HBox) child;
+            }
         }
         return hbox;
     }
