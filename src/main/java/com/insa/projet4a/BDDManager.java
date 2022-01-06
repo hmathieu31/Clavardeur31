@@ -23,7 +23,7 @@ public class BDDManager {
 
     private Connection connect() {
         // SQLite connection string
-        String url = "jdbc:sqlite:src/main/resources/com/insa/projet4a/sqlite/db/" + this.dbName + ".db";
+        String url = "jdbc:sqlite:" + this.dbName + ".db";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
