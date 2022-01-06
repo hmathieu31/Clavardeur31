@@ -57,7 +57,7 @@ public class MainController {
     @FXML
     protected void initialize() throws IOException, SQLException {
 
-        this.bdd = new BDDManager("test");
+        this.bdd = new BDDManager("conversations");
         this.bdd.initHistory();
 
         for (String ip : App.getUserCorresp().keySet()) {
