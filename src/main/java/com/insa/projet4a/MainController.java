@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -62,7 +61,7 @@ public class MainController {
     @FXML
     protected void initialize() throws IOException, SQLException {
 
-        this.bdd = new BDDManager("test");
+        this.bdd = new BDDManager("conversations");
         this.bdd.initHistory();
 
         for (String ip : App.getUserCorresp().keySet()) {

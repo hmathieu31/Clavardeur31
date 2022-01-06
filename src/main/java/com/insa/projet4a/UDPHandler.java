@@ -24,19 +24,17 @@ public class UDPHandler extends Thread {
     private static final int portBroadcaster = 50001;
     private static final int portListener = 50002;
 
-    private DatagramSocket listenerSocket;
     private boolean running;
     private static DatagramSocket broadcasterSocket;
 
     /**
-     * Creates a new UDPHandler listening for broadcasts on port {@code 13} and
-     * emitting on port {@code 14}
+     * Creates a new UDPHandler listening for broadcasts on port {@code 60000} and
+     * emitting on port {@code 60001}
      * 
      * @throws SocketException
      */
     public UDPHandler() throws SocketException {
         super();
-        this.listenerSocket = new DatagramSocket(portListener);
         broadcasterSocket = new DatagramSocket(portBroadcaster);
     }
 
@@ -45,7 +43,6 @@ public class UDPHandler extends Thread {
      */
     public void stopListener() {
         running = false;
-        listenerSocket.close();
         broadcasterSocket.close();
         this.interrupt();
     }
@@ -63,17 +60,13 @@ public class UDPHandler extends Thread {
      * 
      * @param destinAddress Address of the destinary
      * @param msg           Message to pass
-     * @throws SocketException if the Socket could not be opened or bound to the
-     *                         local port (13)
+     * @throws IOException
      */
-    public static void sendMsg(InetAddress destinAddress, String msg) throws SocketException {
+    public synchronized static void sendMsg(InetAddress destinAddress, String msg) throws IOException {
         DatagramPacket outPacket = new DatagramPacket(msg.getBytes(), msg.length(), destinAddress, portListener);
-        try {
-            broadcasterSocket.send(outPacket);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("UDP sending to " + destinAddress);
+        broadcasterSocket.send(outPacket);
+        System.out.println("UDP sending - " + msg);
     }
 
     /**
@@ -85,44 +78,39 @@ public class UDPHandler extends Thread {
      * 
      * @return The list of all connected users and their pseudo ; Or {@code null}
      *         if the pseudo is already taken
+     * @throws IOException
      */
-    public ArrayList<Pair<String, InetAddress>> listenForAnswers() {
+    public ArrayList<Pair<String, InetAddress>> listenForAnswers() throws IOException {
         ArrayList<Pair<String, InetAddress>> onlineUsers = new ArrayList<Pair<String, InetAddress>>();
         byte[] buffer = new byte[256];
 
         boolean keepListening = true;
         boolean pseudoInvalid = false;
-        try {
-            DatagramPacket inPacket = new DatagramPacket(buffer, buffer.length);
-            while (keepListening) { // Keep listening until a user answers with "--INVALID--" or until 10s have
-                                    // expired <=> no more answers are expected
-                try {
-                    listenerSocket.setSoTimeout(500);
-                    while (keepListening) {
-                        listenerSocket.receive(inPacket);
-                        InetAddress inAddress = inPacket.getAddress();
-                        String content = new String(inPacket.getData(), 0, inPacket.getLength());
+        DatagramSocket listenerInitSocket = new DatagramSocket(portListener);
+        DatagramPacket inPacket = new DatagramPacket(buffer, buffer.length);
+        while (keepListening) { // Keep listening until a user answers with "--INVALID--" or until 10s have
+                                // expired <=> no more answers are expected
+            try {
+                listenerInitSocket.setSoTimeout(50);
+                while (keepListening) {
+                    listenerInitSocket.receive(inPacket);
+                    InetAddress inAddress = inPacket.getAddress();
+                    String content = new String(inPacket.getData(), 0, inPacket.getLength());
 
-                        if (!ThreadManager.isAddressLocalhost(inAddress)) {
-                            if (!"--OFF--".equals(content) && !"--INVALID--".equals(content)) {
-                                onlineUsers.add(new Pair<String, InetAddress>(content, inAddress));
-                            }
-                            pseudoInvalid = "--INVALID--".equals(content);
-                            keepListening = !pseudoInvalid;
+                    if (!ThreadManager.isAddressLocalhost(inAddress)) {
+                        if (!"--OFF--".equals(content) && !"--INVALID--".equals(content)) {
+                            onlineUsers.add(new Pair<String, InetAddress>(content, inAddress));
                         }
+                        pseudoInvalid = "--INVALID--".equals(content);
+                        keepListening = !pseudoInvalid;
                     }
-                } catch (SocketTimeoutException timeout) {
-                    keepListening = false;
                 }
-            }
-
-        } catch (Exception e) {
-            if (e instanceof SocketTimeoutException) {
-            } else {
-                e.printStackTrace();
+            } catch (SocketTimeoutException timeout) {
+                keepListening = false;
             }
         }
-        if (pseudoInvalid) { // If the loop was exited due to invalid pseudo, onlineUsers is null
+        listenerInitSocket.close();
+        if (pseudoInvalid) { // If the loop was exited due to invalid pseudo, onlineUsers = null
             onlineUsers = null;
         }
         return onlineUsers;
@@ -135,21 +123,24 @@ public class UDPHandler extends Thread {
 
         DatagramPacket inPacket = new DatagramPacket(buffer, buffer.length);
         try {
+            DatagramSocket listenerRunnableSocket = new DatagramSocket(portListener);
             while (running) {
-                DatagramSocket listenerRunnableSocket = listenerSocket;
                 listenerRunnableSocket.setSoTimeout(0);
                 listenerRunnableSocket.receive(inPacket);
                 InetAddress inAddress = inPacket.getAddress();
 
                 String content = new String(inPacket.getData(), 0, inPacket.getLength());
+
                 if (!ThreadManager.isAddressLocalhost(inAddress)) { // Ignore all broadcasts coming from oneself
+                    System.out.println("Received broadcast from " + inAddress + " - " + content);
                     ThreadManager.notifyOnlineModif(content, inAddress);
                 }
             }
+            listenerRunnableSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        super.run();
+        // super.run();
     }
 
 }

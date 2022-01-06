@@ -96,7 +96,6 @@ public class App extends Application {
     /**
      * Adds / Updates a user in the Hash Map of address {@code ip} and username
      * {@code name}
-     * TODO [CLAV-38]Should check whether keeping an arraylist and a HashMap for
      * online users with different access methods is relevant
      * 
      * @param ip   IP Address in string format --> if the address was already in,
@@ -178,7 +177,11 @@ public class App extends Application {
         } else {
             if (isPseudoValid(username)) {
                 pseudoValidity = true;
-                threadManager.broadcastNewUsername(username);
+                try {
+                    threadManager.broadcastChangeUsername(username);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return pseudoValidity;
@@ -211,6 +214,8 @@ public class App extends Application {
 
         removeUserCorresp(userAddress.getHostAddress());
         System.out.println("user " + userAddress + " removed"); // ! Testing purposes
+        System.out.println(onlineUsers);
+        System.out.println(userCorresp);
     }
 
     /**
@@ -235,7 +240,7 @@ public class App extends Application {
             }
             newDiscussion(newUserAddress);
         } else {
-            if (isMainControllerInit) { // ! Possibly useless conditional
+            if (isMainControllerInit) { // ! Possibly useless condition
                 Platform.runLater(() -> {
                     controller.updateConnected(newUserAddress.getHostAddress());
                 });
@@ -264,13 +269,11 @@ public class App extends Application {
 
     /**
      * Display a received message
-     * TODO #3 Change to call the GUI
      * 
      * @param msg     Message received
      * @param address Address of the sender
      */
     public static void displayMsg(String msg, InetAddress address) {
-        System.out.println("Msg received from " + address + " --- " + msg);
         Platform.runLater(() -> {
             try {
                 controller.receiveMessage(address.getHostAddress(), msg);
@@ -312,9 +315,9 @@ public class App extends Application {
             endDiscussion(inetAddress);
         }
         if (hasConnected) {
-            threadManager.broadcastDisconnection();
-            threadManager.stopUDPHandler();
             try {
+                threadManager.broadcastDisconnection();
+                threadManager.stopUDPHandler();
                 threadManager.stopHandler();
             } catch (IOException e) {
                 e.printStackTrace();
