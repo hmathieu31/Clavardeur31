@@ -71,7 +71,7 @@
                         </AnchorPane>
                         <ScrollPane hbarPolicy="NEVER" prefViewportHeight="483.0" prefViewportWidth="238.0" style="-fx-background-color: #23272A;">
                            <content>
-                              <VBox fx:id="connectedContainer" prefHeight="480.0" prefWidth="238.0" style="-fx-background-color: #23272A;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                              <VBox fx:id="connectedContainer" prefHeight="481.0" prefWidth="238.0" style="-fx-background-color: #23272A;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                            </content>
                         </ScrollPane>
                      </children>
