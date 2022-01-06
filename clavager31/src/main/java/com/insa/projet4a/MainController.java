@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -308,14 +310,40 @@ public class MainController {
 
     /**
      * Removes the user in the GUI corresponding {@code ip} from the list of online
-     * users
+     * users, it then select the previous user in the connected list. 
+     * I there isn't any the default page is shown instead.
      * 
      * @param ip IP address of the user who disconnected
+     * @throws IOException
      */
-    public void removeConnected(String ip) {
-        HBox hbox = lookup(ip);
-        if (hbox != null) {
-            connectedContainer.getChildren().remove(hbox);
+    public void removeConnected(String ip) throws IOException {
+
+        HBox old_current = null;
+        ObservableList<Node> connected_list = connectedContainer.getChildren();
+
+        int i;
+        for (i=0; i < connected_list.size() ; i++) {
+            HBox connected = (HBox)connected_list.get(i);
+            if (connected.getId().equals(ip)){
+                old_current = connected;
+            }
+        }
+
+        if(old_current != null){ // si l'user à enlever est affiché
+            connectedContainer.getChildren().remove(old_current);
+            HBox new_current = (HBox)connected_list.get(i-1);
+            if(new_current != null){ // on prend celui d'au dessus 
+                new_current.fireEvent(new ActionEvent());
+            }
+            else{ // si y'en a pas au dessus on remet l'écran d'acceuil
+                App.currentDiscussionIp = "";
+                resetMessage();
+                ArrayList<Message> list = new ArrayList<Message>();
+                list.add(new Message(true, currentDate(), "Bienvenue dans Clavager31"));
+                list.add(new Message(true, currentDate(),
+                        "Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives \n Selectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
+                loadMessages(list);
+            }
         }
     }
 
@@ -330,7 +358,6 @@ public class MainController {
         if (hbox != null) {
             Pane pane = (Pane) hbox.getChildren().get(0);
             String new_name = App.getPseudoFromIP(ip);
-            System.out.println(new_name);
             paneSetText((AnchorPane) pane.getChildren().get(0), new_name);
         }
     }
@@ -397,7 +424,9 @@ public class MainController {
     private HBox lookup(String ip) {
         HBox hbox = null;
         for (Node child : connectedContainer.getChildren()) {
-            hbox = (HBox) child;
+            if (((HBox) child).getId().equals(ip)){
+                hbox = (HBox) child;
+            }
         }
         return hbox;
     }

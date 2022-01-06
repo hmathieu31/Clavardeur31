@@ -202,7 +202,11 @@ public class App extends Application {
         onlineUsers.remove(userAddress);
 
         Platform.runLater(() -> {
-            controller.removeConnected(userAddress.getHostAddress());
+            try {
+                controller.removeConnected(userAddress.getHostAddress());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
         endDiscussion(userAddress);
 
