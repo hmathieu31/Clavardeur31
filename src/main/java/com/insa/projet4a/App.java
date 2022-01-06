@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     private static Scene scene;
-    private static Stage stage;
+    public static Stage stage;
 
     /**
      * Username chosen by the App user and possibly changed
@@ -62,9 +62,8 @@ public class App extends Application {
     public void start(Stage primaryStage) throws IOException {
         stage = primaryStage;
         scene = new Scene(loadFXML("login_screen"), 650, 400);
-        stage.setResizable(false);
-        stage.setOnCloseRequest(e -> closeProgram());
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.setTitle("Clavager31");
         stage.show();
 
@@ -113,9 +112,9 @@ public class App extends Application {
      * <p>
      * Close the current {@code stage}.
      */
-    private void closeProgram() {
+    @Override
+    public void stop() {
         System.out.println("GUI CLOSING");
-        stage.close();
         disconnect();
     }
 
@@ -129,7 +128,7 @@ public class App extends Application {
         stage.centerOnScreen();
     }
 
-    private static Parent loadFXML(String fxml) throws IOException {
+    public static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
@@ -205,7 +204,11 @@ public class App extends Application {
         onlineUsers.remove(userAddress);
 
         Platform.runLater(() -> {
-            controller.removeConnected(userAddress.getHostAddress());
+            try {
+                controller.removeConnected(userAddress.getHostAddress());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
         endDiscussion(userAddress);
 
