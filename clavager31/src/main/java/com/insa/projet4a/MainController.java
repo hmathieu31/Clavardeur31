@@ -321,30 +321,30 @@ public class MainController {
         HBox old_current = null;
         ObservableList<Node> connected_list = connectedContainer.getChildren();
 
-        if (connected_list.size() > 0){
-            int i;
-            for (i=0; i < connected_list.size() ; i++) {
-                HBox connected = (HBox)connected_list.get(i);
-                if (connected.getId().equals(ip)){
-                    old_current = connected;
-                }
+        int i;
+        for (i=0; i < connected_list.size() ; i++) {
+            HBox connected = (HBox)connected_list.get(i);
+            if (connected.getId().equals(ip)){
+                old_current = connected;
+                System.out.println(old_current);
             }
+        }
 
-            if(old_current != null){ // si l'user à enlever est affiché
-                connectedContainer.getChildren().remove(old_current);
+        if(old_current != null){ // si l'user à enlever est affiché
+            connectedContainer.getChildren().remove(old_current);
+
+            if(i > 1){ // on prend celui d'au dessus 
                 HBox new_current = (HBox)connected_list.get(i-1);
-                if(new_current != null){ // on prend celui d'au dessus 
-                    new_current.fireEvent(new ActionEvent());
-                }
-                else{ // si y'en a pas au dessus on remet l'écran d'acceuil
-                    App.currentDiscussionIp = "";
-                    resetMessage();
-                    ArrayList<Message> list = new ArrayList<Message>();
-                    list.add(new Message(true, currentDate(), "Bienvenue dans Clavager31"));
-                    list.add(new Message(true, currentDate(),
-                            "Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives \n Selectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
-                    loadMessages(list);
-                }
+                new_current.fireEvent(new ActionEvent());
+            }
+            else{ // si y'en a pas au dessus on remet l'écran d'acceuil
+                App.currentDiscussionIp = "";
+                resetMessage();
+                ArrayList<Message> list = new ArrayList<Message>();
+                list.add(new Message(true, currentDate(), "Bienvenue dans Clavager31"));
+                list.add(new Message(true, currentDate(),
+                        "Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives \n Selectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
+                loadMessages(list);
             }
         }
     }
