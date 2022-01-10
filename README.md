@@ -11,7 +11,7 @@
     <li><a href="#-about-the-project-">About The Project</a></li>
     <li><a href="#-requirements-">Requirements</a></li>
     <li><a href="#-installation-">Installation</a></li>
-    <li><a href="#-screenshot-">Screenshots</a></li>
+    <li><a href="#-screenshots-">Screenshots</a></li>
   </ul>
 </details>
 
