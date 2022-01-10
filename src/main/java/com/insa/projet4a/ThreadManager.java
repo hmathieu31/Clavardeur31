@@ -19,6 +19,10 @@ import javafx.util.Pair;
  * a {@linkplain TCPClient Client} Thread for each connection
  */
 public class ThreadManager extends Thread {
+    /**
+     *
+     */
+    private static final String LOCALHOST_ADDR = "255.255.255.255";
     private int port;
     private boolean running = false;
 
@@ -51,6 +55,7 @@ public class ThreadManager extends Thread {
 
     /**
      * Stops this ThreadManager
+     * 
      * @throws IOException
      */
     public void stopHandler() throws IOException {
@@ -59,8 +64,8 @@ public class ThreadManager extends Thread {
         this.interrupt();
     }
 
-    private static HashMap<InetAddress, TCPClient> clientTable = new HashMap<InetAddress, TCPClient>();
-    private static HashMap<InetAddress, TCPServer> serverTable = new HashMap<InetAddress, TCPServer>();
+    private static HashMap<InetAddress, TCPClient> clientTable = new HashMap<>();
+    private static HashMap<InetAddress, TCPServer> serverTable = new HashMap<>();
 
     /**
      * Creates a Client Thread to send messages to specified
@@ -93,7 +98,7 @@ public class ThreadManager extends Thread {
         try {
             if (udpHandler == null)
                 udpHandler = new UDPHandler();
-            UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255"), firstPseudo);
+            UDPHandler.sendMsg(InetAddress.getByName(LOCALHOST_ADDR), firstPseudo);
             ArrayList<Pair<String, InetAddress>> onlineUsers = udpHandler.listenForAnswers();
             if (onlineUsers == null) {
                 initialisationValid = false;
@@ -221,11 +226,12 @@ public class ThreadManager extends Thread {
 
     /**
      * Broadcasts (UDP) that the user is disconnecting (Sends --OFF-- to all)
+     * 
      * @throws IOException
      * @throws UnknownHostException
      */
-    public void broadcastDisconnection() throws UnknownHostException, IOException {
-            UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255"), "--OFF--");
+    public void broadcastDisconnection() throws IOException {
+        UDPHandler.sendMsg(InetAddress.getByName(LOCALHOST_ADDR), "--OFF--");
     }
 
     /**
@@ -235,8 +241,8 @@ public class ThreadManager extends Thread {
      * @throws IOException
      * @throws UnknownHostException
      */
-    public void broadcastChangeUsername(String newUsername) throws UnknownHostException, IOException {
-            UDPHandler.sendMsg(InetAddress.getByName("255.255.255.255"), newUsername);
+    public void broadcastChangeUsername(String newUsername) throws IOException {
+        UDPHandler.sendMsg(InetAddress.getByName(LOCALHOST_ADDR), newUsername);
     }
 
     /**
@@ -263,8 +269,8 @@ public class ThreadManager extends Thread {
                 serverTable.put(socket.getInetAddress(), requestHandler); // Adds the Server thread to table
                 requestHandler.start();
             } catch (Exception e) {
-                if(!(e instanceof SocketException))
-                e.printStackTrace();
+                if (!(e instanceof SocketException))
+                    e.printStackTrace();
             }
         }
     }

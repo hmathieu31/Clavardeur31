@@ -7,17 +7,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class BDDManager {
 
     private String dbName = "test";
+
+    private Logger logger = Logger.getLogger("clavarder.bddmanager");
 
     public BDDManager(String path) {
         try {
             Class.forName("org.sqlite.JDBC");
             this.dbName = path;
         } catch (ClassNotFoundException e) {
-            System.err.println(e.getMessage());
+            logger.warning(e.getMessage());
         }
     }
 
@@ -28,7 +31,7 @@ public class BDDManager {
         try {
             conn = DriverManager.getConnection(url);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.warning(e.getMessage());
         }
         return conn;
     }
@@ -56,7 +59,7 @@ public class BDDManager {
         pStatement.setString(1,user);
 
         ResultSet result = pStatement.executeQuery();
-        ArrayList<Message> list = new ArrayList<Message>();
+        ArrayList<Message> list = new ArrayList<>();
                 
         // loop through the result set
         while (result.next()) {
@@ -76,7 +79,7 @@ public class BDDManager {
         Statement statement = conn.createStatement();
 
         ResultSet result = statement.executeQuery(query);
-        ArrayList<Message> list = new ArrayList<Message>();
+        ArrayList<Message> list = new ArrayList<>();
                 
         // loop through the result set
         while (result.next()) {

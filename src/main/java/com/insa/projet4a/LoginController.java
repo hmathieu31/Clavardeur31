@@ -39,9 +39,9 @@ public class LoginController {
                 stage.setResizable(false);
                 stage.setTitle("Clavager31");
 
-                App.stage.close();
-                App.stage = stage;
-                App.stage.show();
+                App.getStage().close();
+                App.setStage(stage);
+                App.getStage().show();
 
             } else {
                 pseudoField.clear();
