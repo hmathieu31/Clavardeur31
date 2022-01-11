@@ -31,8 +31,8 @@ public class UDPHandler extends Thread {
     private static DatagramSocket broadcasterSocket;
 
     /**
-     * Creates a new UDPHandler listening for broadcasts on port {@code 60000} and
-     * emitting on port {@code 60001}
+     * Creates a new UDPHandler listening for broadcasts on port {@code 50002} and
+     * emitting on port {@code 50001}
      * 
      * @throws SocketException
      */

@@ -23,6 +23,8 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 
+    private static final int TCP_PORT = 60000;
+
     private static String currentDiscussionIp = "";
 
     private static boolean isMainControllerInit = false;
@@ -35,7 +37,7 @@ public class App extends Application {
 
     private static boolean hasConnected = false;
 
-    private static ThreadManager threadManager = new ThreadManager(60000);
+    private static ThreadManager threadManager = new ThreadManager(TCP_PORT);
 
     private static ArrayList<InetAddress> onlineUsers = new ArrayList<>();
 
@@ -310,7 +312,7 @@ public class App extends Application {
      */
     public static void newDiscussion(InetAddress receivAddress) {
         try {
-            threadManager.createClientThread(60000, receivAddress);
+            threadManager.createClientThread(TCP_PORT, receivAddress);
         } catch (IOException e) {
             LOGGER.severe(() -> "Failed to establish connexion with target " + receivAddress);
             e.printStackTrace();
