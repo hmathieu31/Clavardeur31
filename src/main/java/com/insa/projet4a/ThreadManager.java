@@ -200,6 +200,7 @@ public class ThreadManager extends Thread {
                         UDPHandler.sendMsg(senderAddress, App.getPseudo());
                     }
                     App.addOnlineUsers(senderAddress, content);
+                    App.newDiscussion(senderAddress);
                 } else { // The pseudo chosen by the new user is taken -> answer INVALID
                     UDPHandler.sendMsg(senderAddress, "--INVALID--");
                 }
