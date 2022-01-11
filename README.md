@@ -1,4 +1,4 @@
-<h3 align="center"><strong>Clavager31</strong> : <i>decentralized discussion project</i> </h3>
+<h3 align="center"><strong>Clavardeur31</strong> : <i>decentralized discussion project</i> </h3>
 
 <p align="center">
   <img src="https://github.com/hmathieu-insat/Clavardeur31/blob/main/src/main/resources/com/insa/projet4a/img/logo.png" width="120"/>
