@@ -1,4 +1,4 @@
-<h3 align="center"><strong>Clavager31</strong> : <i>decentralized discussion project</i> </h3>
+<h3 align="center"><strong>Clavardeur31</strong> : <i>decentralized discussion project</i> </h3>
 
 <p align="center">
   <img src="https://github.com/hmathieu-insat/Clavardeur31/blob/main/src/main/resources/com/insa/projet4a/img/logo.png" width="120"/>
@@ -20,7 +20,7 @@
 <!-- ABOUT THE PROJECT -->
 <h1> About The Project </h1> 
 
-Clavager31 is an instantaneous discussion system between people present in the same network. This decentralized application allows a peer to peer discussion with local databases that guarantee privacy of the user. Anyone starting the application will be able to enter a nickname and start a discussion on the fly with anybody already connected.
+Clavardeur31 is an instantaneous discussion system between people present in the same network. This decentralized application allows a peer to peer discussion with local databases that guarantee privacy of the user. Anyone starting the application will be able to enter a nickname and start a discussion on the fly with anybody already connected.
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- REQUIREMENTS -->

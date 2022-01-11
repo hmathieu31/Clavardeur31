@@ -37,7 +37,7 @@ public class LoginController {
                 Scene scene = new Scene(App.loadFXML("main"), 1000, 800);
                 stage.setScene(scene);
                 stage.setResizable(false);
-                stage.setTitle("Clavager31");
+                stage.setTitle("Clavardeur31");
 
                 App.getStage().close();
                 App.setStage(stage);

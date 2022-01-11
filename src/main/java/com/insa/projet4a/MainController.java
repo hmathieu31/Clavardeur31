@@ -72,7 +72,7 @@ public class MainController {
         identityLabel.setText(App.getPseudo());
 
         ArrayList<Message> list = new ArrayList<>();
-        list.add(new Message(true, currentDate(), "Bienvenue dans Clavager31"));
+        list.add(new Message(true, currentDate(), "Bienvenue dans Clavardeur31"));
         list.add(new Message(true, currentDate(),
                 "Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives \n Selectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
         loadMessages(list);
@@ -93,7 +93,7 @@ public class MainController {
         Scene scene = new Scene(App.loadFXML("login_screen"), 650, 459);
         stage.setScene(scene);
         stage.setResizable(false);
-        stage.setTitle("Clavager31");
+        stage.setTitle("Clavardeur31");
 
         App.getStage().close();
         App.setStage(stage);
@@ -348,7 +348,7 @@ public class MainController {
                 App.setCurrentDiscussionIp("");
                 resetMessage();
                 ArrayList<Message> list = new ArrayList<>();
-                list.add(new Message(true, currentDate(), "Bienvenue dans Clavager31"));
+                list.add(new Message(true, currentDate(), "Bienvenue dans Clavardeur31"));
                 list.add(new Message(true, currentDate(),
                         "Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives \n Selectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
                 loadMessages(list);

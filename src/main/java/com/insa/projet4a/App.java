@@ -162,7 +162,7 @@ public class App extends Application {
         scene = new Scene(loadFXML("login_screen"), 650, 400);
         stage.setScene(scene);
         stage.setResizable(false);
-        stage.setTitle("Clavager31");
+        stage.setTitle("Clavardeur31");
         stage.show();
 
     }
