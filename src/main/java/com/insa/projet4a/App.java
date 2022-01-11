@@ -2,10 +2,14 @@ package com.insa.projet4a;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -19,13 +23,78 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 
+    private static String currentDiscussionIp = "";
+
+    private static boolean isMainControllerInit = false;
+
+    private static MainController controller;
+
     private static Scene scene;
-    public static Stage stage;
+
+    private static Stage stage;
+
+    private static boolean hasConnected = false;
+
+    private static ThreadManager threadManager = new ThreadManager(60000);
+
+    private static ArrayList<InetAddress> onlineUsers = new ArrayList<>();
+
+    private static String pseudo;
+
+    private static HashMap<String, String> userCorresp = new HashMap<>();
+
+    private static final Logger LOGGER = Logger.getLogger("clavarder.app");
 
     /**
-     * Username chosen by the App user and possibly changed
+     *
+     * @return The IP address of the user currently in discussion with formatted as
+     *         a String of 5 bytes
      */
-    private static String pseudo;
+    public static String getCurrentDiscussionIp() {
+        return currentDiscussionIp;
+    }
+
+    /**
+     * currentDiscussionIP is the IP address of the user currently with which the
+     * conversation screen is being opened.
+     * 
+     * @param currentDiscussionIp must be formatted as a 5 bytes String
+     *                            (InetAddress.getHost() method)
+     */
+    public static void setCurrentDiscussionIp(String currentDiscussionIp) {
+        App.currentDiscussionIp = currentDiscussionIp;
+    }
+
+    /**
+     * Called when the MainController is initialized to allow the App to process.
+     * 
+     * @param isMainControllerInit
+     */
+    public static void setMainControllerInit(boolean isMainControllerInit) {
+        App.isMainControllerInit = isMainControllerInit;
+    }
+
+    public static void setController(MainController controller) {
+        App.controller = controller;
+    }
+
+    /**
+     * Gets the current JavaFX stage
+     * 
+     * @return
+     */
+    public static Stage getStage() {
+        return stage;
+    }
+
+    /**
+     * Sets a JavaFX stage
+     * 
+     * @param stage
+     */
+    public static void setStage(Stage stage) {
+        App.stage = stage;
+    }
 
     /**
      * Getter for App pseudo
@@ -45,31 +114,11 @@ public class App extends Application {
         App.pseudo = pseudo;
     }
 
-    public static String currentDiscussionIp = "";
-
     /**
-     * HashMap with keys of IP Addresses (formatted as string) and values of
-     * Pseudonymes (formatted as Strings)
+     * 
+     * @return the userCorresp of IPs into usernames of all connected user.
      */
-    private static HashMap<String, String> userCorresp = new HashMap<String, String>();
-
-    public static MainController controller;
-    private static boolean hasConnected = false;
-
-    public static boolean isMainControllerInit = false;
-
-    @Override
-    public void start(Stage primaryStage) throws IOException {
-        stage = primaryStage;
-        scene = new Scene(loadFXML("login_screen"), 650, 400);
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.setTitle("Clavager31");
-        stage.show();
-
-    }
-
-    public static HashMap<String, String> getUserCorresp() {
+    public static Map<String, String> getUserCorresp() {
         return userCorresp;
     }
 
@@ -104,7 +153,18 @@ public class App extends Application {
      */
     public static void addUserCorresp(String ip, String name) {
         userCorresp.put(ip, name);
-        System.out.println("user " + ip + " - " + name);
+        LOGGER.log(Level.INFO, () -> "user " + ip + " - " + name + "added to userCorresp");
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws IOException {
+        stage = primaryStage;
+        scene = new Scene(loadFXML("login_screen"), 650, 400);
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.setTitle("Clavardeur31");
+        stage.show();
+
     }
 
     /**
@@ -114,7 +174,7 @@ public class App extends Application {
      */
     @Override
     public void stop() {
-        System.out.println("GUI CLOSING");
+        LOGGER.info("GUI closing");
         disconnect();
     }
 
@@ -135,13 +195,9 @@ public class App extends Application {
 
     /***********************************************************************/
     /*
-     * BACKEND PART
+     * BACKEND METHODS
      * /
      ***********************************************************************/
-
-    private static ThreadManager threadManager = new ThreadManager(60000);
-
-    private static ArrayList<InetAddress> onlineUsers = new ArrayList<InetAddress>();
 
     /**
      * <p>
@@ -187,7 +243,7 @@ public class App extends Application {
         return pseudoValidity;
     }
 
-    public static ArrayList<InetAddress> getOnlineUsers() {
+    public static List<InetAddress> getOnlineUsers() {
         return onlineUsers;
     }
 
@@ -213,9 +269,6 @@ public class App extends Application {
         endDiscussion(userAddress);
 
         removeUserCorresp(userAddress.getHostAddress());
-        System.out.println("user " + userAddress + " removed"); // ! Testing purposes
-        System.out.println(onlineUsers);
-        System.out.println(userCorresp);
     }
 
     /**
@@ -241,12 +294,10 @@ public class App extends Application {
             newDiscussion(newUserAddress);
         } else {
             if (isMainControllerInit) { // ! Possibly useless condition
-                Platform.runLater(() -> {
-                    controller.updateConnected(newUserAddress.getHostAddress());
-                });
+                Platform.runLater(() -> controller.updateConnected(newUserAddress.getHostAddress()));
             }
         }
-        System.out.println("IP: " + newUserAddress + " - name:" + newUserPseudo); // ! Testing purposes
+        LOGGER.info(() -> "IP: " + newUserAddress + " - name:" + newUserPseudo);
     }
 
     /**
@@ -257,13 +308,11 @@ public class App extends Application {
      *         False
      *         otherwise
      */
-    public static boolean newDiscussion(InetAddress receivAddress) {
+    public static void newDiscussion(InetAddress receivAddress) {
         try {
             threadManager.createClientThread(60000, receivAddress);
-            return true;
         } catch (IOException e) {
-            System.err.println("Failed to establish connexion with target " + receivAddress);
-            return false;
+            LOGGER.warning(() -> "Failed to establish connexion with target " + receivAddress);
         }
     }
 
@@ -302,7 +351,7 @@ public class App extends Application {
      */
     public static void endDiscussion(InetAddress receivAddress) {
         ThreadManager.closeConnectionThreads(receivAddress);
-        System.out.println("Connexion closed by local initiative with " + receivAddress);
+        LOGGER.info(() -> "Connexion closed by local initiative with " + receivAddress);
     }
 
     /**
@@ -339,9 +388,13 @@ public class App extends Application {
                 !"".equals(pseudo);
     }
 
-    public static void main(String[] args) throws UnknownHostException, InterruptedException {
+
+    public static void main(String[] args) throws InterruptedException, SecurityException, IOException {
         launch();
 
-        System.out.println("Exited");
+        LOGGER.info("Exited");
+        FileHandler fileHandler = new FileHandler("logs.xml");
+        LOGGER.addHandler(fileHandler);
+        
     }
 }

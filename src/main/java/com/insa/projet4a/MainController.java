@@ -68,16 +68,16 @@ public class MainController {
             this.addConnected(ip);
         }
 
-        App.controller = this;
+        App.setController(this);
         identityLabel.setText(App.getPseudo());
 
-        ArrayList<Message> list = new ArrayList<Message>();
-        list.add(new Message(true, currentDate(), "Bienvenue dans Clavager31"));
+        ArrayList<Message> list = new ArrayList<>();
+        list.add(new Message(true, currentDate(), "Bienvenue dans Clavardeur31"));
         list.add(new Message(true, currentDate(),
                 "Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives \n Selectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
         loadMessages(list);
-        App.isMainControllerInit = true;
-        App.currentDiscussionIp = "";
+        App.setMainControllerInit(true);
+        App.setCurrentDiscussionIp("");
     }
 
     // Pour changer de pseudo
@@ -95,9 +95,9 @@ public class MainController {
         stage.setResizable(false);
         stage.setTitle("Clavardeur31");
 
-        App.stage.close();
-        App.stage = stage;
-        App.stage.show();
+        App.getStage().close();
+        App.setStage(stage);
+        App.getStage().show();
     }
 
     private String formatMessage(String messageText){
@@ -200,7 +200,6 @@ public class MainController {
     public String currentDate() {
         Date date = new Date();
         SimpleDateFormat formater = new SimpleDateFormat("'Le' dd MMMM 'à' HH:mm");
-        ;
         return formater.format(date);
     }
 
@@ -223,12 +222,12 @@ public class MainController {
                 // On vérifie qu'on discute bien avec quelqu'un
                 // Pour éviter d'avoir supprimé quelqu'un et continuer de discuter avec
 
-                if (!App.currentDiscussionIp.equals("")) {
+                if (!App.getCurrentDiscussionIp().equals("")) {
                     String date = currentDate();
                     addMessageTo(date, messageText);
                     messageField.clear();
 
-                    String ip = App.currentDiscussionIp;
+                    String ip = App.getCurrentDiscussionIp();
                     this.bdd.insertHistory(ip, false, messageText, date);
 
                     App.transmitMessage(messageText, InetAddress.getByName(ip));
@@ -243,7 +242,7 @@ public class MainController {
         String date = currentDate();
         this.bdd.insertHistory(ip, true, messageText, date);
         
-        if (App.currentDiscussionIp.equals(ip)){
+        if (App.getCurrentDiscussionIp().equals(ip)){
             addMessageFrom(date, messageText);
         }
         else{
@@ -326,30 +325,30 @@ public class MainController {
      */
     public void removeConnected(String ip) throws IOException {
 
-        HBox old_current = null;
-        ObservableList<Node> connected_list = connectedContainer.getChildren();
+        HBox oldCurrent = null;
+        ObservableList<Node> connectedList = connectedContainer.getChildren();
 
         int i;
-        for (i=0; i < connected_list.size() ; i++) {
-            HBox connected = (HBox)connected_list.get(i);
+        for (i=0; i < connectedList.size() ; i++) {
+            HBox connected = (HBox)connectedList.get(i);
             if (connected.getId().equals(ip)){
-                old_current = connected;
-                System.out.println(old_current);
+                oldCurrent = connected;
+                System.out.println(oldCurrent);
             }
         }
 
-        if(old_current != null){ // si l'user à enlever est affiché
-            connectedContainer.getChildren().remove(old_current);
+        if(oldCurrent != null){ // si l'user à enlever est affiché
+            connectedContainer.getChildren().remove(oldCurrent);
 
             if(i > 1){ // on prend celui d'au dessus 
-                HBox new_current = (HBox)connected_list.get(i-1);
-                new_current.fireEvent(new ActionEvent());
+                HBox newCurrent = (HBox)connectedList.get(i-1);
+                newCurrent.fireEvent(new ActionEvent());
             }
             else{ // si y'en a pas au dessus on remet l'écran d'acceuil
-                App.currentDiscussionIp = "";
+                App.setCurrentDiscussionIp("");
                 resetMessage();
-                ArrayList<Message> list = new ArrayList<Message>();
-                list.add(new Message(true, currentDate(), "Bienvenue dans Clavager31"));
+                ArrayList<Message> list = new ArrayList<>();
+                list.add(new Message(true, currentDate(), "Bienvenue dans Clavardeur31"));
                 list.add(new Message(true, currentDate(),
                         "Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives \n Selectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
                 loadMessages(list);
@@ -367,8 +366,8 @@ public class MainController {
         HBox hbox = lookup(ip);
         if (hbox != null) {
             Pane pane = (Pane) hbox.getChildren().get(0);
-            String new_name = App.getPseudoFromIP(ip);
-            paneSetText((AnchorPane) pane.getChildren().get(0), new_name);
+            String newName = App.getPseudoFromIP(ip);
+            paneSetText((AnchorPane) pane.getChildren().get(0), newName);
         }
     }
 
@@ -386,11 +385,11 @@ public class MainController {
     private void updateCurrentDiscussion(Event e) throws SQLException, IOException {
 
         HBox hbox = (HBox) e.getSource();
-        App.currentDiscussionIp = hbox.getId();
+        App.setCurrentDiscussionIp(hbox.getId());
 
         resetMessage();
 
-        String ip = App.currentDiscussionIp;
+        String ip = App.getCurrentDiscussionIp();
         ArrayList<Message> history = this.bdd.showHistory(ip);
         loadMessages(history);
 
@@ -419,13 +418,13 @@ public class MainController {
     @FXML
     private void clearHistory() throws SQLException {
 
-        if (!App.currentDiscussionIp.equals("")) {
+        if (!App.getCurrentDiscussionIp().equals("")) {
 
             resetMessage();
 
             // MODIFIER METTRE IP AU LIEU DE NOM
             // FAUT CORRESP IP/NOM
-            this.bdd.clearHistory(App.currentDiscussionIp);
+            this.bdd.clearHistory(App.getCurrentDiscussionIp());
         } else {
             alert.show();
         }

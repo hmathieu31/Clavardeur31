@@ -21,8 +21,8 @@ import javafx.util.Pair;
  * is closed
  */
 public class UDPHandler extends Thread {
-    private static final int portBroadcaster = 50001;
-    private static final int portListener = 50002;
+    private static final int BROADCASTER_PORT = 50001;
+    private static final int LISTENER_PORT = 50002;
 
     private boolean running;
     private static DatagramSocket broadcasterSocket;
@@ -35,7 +35,6 @@ public class UDPHandler extends Thread {
      */
     public UDPHandler() throws SocketException {
         super();
-        broadcasterSocket = new DatagramSocket(portBroadcaster);
     }
 
     /**
@@ -62,8 +61,12 @@ public class UDPHandler extends Thread {
      * @param msg           Message to pass
      * @throws IOException
      */
-    public synchronized static void sendMsg(InetAddress destinAddress, String msg) throws IOException {
-        DatagramPacket outPacket = new DatagramPacket(msg.getBytes(), msg.length(), destinAddress, portListener);
+    public static synchronized void sendMsg(InetAddress destinAddress, String msg) throws IOException {
+        if (UDPHandler.broadcasterSocket == null) {
+            UDPHandler.broadcasterSocket = new DatagramSocket(BROADCASTER_PORT);
+        }
+
+        DatagramPacket outPacket = new DatagramPacket(msg.getBytes(), msg.length(), destinAddress, LISTENER_PORT);
         System.out.println("UDP sending to " + destinAddress);
         broadcasterSocket.send(outPacket);
         System.out.println("UDP sending - " + msg);
@@ -81,16 +84,16 @@ public class UDPHandler extends Thread {
      * @throws IOException
      */
     public ArrayList<Pair<String, InetAddress>> listenForAnswers() throws IOException {
-        ArrayList<Pair<String, InetAddress>> onlineUsers = new ArrayList<Pair<String, InetAddress>>();
+        ArrayList<Pair<String, InetAddress>> onlineUsers = new ArrayList<>();
         byte[] buffer = new byte[256];
 
         boolean keepListening = true;
         boolean pseudoInvalid = false;
-        DatagramSocket listenerInitSocket = new DatagramSocket(portListener);
+        DatagramSocket listenerInitSocket = new DatagramSocket(LISTENER_PORT);
         DatagramPacket inPacket = new DatagramPacket(buffer, buffer.length);
         while (keepListening) { // Keep listening until a user answers with "--INVALID--" or until 10s have
-                                // expired <=> no more answers are expected
             try {
+                // expired <=> no more answers are expected
                 listenerInitSocket.setSoTimeout(50);
                 while (keepListening) {
                     listenerInitSocket.receive(inPacket);
@@ -107,6 +110,8 @@ public class UDPHandler extends Thread {
                 }
             } catch (SocketTimeoutException timeout) {
                 keepListening = false;
+            } finally {
+                listenerInitSocket.close();
             }
         }
         listenerInitSocket.close();
@@ -122,8 +127,7 @@ public class UDPHandler extends Thread {
         byte[] buffer = new byte[256];
 
         DatagramPacket inPacket = new DatagramPacket(buffer, buffer.length);
-        try {
-            DatagramSocket listenerRunnableSocket = new DatagramSocket(portListener);
+        try (DatagramSocket listenerRunnableSocket = new DatagramSocket(LISTENER_PORT)) {
             while (running) {
                 listenerRunnableSocket.setSoTimeout(0);
                 listenerRunnableSocket.receive(inPacket);
@@ -136,11 +140,10 @@ public class UDPHandler extends Thread {
                     ThreadManager.notifyOnlineModif(content, inAddress);
                 }
             }
-            listenerRunnableSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // super.run();
+
     }
 
 }

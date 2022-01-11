@@ -1,9 +1,9 @@
 package com.insa.projet4a;
 
-import java.net.UnknownHostException;
+import java.io.IOException;
 
 public class Main {
-    public static void main(String[] args) throws UnknownHostException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException, SecurityException, IOException {
         App.main(args);
     }
 }
