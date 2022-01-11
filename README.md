@@ -33,7 +33,7 @@ Java version 11 or above is required
 <!-- HOW TO INSTALL -->
 <h1> Installation </h1>
 
-<a hfref="https://github.com/hmathieu-insat/Clavardeur31/releases/download/v1.0.0/Clavardeur.jar">Download Link</a>
+<a href="https://github.com/hmathieu-insat/Clavardeur31/releases/download/v1.0.0/Clavardeur.jar">Download Link</a>
 
 The application is released under the form of a fat-jar including all necessary dependancies for the execution as is. The installation does not need any preliminar installation and can be directly executed.
 
