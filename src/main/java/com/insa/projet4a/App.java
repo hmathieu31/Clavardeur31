@@ -231,6 +231,9 @@ public class App extends Application {
                 threadManager.startHandler();
                 threadManager.startUDPListener();
                 hasConnected = true;
+                for (InetAddress inetAddress : onlineUsers) {
+                    newDiscussion(inetAddress);
+                }
             }
         } else {
             if (isPseudoValid(username)) {
@@ -293,7 +296,7 @@ public class App extends Application {
                     }
                 });
             }
-            newDiscussion(newUserAddress);
+            // newDiscussion(newUserAddress);
         } else {
             if (isMainControllerInit) { // ! Possibly useless condition
                 Platform.runLater(() -> controller.updateConnected(newUserAddress.getHostAddress()));
@@ -306,9 +309,6 @@ public class App extends Application {
      * Creates a ClientThread to send messages to {@code receivAddress}
      * 
      * @param receivAddress Address of the destinary
-     * @return {@code True} if the establishment of the discussion was successful.
-     *         False
-     *         otherwise
      */
     public static void newDiscussion(InetAddress receivAddress) {
         try {
@@ -316,7 +316,6 @@ public class App extends Application {
         } catch (IOException e) {
             LOGGER.severe(() -> "Failed to establish connexion with target " + receivAddress);
             e.printStackTrace();
-            newDiscussion(receivAddress);
         }
     }
 

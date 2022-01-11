@@ -71,13 +71,13 @@ public class ThreadManager extends Thread {
      * Creates a Client Thread to send messages to specified
      * {@code clientInetAddress}
      * 
-     * @param clientPort        Destination port
-     * @param clientInetAddress Destination address
+     * @param serverPort        Destination port
+     * @param serverInetAddress Destination address
      * @throws IOException
      */
-    public void createClientThread(int clientPort, InetAddress clientInetAddress) throws IOException {
-        TCPClient clientThread = new TCPClient(clientPort, clientInetAddress);
-        clientTable.put(clientInetAddress, clientThread);
+    public void createClientThread(int serverPort, InetAddress serverInetAddress) throws IOException {
+        TCPClient clientThread = new TCPClient(serverPort, serverInetAddress);
+        clientTable.put(serverInetAddress, clientThread);
         clientThread.run();
     }
 
