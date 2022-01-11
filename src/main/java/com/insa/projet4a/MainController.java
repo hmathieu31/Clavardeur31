@@ -93,7 +93,7 @@ public class MainController {
         Scene scene = new Scene(App.loadFXML("login_screen"), 650, 459);
         stage.setScene(scene);
         stage.setResizable(false);
-        stage.setTitle("Clavager31");
+        stage.setTitle("Clavardeur31");
 
         App.stage.close();
         App.stage = stage;
