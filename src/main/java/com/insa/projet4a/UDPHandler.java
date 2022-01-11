@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import javafx.util.Pair;
 
@@ -23,6 +24,8 @@ import javafx.util.Pair;
 public class UDPHandler extends Thread {
     private static final int BROADCASTER_PORT = 50001;
     private static final int LISTENER_PORT = 50002;
+
+    private static final Logger LOGGER = Logger.getLogger("clavarder.UDPHandler");
 
     private boolean running;
     private static DatagramSocket broadcasterSocket;
@@ -67,9 +70,8 @@ public class UDPHandler extends Thread {
         }
 
         DatagramPacket outPacket = new DatagramPacket(msg.getBytes(), msg.length(), destinAddress, LISTENER_PORT);
-        System.out.println("UDP sending to " + destinAddress);
         broadcasterSocket.send(outPacket);
-        System.out.println("UDP sending - " + msg);
+        LOGGER.info(() -> "UDP Send - " + msg + " to " + destinAddress);
     }
 
     /**
@@ -123,7 +125,7 @@ public class UDPHandler extends Thread {
 
     @Override
     public void run() {
-        System.out.println("Listener started");
+        LOGGER.info("Listener started");
         byte[] buffer = new byte[256];
 
         DatagramPacket inPacket = new DatagramPacket(buffer, buffer.length);
@@ -136,7 +138,7 @@ public class UDPHandler extends Thread {
                 String content = new String(inPacket.getData(), 0, inPacket.getLength());
 
                 if (!ThreadManager.isAddressLocalhost(inAddress)) { // Ignore all broadcasts coming from oneself
-                    System.out.println("Received broadcast from " + inAddress + " - " + content);
+                    LOGGER.info(() -> "Received broadcast from " + inAddress + " - " + content);
                     ThreadManager.notifyOnlineModif(content, inAddress);
                 }
             }

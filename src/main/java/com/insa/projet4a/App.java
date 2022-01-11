@@ -388,13 +388,12 @@ public class App extends Application {
                 !"".equals(pseudo);
     }
 
-
     public static void main(String[] args) throws InterruptedException, SecurityException, IOException {
         launch();
 
         LOGGER.info("Exited");
         FileHandler fileHandler = new FileHandler("logs.xml");
         LOGGER.addHandler(fileHandler);
-        
+
     }
 }
