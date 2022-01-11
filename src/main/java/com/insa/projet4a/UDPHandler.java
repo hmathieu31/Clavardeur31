@@ -94,8 +94,8 @@ public class UDPHandler extends Thread {
         DatagramSocket listenerInitSocket = new DatagramSocket(LISTENER_PORT);
         DatagramPacket inPacket = new DatagramPacket(buffer, buffer.length);
         while (keepListening) { // Keep listening until a user answers with "--INVALID--" or until 10s have
+                                // expired <=> no more answers are expected
             try {
-                // expired <=> no more answers are expected
                 listenerInitSocket.setSoTimeout(50);
                 while (keepListening) {
                     listenerInitSocket.receive(inPacket);

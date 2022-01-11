@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -45,7 +46,7 @@ public class App extends Application {
 
     private static HashMap<String, String> userCorresp = new HashMap<>();
 
-    private static final Logger LOGGER = Logger.getLogger("clavarder.app");
+    private static final Logger LOGGER = Logger.getLogger("clavarder");
 
     /**
      *
@@ -226,7 +227,7 @@ public class App extends Application {
     public static boolean isInitPseudoValid(String username) {
         boolean pseudoValidity = false;
         if (!hasConnected) {
-            if (threadManager.initUDPHandler(username) && isPseudoValid(username)) {
+            if (ThreadManager.initUDPHandler(username) && isPseudoValid(username)) {
                 pseudoValidity = true;
                 threadManager.startHandler();
                 threadManager.startUDPListener();
@@ -392,11 +393,12 @@ public class App extends Application {
     }
 
     public static void main(String[] args) throws InterruptedException, SecurityException, IOException {
+        FileHandler fileHandler = new FileHandler("logs.log");
+        LOGGER.addHandler(fileHandler);
+        fileHandler.setFormatter(new SimpleFormatter());
         launch();
 
         LOGGER.info("Exited");
-        FileHandler fileHandler = new FileHandler("logs.xml");
-        LOGGER.addHandler(fileHandler);
 
     }
 }
