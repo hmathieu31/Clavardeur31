@@ -76,8 +76,7 @@ public class ThreadManager extends Thread {
      * @throws IOException
      */
     public void createClientThread(int clientPort, InetAddress clientInetAddress) throws IOException {
-        TCPClient clientThread;
-        clientThread = new TCPClient(clientPort, clientInetAddress);
+        TCPClient clientThread = new TCPClient(clientPort, clientInetAddress);
         clientTable.put(clientInetAddress, clientThread);
         clientThread.run();
     }

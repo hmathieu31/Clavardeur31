@@ -312,7 +312,9 @@ public class App extends Application {
         try {
             threadManager.createClientThread(60000, receivAddress);
         } catch (IOException e) {
-            LOGGER.warning(() -> "Failed to establish connexion with target " + receivAddress);
+            LOGGER.severe(() -> "Failed to establish connexion with target " + receivAddress);
+            e.printStackTrace();
+            newDiscussion(receivAddress);
         }
     }
 
