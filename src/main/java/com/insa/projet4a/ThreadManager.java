@@ -93,7 +93,7 @@ public class ThreadManager extends Thread {
      * 
      * @return True if the pseudo is valid
      */
-    public static synchronized boolean initUDPHandler(String firstPseudo) {
+    public synchronized boolean initUDPHandler(String firstPseudo) {
 
         boolean initialisationValid = true;
 

@@ -226,7 +226,7 @@ public class App extends Application {
     public static boolean isInitPseudoValid(String username) {
         boolean pseudoValidity = false;
         if (!hasConnected) {
-            if (ThreadManager.initUDPHandler(username) && isPseudoValid(username)) {
+            if (App.threadManager.initUDPHandler(username) && isPseudoValid(username)) {
                 pseudoValidity = true;
                 threadManager.startHandler();
                 threadManager.startUDPListener();
