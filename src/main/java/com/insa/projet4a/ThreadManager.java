@@ -8,6 +8,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 import javafx.util.Pair;
 
@@ -29,6 +30,8 @@ public class ThreadManager extends Thread {
     private ServerSocket servSocket;
 
     private static UDPHandler udpHandler;
+
+    private static final Logger LOGGER = Logger.getLogger("clavarder.ThreadManager");
 
     /**
      * Creates a thread manager listening for incoming connections on {@code port}
@@ -99,6 +102,7 @@ public class ThreadManager extends Thread {
                 udpHandler = new UDPHandler();
             UDPHandler.sendMsg(InetAddress.getByName(LOCALHOST_ADDR), firstPseudo);
             ArrayList<Pair<String, InetAddress>> onlineUsers = udpHandler.listenForAnswers();
+            LOGGER.info(() -> "Finished listening for answers with online users = " + onlineUsers);
             if (onlineUsers == null) {
                 initialisationValid = false;
             } else {

@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -155,7 +156,6 @@ public class App extends Application {
      */
     public static void addUserCorresp(String ip, String name) {
         userCorresp.put(ip, name);
-        LOGGER.log(Level.INFO, () -> "user " + ip + " - " + name + "added to userCorresp");
     }
 
     @Override
@@ -392,11 +392,13 @@ public class App extends Application {
     }
 
     public static void main(String[] args) throws InterruptedException, SecurityException, IOException {
-        launch();
-
-        LOGGER.info("Exited");
-        FileHandler fileHandler = new FileHandler("logs.xml");
+        FileHandler fileHandler = new FileHandler("logs.log");
         LOGGER.addHandler(fileHandler);
+        fileHandler.setFormatter(new SimpleFormatter());
+        
+        launch();
+        
+        LOGGER.info("Exited");
 
     }
 }

@@ -85,7 +85,7 @@ public class UDPHandler extends Thread {
      *         if the pseudo is already taken
      * @throws IOException
      */
-    public ArrayList<Pair<String, InetAddress>> listenForAnswers() throws IOException {
+    public synchronized ArrayList<Pair<String, InetAddress>> listenForAnswers() throws IOException {
         ArrayList<Pair<String, InetAddress>> onlineUsers = new ArrayList<>();
         byte[] buffer = new byte[256];
 
