@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -45,6 +46,8 @@ public class MainController {
 
     @FXML
     private VBox connectedContainer;
+
+    private static final Logger LOGGER = Logger.getLogger("clavarder.mainController");
 
     Alert alert = new Alert(AlertType.ERROR,
             "Vous n'avez pas de discussion active, veuillez choisir un utilisateur avec qui communiquer.",
@@ -327,14 +330,16 @@ public class MainController {
 
         HBox oldCurrent = null;
         ObservableList<Node> connectedList = connectedContainer.getChildren();
+        LOGGER.info(connectedList.toString());
 
-        int i;
-        for (i=0; i < connectedList.size() ; i++) {
-            HBox connected = (HBox)connectedList.get(i);
-            if (connected.getId().equals(ip)){
-                oldCurrent = connected;
-                System.out.println(oldCurrent);
-            }
+        int i = 0;
+        if (connectedList.size() > 0){
+            for (i=0; i < connectedList.size() ; i++) {
+                HBox connected = (HBox)connectedList.get(i);
+                if (connected.getId().equals(ip)){
+                    oldCurrent = connected;
+                }
+            }  
         }
 
         if(oldCurrent != null){ // si l'user à enlever est affiché
