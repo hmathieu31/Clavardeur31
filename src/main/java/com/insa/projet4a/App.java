@@ -46,7 +46,7 @@ public class App extends Application {
 
     private static HashMap<String, String> userCorresp = new HashMap<>();
 
-    private static final Logger LOGGER = Logger.getLogger("clavarder.app");
+    private static final Logger LOGGER = Logger.getLogger("clavarder");
 
     /**
      *
@@ -226,7 +226,7 @@ public class App extends Application {
     public static boolean isInitPseudoValid(String username) {
         boolean pseudoValidity = false;
         if (!hasConnected) {
-            if (threadManager.initUDPHandler(username) && isPseudoValid(username)) {
+            if (ThreadManager.initUDPHandler(username) && isPseudoValid(username)) {
                 pseudoValidity = true;
                 threadManager.startHandler();
                 threadManager.startUDPListener();
