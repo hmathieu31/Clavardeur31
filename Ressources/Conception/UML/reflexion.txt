@@ -3,13 +3,10 @@ OK - diagramme de séquence générique (à finir)
    	-> changement de pseudo
    	-> init conversation et envoie de message
    	-> deconnexion
-   - (?)x components diagram
-   - diagram composite
    - quelques tests junit en plus 
    - "guide de comment tester à la main plusieurs cas"
-   - readme qui fait explique l'installation + les configurations nécessaires (version java, os etc..)
-   - manuel pour les utilisateurs
-   - pourquoi on a pris telle techno au lieu d'une autre (par ex sqlite et javafx)
+O  - readme qui fait explique l'installation + les configurations nécessaires (version java, os etc..)
+OK - manuel pour les utilisateurs
+OK - pourquoi on a pris telle techno au lieu d'une autre (par ex sqlite et javafx)
    - fix les petits bugs qu'il restait (je sais plus lesquels)
    - que je fasse un .jar à la fin quand version finale
-   - on mets un truc de téléchargement sur mon site
