@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class implements a TCP client-side connection handler, who connects to the
@@ -31,6 +33,8 @@ public class TCPClient extends Thread {
     private PrintWriter pWriter;
 
     private boolean running;
+
+    private static final Logger LOGGER = Logger.getLogger("clavarder.TCPClient");
     
 
     /**
@@ -80,7 +84,12 @@ public class TCPClient extends Thread {
      * @param msg
      */
     public void sendMsg(String msg) {
+        try {
         this.pWriter.println(msg);
+        } catch (NullPointerException e) {
+            LOGGER.log(Level.WARNING, "Host disconnected", e);
+            App.removeOnlineUser(address);
+        }
     }
 
     
