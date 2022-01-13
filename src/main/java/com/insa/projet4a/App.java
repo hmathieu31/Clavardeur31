@@ -231,12 +231,6 @@ public class App extends Application {
                 threadManager.startHandler();
                 threadManager.startUDPListener();
                 hasConnected = true;
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    LOGGER.log(Level.WARNING, "Inetterupted!", e);
-                    Thread.currentThread().interrupt();
-                }
                 for (InetAddress inetAddress : onlineUsers) {
                     newDiscussion(inetAddress);
                 }
