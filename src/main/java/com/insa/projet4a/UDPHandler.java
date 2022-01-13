@@ -4,9 +4,14 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import javafx.util.Pair;
@@ -66,12 +71,38 @@ public class UDPHandler extends Thread {
      */
     public static synchronized void sendMsg(InetAddress destinAddress, String msg) throws IOException {
         if (UDPHandler.broadcasterSocket == null) {
-            UDPHandler.broadcasterSocket = new DatagramSocket(BROADCASTER_PORT);
+            UDPHandler.broadcasterSocket = new DatagramSocket();
+            broadcasterSocket.setBroadcast(true);
         }
-
-        DatagramPacket outPacket = new DatagramPacket(msg.getBytes(), msg.length(), destinAddress, LISTENER_PORT);
+        DatagramPacket outPacket = new DatagramPacket(msg.getBytes(), msg.length());
+        if ("255.255.255.255".equals(destinAddress.getHostAddress())) {
+            for (InetAddress address : listAllBroadcastAddresses()) {
+                outPacket = new DatagramPacket(msg.getBytes(), msg.length(), address,
+                        LISTENER_PORT);
+            }
+        } else {
+            outPacket = new DatagramPacket(msg.getBytes(), msg.length(), destinAddress, LISTENER_PORT);
+        }
         broadcasterSocket.send(outPacket);
         LOGGER.info(() -> "UDP Send - " + msg + " to " + destinAddress);
+    }
+
+    private static List<InetAddress> listAllBroadcastAddresses() throws SocketException {
+        List<InetAddress> broadcastList = new ArrayList<>();
+        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+        while (interfaces.hasMoreElements()) {
+            NetworkInterface networkInterface = interfaces.nextElement();
+
+            if (networkInterface.isLoopback() || !networkInterface.isUp()) {
+                continue;
+            }
+
+            networkInterface.getInterfaceAddresses().stream()
+                    .map(InterfaceAddress::getBroadcast)
+                    .filter(Objects::nonNull)
+                    .forEach(broadcastList::add);
+        }
+        return broadcastList;
     }
 
     /**

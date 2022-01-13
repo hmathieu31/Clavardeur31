@@ -23,7 +23,8 @@ public class ThreadManager extends Thread {
     /**
      *
      */
-    private static final String LOCALHOST_ADDR = "255.255.255.255";
+    private static final String BROADCAST_ADDR = "255.255.255.255";
+    
     private int port;
     private boolean running = false;
 
@@ -100,7 +101,7 @@ public class ThreadManager extends Thread {
         try {
             if (udpHandler == null)
                 udpHandler = new UDPHandler();
-            UDPHandler.sendMsg(InetAddress.getByName(LOCALHOST_ADDR), firstPseudo);
+            UDPHandler.sendMsg(InetAddress.getByName(BROADCAST_ADDR), firstPseudo);
             ArrayList<Pair<String, InetAddress>> onlineUsers = udpHandler.listenForAnswers();
             LOGGER.info(() -> "Finished listening for answers with online users = " + onlineUsers);
             if (onlineUsers == null) {
@@ -235,7 +236,7 @@ public class ThreadManager extends Thread {
      * @throws UnknownHostException
      */
     public void broadcastDisconnection() throws IOException {
-        UDPHandler.sendMsg(InetAddress.getByName(LOCALHOST_ADDR), "--OFF--");
+        UDPHandler.sendMsg(InetAddress.getByName(BROADCAST_ADDR), "--OFF--");
     }
 
     /**
@@ -246,7 +247,7 @@ public class ThreadManager extends Thread {
      * @throws UnknownHostException
      */
     public void broadcastChangeUsername(String newUsername) throws IOException {
-        UDPHandler.sendMsg(InetAddress.getByName(LOCALHOST_ADDR), newUsername);
+        UDPHandler.sendMsg(InetAddress.getByName(BROADCAST_ADDR), newUsername);
     }
 
     /**
