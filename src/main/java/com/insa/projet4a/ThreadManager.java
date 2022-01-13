@@ -202,12 +202,13 @@ public class ThreadManager extends Thread {
             } else if (!"--INVALID--".equals(content)) { // Ignore --INVALID--
                                                          // messages
                 if (pseudoFree) {
+                    Thread.sleep(1000);
                     if (!App.getOnlineUsers().contains(senderAddress)) { // Send own pseudo only if this is a new user
                         UDPHandler.sendMsg(senderAddress, App.getPseudo());
+                        Thread.sleep(3000);
+                        App.newDiscussion(senderAddress);
                     }
                     App.addOnlineUsers(senderAddress, content);
-                    Thread.sleep(3500);
-                    App.newDiscussion(senderAddress);
                 } else { // The pseudo chosen by the new user is taken -> answer INVALID
                     UDPHandler.sendMsg(senderAddress, "--INVALID--");
                 }
