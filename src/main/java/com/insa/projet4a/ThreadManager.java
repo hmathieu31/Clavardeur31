@@ -202,12 +202,13 @@ public class ThreadManager extends Thread {
             } else if (!"--INVALID--".equals(content)) { // Ignore --INVALID--
                                                          // messages
                 if (pseudoFree) {
+                    Thread.sleep(1000);
                     if (!App.getOnlineUsers().contains(senderAddress)) { // Send own pseudo only if this is a new user
                         UDPHandler.sendMsg(senderAddress, App.getPseudo());
+                        Thread.sleep(2000);
+                        App.newDiscussion(senderAddress);
                     }
                     App.addOnlineUsers(senderAddress, content);
-                    Thread.sleep(3500);
-                    App.newDiscussion(senderAddress);
                 } else { // The pseudo chosen by the new user is taken -> answer INVALID
                     UDPHandler.sendMsg(senderAddress, "--INVALID--");
                 }
@@ -264,7 +265,8 @@ public class ThreadManager extends Thread {
         try {
             client.sendMsg(msg);
         } catch (NullPointerException e) {
-            LOGGER.log(Level.WARNING, "Host disconnected", e); // ? @HeineKayn Ca serait possible d'avoir une popup qui dit "l'utilisateur s'est déco"?
+            LOGGER.log(Level.WARNING, "Host disconnected", e); // ? @HeineKayn Ca serait possible d'avoir une popup qui
+                                                               // dit "l'utilisateur s'est déco"?
             App.removeOnlineUser(receivAddress);
         }
     }
