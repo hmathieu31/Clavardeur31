@@ -205,7 +205,7 @@ public class ThreadManager extends Thread {
                     Thread.sleep(1000);
                     if (!App.getOnlineUsers().contains(senderAddress)) { // Send own pseudo only if this is a new user
                         UDPHandler.sendMsg(senderAddress, App.getPseudo());
-                        Thread.sleep(2000);
+                        Thread.sleep(3000);
                         App.newDiscussion(senderAddress);
                     }
                     App.addOnlineUsers(senderAddress, content);
