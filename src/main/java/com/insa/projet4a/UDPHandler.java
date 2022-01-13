@@ -138,7 +138,7 @@ public class UDPHandler extends Thread {
 
                     if (!ThreadManager.isAddressLocalhost(inAddress)) {
                         if (!"--OFF--".equals(content) && !"--INVALID--".equals(content)) {
-                            LOGGER.fine(() -> "User discovered - " + inAddress);
+                            LOGGER.info(() -> "User discovered - " + inAddress);
                             onlineUsers.add(new Pair<String, InetAddress>(content, inAddress));
                         }
                         pseudoInvalid = "--INVALID--".equals(content);
