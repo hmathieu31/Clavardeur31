@@ -259,7 +259,11 @@ public class ThreadManager extends Thread {
      */
     protected void transmitMessage(String msg, InetAddress receivAddress) {
         TCPClient client = clientTable.get(receivAddress);
-        client.sendMsg(msg);
+            client.sendMsg(msg);
+        } catch (NullPointerException e) {
+            LOGGER.log(Level.WARNING, "Host disconnected", e); // ? @HeineKayn Ca serait possible d'avoir une popup qui dit "l'utilisateur s'est déco"?
+            App.removeOnlineUser(receivAddress);
+        }
     }
 
     @Override
