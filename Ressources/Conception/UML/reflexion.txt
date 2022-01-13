@@ -1,9 +1,8 @@
 OK - diagramme de séquence générique (à finir)
    - 2-3 diagramme de séquence plus précis 
-   	-> changement de pseudo
-   	-> init conversation et envoie de message
-   	-> deconnexion
-   - quelques tests junit en plus 
+OK 	-> init conversation et envoie de message
+OK 	-> deconnexion
+OK - quelques tests junit en plus 
    - "guide de comment tester à la main plusieurs cas"
 O  - readme qui fait explique l'installation + les configurations nécessaires (version java, os etc..)
 OK - manuel pour les utilisateurs
