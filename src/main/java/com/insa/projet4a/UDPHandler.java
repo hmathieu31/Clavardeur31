@@ -129,6 +129,7 @@ public class UDPHandler extends Thread {
         DatagramPacket inPacket = new DatagramPacket(buffer, buffer.length);
         while (keepListening) { // Keep listening until a user answers with "--INVALID--" or until the timer
                                 // expires <=> no more answers are expected
+            LOGGER.info("Started Listening for answers");
             try {
                 listenerInitSocket.setSoTimeout(2000);
                 while (keepListening) {
