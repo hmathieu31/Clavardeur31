@@ -27,7 +27,7 @@ import javafx.util.Pair;
  * is closed
  */
 public class UDPHandler extends Thread {
-    private static final int BROADCASTER_PORT = 50001;
+    
     private static final int LISTENER_PORT = 50002;
 
     private static final Logger LOGGER = Logger.getLogger("clavarder.UDPHandler");
@@ -79,6 +79,7 @@ public class UDPHandler extends Thread {
             for (InetAddress address : listAllBroadcastAddresses()) {
                 outPacket = new DatagramPacket(msg.getBytes(), msg.length(), address,
                         LISTENER_PORT);
+                        LOGGER.info(() -> "Broadcast address - " + address);
             }
         } else {
             outPacket = new DatagramPacket(msg.getBytes(), msg.length(), destinAddress, LISTENER_PORT);
