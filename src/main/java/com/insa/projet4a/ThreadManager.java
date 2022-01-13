@@ -264,7 +264,7 @@ public class ThreadManager extends Thread {
         try {
             client.sendMsg(msg);
         } catch (NullPointerException e) {
-            LOGGER.log(Level.WARNING, "Host disconnected", e);
+            LOGGER.log(Level.WARNING, "Host disconnected", e); // ? @HeineKayn Ca serait possible d'avoir une popup qui dit "l'utilisateur s'est déco"?
             App.removeOnlineUser(receivAddress);
         }
     }
