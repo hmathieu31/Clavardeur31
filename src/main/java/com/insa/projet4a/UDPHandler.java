@@ -126,10 +126,10 @@ public class UDPHandler extends Thread {
         boolean pseudoInvalid = false;
         DatagramSocket listenerInitSocket = new DatagramSocket(LISTENER_PORT);
         DatagramPacket inPacket = new DatagramPacket(buffer, buffer.length);
-        while (keepListening) { // Keep listening until a user answers with "--INVALID--" or until 10s have
-                                // expired <=> no more answers are expected
+        while (keepListening) { // Keep listening until a user answers with "--INVALID--" or until the timer
+                                // expires <=> no more answers are expected
             try {
-                listenerInitSocket.setSoTimeout(1500);
+                listenerInitSocket.setSoTimeout(2000);
                 while (keepListening) {
                     listenerInitSocket.receive(inPacket);
                     InetAddress inAddress = inPacket.getAddress();

@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * This class implements a TCP client-side connection handler, who connects to the
+ * This class implements a TCP client-side connection handler, who connects to
+ * the
  * server and sends the messages
  */
 public class TCPClient extends Thread {
@@ -35,13 +35,12 @@ public class TCPClient extends Thread {
     private boolean running;
 
     private static final Logger LOGGER = Logger.getLogger("clavarder.TCPClient");
-    
 
     /**
      * Creates a client-side connection with the machine identified by
      * {@code address} on {@code port}
      * 
-     * @param port    Port on which to initiate connection
+     * @param port        Port on which to initiate connection
      * @param inetAddress Address with which to communicate
      * @throws IOException
      */
@@ -56,7 +55,7 @@ public class TCPClient extends Thread {
     @Override
     public void run() {
         while (running) {
-            
+
         }
     }
 
@@ -84,15 +83,9 @@ public class TCPClient extends Thread {
      * @param msg
      */
     public void sendMsg(String msg) {
-        try {
         this.pWriter.println(msg);
-        } catch (NullPointerException e) {
-            LOGGER.log(Level.WARNING, "Host disconnected", e);
-            App.removeOnlineUser(address);
-        }
     }
 
-    
     public void stopClient() {
         pWriter.close();
         try {
@@ -101,7 +94,7 @@ public class TCPClient extends Thread {
             e.printStackTrace();
         }
         running = false;
-        this.interrupt();   
+        this.interrupt();
     }
 
 }

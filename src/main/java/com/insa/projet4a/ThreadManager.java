@@ -8,6 +8,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.util.Pair;
@@ -24,7 +25,7 @@ public class ThreadManager extends Thread {
      *
      */
     private static final String BROADCAST_ADDR = "255.255.255.255";
-    
+
     private int port;
     private boolean running = false;
 
@@ -205,7 +206,7 @@ public class ThreadManager extends Thread {
                         UDPHandler.sendMsg(senderAddress, App.getPseudo());
                     }
                     App.addOnlineUsers(senderAddress, content);
-                    Thread.sleep(1000);
+                    Thread.sleep(3500);
                     App.newDiscussion(senderAddress);
                 } else { // The pseudo chosen by the new user is taken -> answer INVALID
                     UDPHandler.sendMsg(senderAddress, "--INVALID--");
@@ -260,7 +261,12 @@ public class ThreadManager extends Thread {
      */
     protected void transmitMessage(String msg, InetAddress receivAddress) {
         TCPClient client = clientTable.get(receivAddress);
-        client.sendMsg(msg);
+        try {
+            client.sendMsg(msg);
+        } catch (NullPointerException e) {
+            LOGGER.log(Level.WARNING, "Host disconnected", e);
+            App.removeOnlineUser(receivAddress);
+        }
     }
 
     @Override

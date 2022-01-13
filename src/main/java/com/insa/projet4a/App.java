@@ -296,7 +296,6 @@ public class App extends Application {
                     }
                 });
             }
-            // newDiscussion(newUserAddress);
         } else {
             if (isMainControllerInit) { // ! Possibly useless condition
                 Platform.runLater(() -> controller.updateConnected(newUserAddress.getHostAddress()));
