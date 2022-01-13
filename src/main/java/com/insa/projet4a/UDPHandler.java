@@ -80,13 +80,13 @@ public class UDPHandler extends Thread {
                 outPacket = new DatagramPacket(msg.getBytes(), msg.length(), address,
                         LISTENER_PORT);
                 broadcasterSocket.send(outPacket);
-                LOGGER.info(() -> "Broadcast address - " + address);
+                LOGGER.info(() -> "UDP Send - " + msg + " to " + address);
             }
         } else {
             outPacket = new DatagramPacket(msg.getBytes(), msg.length(), destinAddress, LISTENER_PORT);
             broadcasterSocket.send(outPacket);
+            LOGGER.info(() -> "UDP Send - " + msg + " to " + destinAddress);
         }
-        LOGGER.info(() -> "UDP Send - " + msg + " to " + destinAddress);
     }
 
     private static List<InetAddress> listAllBroadcastAddresses() throws SocketException {
