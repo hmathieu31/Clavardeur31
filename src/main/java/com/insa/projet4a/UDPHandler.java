@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.util.Pair;
@@ -137,6 +138,7 @@ public class UDPHandler extends Thread {
 
                     if (!ThreadManager.isAddressLocalhost(inAddress)) {
                         if (!"--OFF--".equals(content) && !"--INVALID--".equals(content)) {
+                            LOGGER.fine(() -> "User discovered - " + inAddress);
                             onlineUsers.add(new Pair<String, InetAddress>(content, inAddress));
                         }
                         pseudoInvalid = "--INVALID--".equals(content);
