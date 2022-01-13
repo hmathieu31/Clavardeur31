@@ -8,6 +8,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.util.Pair;
@@ -259,6 +260,7 @@ public class ThreadManager extends Thread {
      */
     protected void transmitMessage(String msg, InetAddress receivAddress) {
         TCPClient client = clientTable.get(receivAddress);
+        try {
             client.sendMsg(msg);
         } catch (NullPointerException e) {
             LOGGER.log(Level.WARNING, "Host disconnected", e); // ? @HeineKayn Ca serait possible d'avoir une popup qui dit "l'utilisateur s'est déco"?
