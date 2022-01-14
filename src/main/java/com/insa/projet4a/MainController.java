@@ -332,8 +332,7 @@ public class MainController {
         HBox oldCurrent = null;
         ObservableList<Node> connectedList = connectedContainer.getChildren();
 
-        alertDisconnect.show();
-
+        // On attrape la box correspondant à l'utilisateur qu'on veut supprimer
         int i = 0;
         if (connectedList.size() > 0){
             for (i=0; i < connectedList.size() ; i++) {
@@ -344,10 +343,16 @@ public class MainController {
             }  
         }
 
-        if(oldCurrent != null){ // si l'user à enlever est affiché
+        if(oldCurrent != null){
             connectedContainer.getChildren().remove(oldCurrent);
+        }
 
-            if(i > 1){ // on prend celui d'au dessus 
+        // Si l'user à enlever est affiché et que c'est sur lui qu'on avait le focus
+        if(App.getCurrentDiscussionIp().equals(ip)){ 
+
+            alertDisconnect.show();
+
+            if(i > 1){ // on focus celui d'au dessus 
                 HBox newCurrent = (HBox)connectedList.get(i-1);
                 newCurrent.fireEvent(new ActionEvent());
             }
