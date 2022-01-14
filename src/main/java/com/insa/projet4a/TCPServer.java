@@ -25,7 +25,7 @@ class TCPServer extends Thread {
 
     @Override
     public void run() {
-        LOGGER.info(() -> "Server started - " + this);
+        LOGGER.fine(() -> "Server started - " + this);
         try {
             LOGGER.info(() -> "Received a connection from " + this.socket.getInetAddress());
             running = true;
@@ -47,7 +47,7 @@ class TCPServer extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        LOGGER.info(() -> "Listener terminated - " + this);
+        LOGGER.fine(() -> "Listener terminated - " + this);
     }
 
 }
