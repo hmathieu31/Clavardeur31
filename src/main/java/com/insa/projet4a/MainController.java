@@ -332,6 +332,8 @@ public class MainController {
         HBox oldCurrent = null;
         ObservableList<Node> connectedList = connectedContainer.getChildren();
 
+        alertDisconnect.show();
+
         // On attrape la box correspondant à l'utilisateur qu'on veut supprimer
         int i = 0;
         if (connectedList.size() > 0){
