@@ -160,7 +160,7 @@ public class UDPHandler extends Thread {
 
     @Override
     public void run() {
-        LOGGER.info("Listener started");
+        LOGGER.info(() -> "Listener started - " + this);
         byte[] buffer = new byte[256];
 
         DatagramPacket inPacket = new DatagramPacket(buffer, buffer.length);
@@ -180,7 +180,7 @@ public class UDPHandler extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        LOGGER.info(() -> "Listener terminated - " + this);
     }
 
 }
