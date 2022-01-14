@@ -201,12 +201,14 @@ public class ThreadManager extends Thread {
      * @throws UnknownHostException
      */
     protected static void notifyOnlineModif(String content, InetAddress senderAddress) throws UnknownHostException {
-
-        boolean pseudoFree = !content.equals(App.getPseudo()); // Compare the desired pseudo to the App pseudo
         try {
-            if ("--OFF--".equals(content)) { // The user has disconnected -> removal
-                // from the list
+            if ("--OFF--".equals(content)) { // The user has disconnected -> removal from the list
+                //
                 App.removeOnlineUser(senderAddress);
+            } else if (content.equals(App.getPseudo())) {
+                Thread.sleep(1000);
+                UDPHandler.sendMsg(senderAddress, "--INVALID--");
+
             } else if (!"--INVALID--".equals(content) && !App.getUserCorresp().containsValue(content)) {
                 /*
                  * Flags --INVALID-- need no answering to for obvious reasons.
@@ -214,20 +216,17 @@ public class ThreadManager extends Thread {
                  * username already taken by another. ==> Allows the fix the multi-interface
                  * broadcast issue
                  */
-                if (pseudoFree) {
-                    Thread.sleep(1000);
-                    if (!App.getOnlineUsers().contains(senderAddress)) { // Send own pseudo only if this is a new
-                                                                         // user
-                        UDPHandler.sendMsg(senderAddress, App.getPseudo());
-                        Thread.sleep(3000);
-                        App.newDiscussion(senderAddress);
-                    }
-                    App.addOnlineUsers(senderAddress, content);
-                } else { // The pseudo chosen by the new user is taken -> answer INVALID
-                    UDPHandler.sendMsg(senderAddress, "--INVALID--");
+                Thread.sleep(1000);
+                if (!App.getOnlineUsers().contains(senderAddress)) { // Send own pseudo only if this is a new
+                                                                     // user
+                    UDPHandler.sendMsg(senderAddress, App.getPseudo());
+                    Thread.sleep(3000);
+                    App.newDiscussion(senderAddress);
                 }
+                App.addOnlineUsers(senderAddress, content);
             }
-        } catch (Exception e) {
+        } catch (
+        Exception e) {
             e.printStackTrace();
         }
     }
