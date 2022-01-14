@@ -339,6 +339,7 @@ public class MainController {
                 HBox connected = (HBox)connectedList.get(i);
                 if (connected.getId().equals(ip)){
                     oldCurrent = connected;
+                    break;
                 }
             }  
         }
