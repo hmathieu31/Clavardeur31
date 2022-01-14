@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.util.Pair;
@@ -36,6 +35,8 @@ public class UDPHandler extends Thread {
     private boolean running;
     private static DatagramSocket broadcasterSocket;
 
+    DatagramSocket listenerRunnableSocket;
+
     /**
      * Creates a new UDPHandler listening for broadcasts on port {@code 50002} and
      * emitting on port {@code 50001}
@@ -52,7 +53,7 @@ public class UDPHandler extends Thread {
     public void stopListener() {
         running = false;
         broadcasterSocket.close();
-        this.interrupt();
+        listenerRunnableSocket.close();
     }
 
     /**
@@ -163,9 +164,10 @@ public class UDPHandler extends Thread {
     public void run() {
         LOGGER.info("Listener started");
         byte[] buffer = new byte[256];
-
+        
         DatagramPacket inPacket = new DatagramPacket(buffer, buffer.length);
-        try (DatagramSocket listenerRunnableSocket = new DatagramSocket(LISTENER_PORT)) {
+        try {
+            listenerRunnableSocket = new DatagramSocket(LISTENER_PORT);
             while (running) {
                 listenerRunnableSocket.setSoTimeout(0);
                 listenerRunnableSocket.receive(inPacket);
@@ -181,7 +183,8 @@ public class UDPHandler extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        LOGGER.info(() -> "Listener terminated - " + this);
+        this.interrupt();
     }
 
 }

@@ -368,6 +368,7 @@ public class App extends Application {
             try {
                 threadManager.broadcastDisconnection();
                 threadManager.stopUDPHandler();
+                threadManager.terminateAllThreads();
                 threadManager.stopHandler();
             } catch (IOException e) {
                 e.printStackTrace();

@@ -35,6 +35,8 @@ public class ThreadManager extends Thread {
 
     private static final Logger LOGGER = Logger.getLogger("clavarder.ThreadManager");
 
+    private ArrayList<Thread> threadList = new ArrayList<>();
+
     /**
      * Creates a thread manager listening for incoming connections on {@code port}
      * and handling the creation and destruction of {@link TCPClient TCPClient} and
@@ -83,7 +85,6 @@ public class ThreadManager extends Thread {
     public void createClientThread(int serverPort, InetAddress serverInetAddress) throws IOException {
         TCPClient clientThread = new TCPClient(serverPort, serverInetAddress);
         clientTable.put(serverInetAddress, clientThread);
-        // clientThread.run();
     }
 
     /**
@@ -96,9 +97,7 @@ public class ThreadManager extends Thread {
      * @return True if the pseudo is valid
      */
     public synchronized boolean initUDPHandler(String firstPseudo) {
-
         boolean initialisationValid = true;
-
         try {
             if (udpHandler == null)
                 udpHandler = new UDPHandler();
@@ -115,6 +114,9 @@ public class ThreadManager extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (initialisationValid) {
+            threadList.add(udpHandler);
+        }
         return initialisationValid;
     }
 
@@ -130,6 +132,12 @@ public class ThreadManager extends Thread {
      */
     public void stopUDPHandler() {
         udpHandler.stopListener();
+    }
+
+    public void terminateAllThreads() {
+        for (Thread thread : threadList) {
+            thread.interrupt();
+        }
     }
 
     /**
@@ -193,12 +201,14 @@ public class ThreadManager extends Thread {
      * @throws UnknownHostException
      */
     protected static void notifyOnlineModif(String content, InetAddress senderAddress) throws UnknownHostException {
-
-        boolean pseudoFree = !content.equals(App.getPseudo()); // Compare the desired pseudo to the App pseudo
         try {
-            if ("--OFF--".equals(content)) { // The user has disconnected -> removal
-                // from the list
+            if ("--OFF--".equals(content)) { // The user has disconnected -> removal from the list
+                //
                 App.removeOnlineUser(senderAddress);
+            } else if (content.equals(App.getPseudo())) {
+                Thread.sleep(1000);
+                UDPHandler.sendMsg(senderAddress, "--INVALID--");
+
             } else if (!"--INVALID--".equals(content) && !App.getUserCorresp().containsValue(content)) {
                 /*
                  * Flags --INVALID-- need no answering to for obvious reasons.
@@ -206,20 +216,17 @@ public class ThreadManager extends Thread {
                  * username already taken by another. ==> Allows the fix the multi-interface
                  * broadcast issue
                  */
-                if (pseudoFree) {
-                    Thread.sleep(1000);
-                    if (!App.getOnlineUsers().contains(senderAddress)) { // Send own pseudo only if this is a new
-                                                                         // user
-                        UDPHandler.sendMsg(senderAddress, App.getPseudo());
-                        Thread.sleep(3000);
-                        App.newDiscussion(senderAddress);
-                    }
-                    App.addOnlineUsers(senderAddress, content);
-                } else { // The pseudo chosen by the new user is taken -> answer INVALID
-                    UDPHandler.sendMsg(senderAddress, "--INVALID--");
+                Thread.sleep(1000);
+                if (!App.getOnlineUsers().contains(senderAddress)) { // Send own pseudo only if this is a new
+                                                                     // user
+                    UDPHandler.sendMsg(senderAddress, App.getPseudo());
+                    Thread.sleep(3000);
+                    App.newDiscussion(senderAddress);
                 }
+                App.addOnlineUsers(senderAddress, content);
             }
-        } catch (Exception e) {
+        } catch (
+        Exception e) {
             e.printStackTrace();
         }
     }
@@ -286,6 +293,7 @@ public class ThreadManager extends Thread {
 
                 TCPServer requestHandler = new TCPServer(socket);
                 serverTable.put(socket.getInetAddress(), requestHandler); // Adds the Server thread to table
+                threadList.add(requestHandler);
                 requestHandler.start();
             } catch (Exception e) {
                 if (!(e instanceof SocketException))

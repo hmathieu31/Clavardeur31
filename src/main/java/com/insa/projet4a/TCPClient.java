@@ -7,8 +7,7 @@ import java.net.Socket;
 
 /**
  * This class implements a TCP client-side connection handler, who connects to
- * the
- * server and sends the messages
+ * the server and sends the messages
  */
 public class TCPClient {
     /**
@@ -31,8 +30,6 @@ public class TCPClient {
      */
     private PrintWriter pWriter;
 
-    private boolean running;
-
     /**
      * Creates a client-side connection with the machine identified by
      * {@code address} on {@code port}
@@ -48,13 +45,6 @@ public class TCPClient {
         this.socket = new Socket(address, port);
         this.pWriter = new PrintWriter(socket.getOutputStream(), true);
     }
-
-    // @Override
-    // public void run() {
-    //     while (running) {
-
-    //     }
-    // }
 
     /**
      * Get the {@code port} on which the client emits
@@ -90,8 +80,7 @@ public class TCPClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // running = false;
-        // this.interrupt();
+
     }
 
 }
