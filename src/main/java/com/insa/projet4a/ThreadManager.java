@@ -199,11 +199,17 @@ public class ThreadManager extends Thread {
             if ("--OFF--".equals(content)) { // The user has disconnected -> removal
                 // from the list
                 App.removeOnlineUser(senderAddress);
-            } else if (!"--INVALID--".equals(content)) { // Ignore --INVALID--
-                                                         // messages
+            } else if (!"--INVALID--".equals(content) && !App.getUserCorresp().containsValue(content)) {
+                /*
+                 * Flags --INVALID-- need no answering to for obvious reasons.
+                 * We don't want to do anything either when a user attempts to connect using a
+                 * username already taken by another. ==> Allows the fix the multi-interface
+                 * broadcast issue
+                 */
                 if (pseudoFree) {
                     Thread.sleep(1000);
-                    if (!App.getOnlineUsers().contains(senderAddress)) { // Send own pseudo only if this is a new user
+                    if (!App.getOnlineUsers().contains(senderAddress)) { // Send own pseudo only if this is a new
+                                                                         // user
                         UDPHandler.sendMsg(senderAddress, App.getPseudo());
                         Thread.sleep(3000);
                         App.newDiscussion(senderAddress);
