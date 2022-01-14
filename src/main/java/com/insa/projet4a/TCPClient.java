@@ -90,8 +90,7 @@ public class TCPClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // running = false;
-        // this.interrupt();
+
     }
 
 }

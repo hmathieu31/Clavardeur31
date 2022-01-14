@@ -35,6 +35,8 @@ public class ThreadManager extends Thread {
 
     private static final Logger LOGGER = Logger.getLogger("clavarder.ThreadManager");
 
+    private ArrayList<Thread> threadList = new ArrayList<>();
+
     /**
      * Creates a thread manager listening for incoming connections on {@code port}
      * and handling the creation and destruction of {@link TCPClient TCPClient} and
@@ -83,7 +85,6 @@ public class ThreadManager extends Thread {
     public void createClientThread(int serverPort, InetAddress serverInetAddress) throws IOException {
         TCPClient clientThread = new TCPClient(serverPort, serverInetAddress);
         clientTable.put(serverInetAddress, clientThread);
-        // clientThread.run();
     }
 
     /**
@@ -96,9 +97,7 @@ public class ThreadManager extends Thread {
      * @return True if the pseudo is valid
      */
     public synchronized boolean initUDPHandler(String firstPseudo) {
-
         boolean initialisationValid = true;
-
         try {
             if (udpHandler == null)
                 udpHandler = new UDPHandler();
@@ -115,6 +114,9 @@ public class ThreadManager extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (initialisationValid) {
+            threadList.add(udpHandler);
+        }
         return initialisationValid;
     }
 
@@ -130,6 +132,12 @@ public class ThreadManager extends Thread {
      */
     public void stopUDPHandler() {
         udpHandler.stopListener();
+    }
+
+    public void terminateAllThreads() {
+        for (Thread thread : threadList) {
+            thread.interrupt();
+        }
     }
 
     /**
@@ -287,6 +295,7 @@ public class ThreadManager extends Thread {
 
                 TCPServer requestHandler = new TCPServer(socket);
                 serverTable.put(socket.getInetAddress(), requestHandler); // Adds the Server thread to table
+                threadList.add(requestHandler);
                 requestHandler.start();
             } catch (Exception e) {
                 if (!(e instanceof SocketException))
