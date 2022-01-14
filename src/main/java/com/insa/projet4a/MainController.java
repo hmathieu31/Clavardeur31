@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -47,10 +46,12 @@ public class MainController {
     @FXML
     private VBox connectedContainer;
 
-    private static final Logger LOGGER = Logger.getLogger("clavarder.mainController");
-
-    Alert alert = new Alert(AlertType.ERROR,
+    Alert alertSelected = new Alert(AlertType.NONE,
             "Vous n'avez pas de discussion active, veuillez choisir un utilisateur avec qui communiquer.",
+            ButtonType.OK);
+
+    Alert alertDisconnect = new Alert(AlertType.NONE,
+            "L'utilisateur correspondant s'est déconnecté inopinément.",
             ButtonType.OK);
 
     @FXML
@@ -235,7 +236,7 @@ public class MainController {
 
                     App.transmitMessage(messageText, InetAddress.getByName(ip));
                 } else {
-                    alert.show();
+                    alertSelected.show();
                 }
             }
         }
@@ -330,7 +331,8 @@ public class MainController {
 
         HBox oldCurrent = null;
         ObservableList<Node> connectedList = connectedContainer.getChildren();
-        LOGGER.info(connectedList.toString());
+
+        alertDisconnect.show();
 
         int i = 0;
         if (connectedList.size() > 0){
@@ -431,7 +433,7 @@ public class MainController {
             // FAUT CORRESP IP/NOM
             this.bdd.clearHistory(App.getCurrentDiscussionIp());
         } else {
-            alert.show();
+            alertSelected.show();
         }
     }
 

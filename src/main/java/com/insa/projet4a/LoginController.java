@@ -15,8 +15,8 @@ import javafx.stage.Stage;
 public class LoginController {
 
     @FXML
-    Alert alert = new Alert(AlertType.ERROR,
-            "This name is taken, try again with another one.",
+    Alert alert = new Alert(AlertType.NONE,
+            "Ce nom est déjà pris essayez en un autre.",
             ButtonType.OK);
 
     @FXML
