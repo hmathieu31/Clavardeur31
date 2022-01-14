@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -47,10 +46,12 @@ public class MainController {
     @FXML
     private VBox connectedContainer;
 
-    private static final Logger LOGGER = Logger.getLogger("clavarder.mainController");
-
-    Alert alert = new Alert(AlertType.ERROR,
+    Alert alertSelected = new Alert(AlertType.NONE,
             "Vous n'avez pas de discussion active, veuillez choisir un utilisateur avec qui communiquer.",
+            ButtonType.OK);
+
+    Alert alertDisconnect = new Alert(AlertType.NONE,
+            "L'utilisateur correspondant s'est déconnecté inopinément.",
             ButtonType.OK);
 
     @FXML
@@ -235,7 +236,7 @@ public class MainController {
 
                     App.transmitMessage(messageText, InetAddress.getByName(ip));
                 } else {
-                    alert.show();
+                    alertSelected.show();
                 }
             }
         }
@@ -330,22 +331,29 @@ public class MainController {
 
         HBox oldCurrent = null;
         ObservableList<Node> connectedList = connectedContainer.getChildren();
-        LOGGER.info(connectedList.toString());
 
+        // On attrape la box correspondant à l'utilisateur qu'on veut supprimer
         int i = 0;
         if (connectedList.size() > 0){
             for (i=0; i < connectedList.size() ; i++) {
                 HBox connected = (HBox)connectedList.get(i);
                 if (connected.getId().equals(ip)){
                     oldCurrent = connected;
+                    break;
                 }
             }  
         }
 
-        if(oldCurrent != null){ // si l'user à enlever est affiché
+        if(oldCurrent != null){
             connectedContainer.getChildren().remove(oldCurrent);
+        }
 
-            if(i > 1){ // on prend celui d'au dessus 
+        // Si l'user à enlever est affiché et que c'est sur lui qu'on avait le focus
+        if(App.getCurrentDiscussionIp().equals(ip)){ 
+
+            alertDisconnect.show();
+
+            if(i > 1){ // on focus celui d'au dessus 
                 HBox newCurrent = (HBox)connectedList.get(i-1);
                 newCurrent.fireEvent(new ActionEvent());
             }
@@ -431,7 +439,7 @@ public class MainController {
             // FAUT CORRESP IP/NOM
             this.bdd.clearHistory(App.getCurrentDiscussionIp());
         } else {
-            alert.show();
+            alertSelected.show();
         }
     }
 

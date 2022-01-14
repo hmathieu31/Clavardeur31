@@ -147,11 +147,11 @@ public class ThreadManager extends Thread {
      * @param address
      */
     public static void closeConnectionThreads(InetAddress address) {
-        closeClientThread(address);
+        closeClient(address);
         closeServerThread(address);
     }
 
-    private static void closeClientThread(InetAddress address) {
+    private static void closeClient(InetAddress address) {
         TCPClient client = clientTable.get(address);
         if (client != null) {
             client.stopClient();
@@ -187,7 +187,7 @@ public class ThreadManager extends Thread {
      * @param address Address of the client which ended the connection
      */
     protected static void notifyConnectionClosed(InetAddress address) {
-        closeClientThread(address);
+        closeClient(address);
         serverTable.remove(address);
     }
 
@@ -203,9 +203,9 @@ public class ThreadManager extends Thread {
     protected static void notifyOnlineModif(String content, InetAddress senderAddress) throws UnknownHostException {
         try {
             if ("--OFF--".equals(content)) { // The user has disconnected -> removal from the list
-                //
-                App.removeOnlineUser(senderAddress);
-            } else if (content.equals(App.getPseudo())) {
+            App.removeOnlineUser(senderAddress);
+            } else
+            if (content.equals(App.getPseudo())) {
                 Thread.sleep(1000);
                 UDPHandler.sendMsg(senderAddress, "--INVALID--");
 
@@ -225,8 +225,7 @@ public class ThreadManager extends Thread {
                 }
                 App.addOnlineUsers(senderAddress, content);
             }
-        } catch (
-        Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
