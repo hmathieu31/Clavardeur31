@@ -83,7 +83,7 @@ public class ThreadManager extends Thread {
     public void createClientThread(int serverPort, InetAddress serverInetAddress) throws IOException {
         TCPClient clientThread = new TCPClient(serverPort, serverInetAddress);
         clientTable.put(serverInetAddress, clientThread);
-        clientThread.run();
+        // clientThread.run();
     }
 
     /**
