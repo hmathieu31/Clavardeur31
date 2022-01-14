@@ -189,6 +189,7 @@ public class ThreadManager extends Thread {
     protected static void notifyConnectionClosed(InetAddress address) {
         closeClientThread(address);
         serverTable.remove(address);
+        App.removeOnlineUser(address);
     }
 
     /**
