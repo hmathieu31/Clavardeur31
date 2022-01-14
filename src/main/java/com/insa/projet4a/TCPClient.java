@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.logging.Logger;
 
 /**
  * This class implements a TCP client-side connection handler, who connects to
@@ -33,8 +32,6 @@ public class TCPClient extends Thread {
     private PrintWriter pWriter;
 
     private boolean running;
-
-    private static final Logger LOGGER = Logger.getLogger("clavarder.TCPClient");
 
     /**
      * Creates a client-side connection with the machine identified by
