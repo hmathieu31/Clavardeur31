@@ -45,7 +45,6 @@ public class UDPHandler extends Thread {
      */
     public UDPHandler() throws SocketException {
         super();
-        listenerRunnableSocket = new DatagramSocket(LISTENER_PORT);
     }
 
     /**
@@ -165,9 +164,10 @@ public class UDPHandler extends Thread {
     public void run() {
         LOGGER.info(() -> "Listener started - " + this);
         byte[] buffer = new byte[256];
-
+        
         DatagramPacket inPacket = new DatagramPacket(buffer, buffer.length);
         try {
+            listenerRunnableSocket = new DatagramSocket(LISTENER_PORT);
             while (running) {
                 listenerRunnableSocket.setSoTimeout(0);
                 listenerRunnableSocket.receive(inPacket);
