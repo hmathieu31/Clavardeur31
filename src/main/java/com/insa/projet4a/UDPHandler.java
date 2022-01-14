@@ -51,7 +51,6 @@ public class UDPHandler extends Thread {
     public void stopListener() {
         running = false;
         broadcasterSocket.close();
-        this.interrupt();
     }
 
     /**
@@ -181,6 +180,7 @@ public class UDPHandler extends Thread {
             e.printStackTrace();
         }
         LOGGER.info(() -> "Listener terminated - " + this);
+        this.interrupt();
     }
 
 }
