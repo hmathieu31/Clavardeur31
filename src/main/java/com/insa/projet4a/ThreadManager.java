@@ -288,7 +288,7 @@ public class ThreadManager extends Thread {
     @Override
     public void run() {
         running = true;
-        LOGGER.info(() -> "Thread Handler started - " + this);
+        LOGGER.fine(() -> "Thread Handler started - " + this);
         while (running) {
             try {
 
@@ -303,7 +303,7 @@ public class ThreadManager extends Thread {
                     e.printStackTrace();
             }
         }
-        LOGGER.info(() -> "Thread Handler terminated - " + this);
+        LOGGER.fine(() -> "Thread Handler terminated - " + this);
     }
 
 }
