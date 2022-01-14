@@ -10,7 +10,7 @@ import java.net.Socket;
  * the
  * server and sends the messages
  */
-public class TCPClient extends Thread {
+public class TCPClient {
     /**
      * Port on which the connexion is implemented
      */
@@ -49,12 +49,12 @@ public class TCPClient extends Thread {
         this.pWriter = new PrintWriter(socket.getOutputStream(), true);
     }
 
-    @Override
-    public void run() {
-        while (running) {
+    // @Override
+    // public void run() {
+    //     while (running) {
 
-        }
-    }
+    //     }
+    // }
 
     /**
      * Get the {@code port} on which the client emits
@@ -90,8 +90,8 @@ public class TCPClient extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        running = false;
-        this.interrupt();
+        // running = false;
+        // this.interrupt();
     }
 
 }
