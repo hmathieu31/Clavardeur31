@@ -334,7 +334,7 @@ public class MainController {
 
         int i = 0;
         if (connectedList.size() > 0){
-            for (i=0; i < connectedList.size() ; i++) {
+            for (i=0; i < connectedList.size()-1 ; i++) {
                 HBox connected = (HBox)connectedList.get(i);
                 if (connected.getId().equals(ip)){
                     oldCurrent = connected;
