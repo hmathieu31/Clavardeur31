@@ -51,7 +51,7 @@ public class MainController {
             ButtonType.OK);
 
     Alert alertDisconnect = new Alert(AlertType.NONE,
-            "L'utilisateur correspondant s'est déconnecté inopinément.",
+            "L'utilisateur correspondant s'étant déconnecté, vous avez été redirigé.",
             ButtonType.OK);
 
     @FXML
@@ -346,25 +346,34 @@ public class MainController {
 
         if(oldCurrent != null){
             connectedContainer.getChildren().remove(oldCurrent);
-        }
+            connectedList = connectedContainer.getChildren();
 
-        // Si l'user à enlever est affiché et que c'est sur lui qu'on avait le focus
-        if(App.getCurrentDiscussionIp().equals(ip)){ 
+            // Si l'user à enlever est affiché et que c'est sur lui qu'on avait le focus
+            if(App.getCurrentDiscussionIp().equals(ip)){ 
 
-            alertDisconnect.show();
+                alertDisconnect.show();
 
-            if(i > 1){ // on focus celui d'au dessus 
-                HBox newCurrent = (HBox)connectedList.get(i-1);
-                newCurrent.fireEvent(new ActionEvent());
-            }
-            else{ // si y'en a pas au dessus on remet l'écran d'acceuil
-                App.setCurrentDiscussionIp("");
-                resetMessage();
-                ArrayList<Message> list = new ArrayList<>();
-                list.add(new Message(true, currentDate(), "Bienvenue dans Clavardeur31"));
-                list.add(new Message(true, currentDate(),
-                        "Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives \n Selectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
-                loadMessages(list);
+                // Si on peut focus quelqu'un d'autre
+                if (connectedList.size() > 1){
+
+                    // On focus celui au dessus 
+                    if(i > 1){  
+                        i -= 1; 
+                    }
+                    HBox newCurrent = (HBox)connectedList.get(i); // Sinon c'est celui d'en dessous qui est pris
+                    newCurrent.fireEvent(new ActionEvent());
+                }
+                
+                // Si y'a personne à focus on remet l'écran d'acceuil
+                else{ 
+                    App.setCurrentDiscussionIp("");
+                    resetMessage();
+                    ArrayList<Message> list = new ArrayList<>();
+                    list.add(new Message(true, currentDate(), "Bienvenue dans Clavardeur31"));
+                    list.add(new Message(true, currentDate(),
+                            "Pour envoyer un message veuillez ajouter un utilisateur à vos discussions actives \n Selectionnez ensuite dans cette liste un utilisateur avec qui discuter."));
+                    loadMessages(list);
+                }
             }
         }
     }
