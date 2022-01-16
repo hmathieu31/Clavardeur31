@@ -12,7 +12,7 @@
     <li><a href="#-requirements-">Requirements</a></li>
     <li><a href="#-installation-">Installation</a></li>
     <li><a href="#-screenshots-">Screenshots</a></li>
-  </ul>
+  </ul>``
 </details>
 
 
@@ -33,11 +33,11 @@ Java version 11 or above is required
 <!-- HOW TO INSTALL -->
 <h1> Installation </h1>
 
-<a href="https://github.com/hmathieu-insat/Clavardeur31/releases/download/v1.0.0/Clavardeur.jar">Download Link</a>
+<a href="https://github.com/hmathieu-insat/Clavardeur31/releases/download/v1.1.0/Clavardeur31-1.1.0-shaded.jar">Download Link</a>
 
 The application is released under the form of a fat-jar including all necessary dependancies for the execution as is. The installation does not need any preliminar installation and can be directly executed.
 
-`java -jar Clavardeur31-1.0-SNAPSHOT-shaded`
+`java -jar Clavardeur31-1.1.0-shaded.jar`
 
 On first start, the application will create a `conversation.db` in the parent directory. The file should be kept in the same directory as the application for the message history to be kept.
 
