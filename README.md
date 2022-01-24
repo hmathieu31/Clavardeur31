@@ -46,6 +46,8 @@ On first start, the application will create a `conversation.db` in the parent di
 <!-- Screenshots -->
 <h1> Screenshots </h1>
 
-*Insert screenshots*
+![Application loading screen](https://github.com/hmathieu-insat/Clavardeur31/blob/main/Ressources/Screenshots/Screenshot%202022-01-24%20185709.png)
+
+![Application Home screen](https://github.com/hmathieu-insat/Clavardeur31/blob/main/Ressources/Screenshots/Screenshot%202022-01-24%20185727.png)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
