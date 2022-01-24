@@ -48,6 +48,10 @@ On first start, the application will create a `conversation.db` in the parent di
 
 ![Application loading screen](https://github.com/hmathieu-insat/Clavardeur31/blob/main/Ressources/Screenshots/Screenshot%202022-01-24%20185709.png)
 
+*Loading and change of username screen*
+
 ![Application Home screen](https://github.com/hmathieu-insat/Clavardeur31/blob/main/Ressources/Screenshots/Screenshot%202022-01-24%20185727.png)
+
+*Homepage of the application and list of all conversations*
 
 <p align="right">(<a href="#top">back to top</a>)</p>
